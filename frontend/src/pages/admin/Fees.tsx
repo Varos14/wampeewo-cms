@@ -1,17 +1,35 @@
+import { useState, useEffect } from 'react';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
-import { mockFeeStatements, mockStudents } from '../../utils/mockData';
+import { feeService, studentService } from '../../services/api';
+import { FeeStatement, Student } from '../../types';
 import { formatCurrency, formatDate } from '../../utils/helpers';
 
 export default function AdminFees() {
-  const statements = Object.values(mockFeeStatements);
+  const [statements, setStatements] = useState<FeeStatement[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    Promise.all([
+      feeService.listStatements(),
+      studentService.list()
+    ]).then(([stmts, stds]) => {
+      setStatements(stmts);
+      setStudents(stds);
+      setLoading(false);
+    }).catch(err => {
+      console.error(err);
+      setLoading(false);
+    });
+  }, []);
 
   const getStudentName = (studentId: string) => {
-    return mockStudents.find(s => s.id === studentId)?.name ?? 'Unknown Student';
+    return students.find(s => s.id === studentId)?.name ?? 'Unknown Student';
   };
 
   const getStudentReg = (studentId: string) => {
-    return mockStudents.find(s => s.id === studentId)?.registrationNumber ?? '—';
+    return students.find(s => s.id === studentId)?.registrationNumber ?? '—';
   };
 
   // Compute school-wide fees stats
@@ -34,6 +52,11 @@ export default function AdminFees() {
         <h2 className="text-xl font-bold text-slate-100 tracking-tight">Fee Administration</h2>
         <p className="text-xs text-slate-500 mt-1">Track tuition billing, payments, and outstanding balances.</p>
       </div>
+
+      {loading ? (
+        <div className="flex justify-center p-8"><p className="text-slate-400">Loading fee statements...</p></div>
+      ) : (
+        <>
 
       {/* Stats row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -151,6 +174,7 @@ export default function AdminFees() {
           );
         })}
       </div>
+      )}
     </div>
   );
 }

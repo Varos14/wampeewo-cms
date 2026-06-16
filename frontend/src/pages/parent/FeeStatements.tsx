@@ -1,22 +1,45 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { useAuthStore } from '../../store/authStore';
-import { mockStudents, mockFeeStatements } from '../../utils/mockData';
+import { studentService, feeService } from '../../services/api';
+import { Student, FeeStatement } from '../../types';
 import { formatCurrency, formatDate } from '../../utils/helpers';
 
 export default function ParentFeeStatements() {
   const { user } = useAuthStore();
 
   const parentId = user?.id ?? '4';
-  const myChildren = mockStudents.filter(s => s.parentIds.includes(parentId));
+  const [myChildren, setMyChildren] = useState<Student[]>([]);
+  const [activeChildId, setActiveChildId] = useState<string>('');
+  const [statement, setStatement] = useState<FeeStatement | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const [activeChildId, setActiveChildId] = useState<string>(myChildren[0]?.id ?? '');
+  useEffect(() => {
+    studentService.list({ parentId }).then(children => {
+      setMyChildren(children);
+      if (children.length > 0) {
+        setActiveChildId(children[0].id);
+      } else {
+        setLoading(false);
+      }
+    }).catch(console.error);
+  }, [parentId]);
+
+  useEffect(() => {
+    if (activeChildId) {
+      setLoading(true);
+      feeService.getStatement(activeChildId).then(stmt => {
+        setStatement(stmt || null);
+        setLoading(false);
+      }).catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
+    }
+  }, [activeChildId]);
 
   const activeChild = myChildren.find(c => c.id === activeChildId);
-
-  // Get fee statement for active child
-  const statement = mockFeeStatements[activeChildId];
 
   const getPaymentMethodColor = (method: string) => {
     switch (method) {
@@ -60,7 +83,9 @@ export default function ParentFeeStatements() {
         </div>
       )}
 
-      {activeChild && statement ? (
+      {loading ? (
+        <div className="flex justify-center p-8"><p className="text-slate-400">Loading fee statements...</p></div>
+      ) : activeChild && statement ? (
         <div className="space-y-6">
           {/* Red warning banner if there is a balance outstanding */}
           {statement.balance > 0 && (

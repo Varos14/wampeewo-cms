@@ -96,13 +96,18 @@ export const authService = {
 
 // --- Students & User Records ---
 export const studentService = {
-  list: async (classId?: string): Promise<Student[]> => {
+  list: async (filters?: { classId?: string; parentId?: string }): Promise<Student[]> => {
     if (MOCK_MODE) {
       await delay();
-      if (classId) return mock.mockStudents.filter(s => s.classId === classId);
-      return mock.mockStudents;
+      let res = mock.mockStudents;
+      if (filters?.classId) res = res.filter(s => s.classId === filters.classId);
+      if (filters?.parentId) res = res.filter(s => s.parentIds.includes(filters.parentId!));
+      return res;
     }
-    return request<Student[]>(`/students${classId ? `?classId=${classId}` : ''}`);
+    const params = new URLSearchParams();
+    if (filters?.classId) params.append('classId', filters.classId);
+    if (filters?.parentId) params.append('parentId', filters.parentId);
+    return request<Student[]>(`/students${params.toString() ? `?${params.toString()}` : ''}`);
   },
   getById: async (id: string): Promise<Student | undefined> => {
     if (MOCK_MODE) {
@@ -307,6 +312,13 @@ export const feeService = {
       return mock.mockFeeStatements[studentId];
     }
     return request<FeeStatement>(`/payments/statement?studentId=${studentId}`);
+  },
+  listStatements: async (): Promise<FeeStatement[]> => {
+    if (MOCK_MODE) {
+      await delay();
+      return Object.values(mock.mockFeeStatements);
+    }
+    return request<FeeStatement[]>('/payments/statements');
   }
 };
 

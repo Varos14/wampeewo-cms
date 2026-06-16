@@ -44,3 +44,29 @@ export async function getFeeStatement(req: Request, res: Response) {
     return res.status(500).json({ error: 'Internal server error fetching fee statement' });
   }
 }
+
+export async function getAllStatements(req: Request, res: Response) {
+  try {
+    const db = getDb();
+    
+    const [statementRows] = await db.query(
+      'SELECT student_id as studentId, billed_amount as billedAmount, paid_amount as paidAmount, balance FROM fee_statements'
+    );
+    const statements = statementRows as any[];
+
+    const [paymentsRows] = await db.query(
+      'SELECT id, student_id as studentId, amount, receipt_number as receiptNumber, payment_method as paymentMethod, payment_date as paymentDate, term, year FROM fee_payments ORDER BY payment_date DESC'
+    );
+    const payments = paymentsRows as any[];
+
+    const result = statements.map(st => ({
+      ...st,
+      payments: payments.filter(p => p.studentId === st.studentId)
+    }));
+
+    return res.json(result);
+  } catch (err) {
+    console.error('[getAllStatements] DB error:', err);
+    return res.status(500).json({ error: 'Internal server error fetching fee statements' });
+  }
+}

@@ -4,6 +4,7 @@ import { hashPassword } from '../utils/bcrypt';
 
 export async function listStudents(req: Request, res: Response) {
   const classId = req.query.classId as string | undefined;
+  const parentId = req.query.parentId as string | undefined;
 
   try {
     const db = getDb();
@@ -15,10 +16,21 @@ export async function listStudents(req: Request, res: Response) {
       JOIN students s ON u.id = s.id
     `;
     const params: any[] = [];
+    const conditions: string[] = [];
 
     if (classId) {
-      query += ' WHERE s.class_id = ?';
+      conditions.push('s.class_id = ?');
       params.push(classId);
+    }
+    
+    if (parentId) {
+      query += ' JOIN student_parents sp ON s.id = sp.student_id';
+      conditions.push('sp.parent_id = ?');
+      params.push(parentId);
+    }
+
+    if (conditions.length > 0) {
+      query += ' WHERE ' + conditions.join(' AND ');
     }
 
     const [rows] = await db.query(query, params);
