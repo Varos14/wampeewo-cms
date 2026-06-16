@@ -27,8 +27,12 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   });
 
   if (!response.ok) {
+    if (response.status === 401) {
+      useAuthStore.getState().logout();
+      throw new Error('Session expired. Please log in again.');
+    }
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || `API error: ${response.status}`);
+    throw new Error(errorData.error || errorData.message || `API error: ${response.status}`);
   }
 
   return response.json() as Promise<T>;
