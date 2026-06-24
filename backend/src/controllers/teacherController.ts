@@ -37,9 +37,9 @@ export async function listTeachers(_req: Request, res: Response) {
     }
 
     return res.json(results);
-  } catch (err) {
+  } catch (err: any) {
     console.error('[listTeachers] DB error:', err);
-    return res.status(500).json({ error: 'Internal server error listing teachers' });
+    return res.status(500).json({ error: 'Internal server error listing teachers: ' + (err.message || 'Unknown error') });
   }
 }
 
