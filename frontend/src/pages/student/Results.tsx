@@ -1,13 +1,22 @@
+import { useEffect, useState } from 'react';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { useAuthStore } from '../../store/authStore';
 import { mockExamResults, mockExams, mockSubjects } from '../../utils/mockData';
 import { getGradeColor } from '../../utils/helpers';
+import { gradeService } from '../../services/api';
 
 export default function StudentResults() {
   const { user } = useAuthStore();
+  const [quickGrades, setQuickGrades] = useState<{ subject: string, grade: string }[]>([]);
 
   const studentId = user?.id ?? '3';
+
+  useEffect(() => {
+    gradeService.getQuickGrade(studentId)
+      .then(res => setQuickGrades(res.grades || []))
+      .catch(console.error);
+  }, [studentId]);
 
   // Filter exam results for the student
   const myResults = mockExamResults.filter(r => r.studentId === studentId);
@@ -35,6 +44,25 @@ export default function StudentResults() {
         <h2 className="text-xl font-bold text-slate-100 tracking-tight">Academic Transcripts</h2>
         <p className="text-xs text-slate-500 mt-1">Access your terminal report cards, exam scores, and teacher remarks.</p>
       </div>
+
+      {quickGrades.length > 0 && (
+        <Card className="p-5 flex flex-col md:flex-row md:items-center justify-between border-l-4 border-l-blue-500 gap-4" variant="glass">
+          <div>
+            <h3 className="font-bold text-slate-200">Overall Teacher Assessment</h3>
+            <p className="text-xs text-slate-400 mt-1">Your latest quick grades awarded by your class teachers.</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            {quickGrades.map((qg, idx) => (
+              <div key={idx} className="flex flex-col items-center bg-slate-900/50 rounded-lg p-2 border border-white/5">
+                <span className="text-[10px] text-slate-500 uppercase tracking-wider font-bold mb-1">{qg.subject}</span>
+                <span className={`px-3 py-1 rounded-md text-sm font-extrabold border ${getGradeColor(qg.grade)}`}>
+                  {qg.grade}
+                </span>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
 
       <div className="space-y-6">
         {Object.entries(groupedByExam).map(([examId, results]) => {

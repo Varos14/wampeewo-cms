@@ -13,6 +13,7 @@ import { examRoutes } from './routes/examRoutes';
 import { paymentRoutes } from './routes/paymentRoutes';
 import { announcementRoutes } from './routes/announcementRoutes';
 import { timetableRoutes } from './routes/timetableRoutes';
+import { gradeRoutes } from './routes/gradeRoutes';
 import { requireAuth } from './middleware/auth';
 
 export function registerRoutes(app: Express) {
@@ -34,4 +35,5 @@ export function registerRoutes(app: Express) {
   app.use('/api/payments', paymentRoutes);
   app.use('/api/announcements', announcementRoutes);
   app.use('/api/timetable', timetableRoutes);
+  app.use('/api/grades', gradeRoutes);
 }

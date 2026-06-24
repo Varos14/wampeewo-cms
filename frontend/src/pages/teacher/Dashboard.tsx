@@ -2,12 +2,16 @@ import { Card } from '../../components/ui/Card';
 import { StatCard } from '../../components/ui/StatCard';
 import { DonutChart } from '../../components/charts/DonutChart';
 import { useAuthStore } from '../../store/authStore';
-import { mockClasses, mockAOIs, mockSubmissions, mockTimetables } from '../../utils/mockData';
+import { mockClasses, mockAOIs, mockSubmissions, mockTimetables, mockStudents, mockTeachers } from '../../utils/mockData';
+import { gradeService } from '../../services/api';
 
 export default function TeacherDashboard() {
   const { user } = useAuthStore();
   
   if (!user) return null;
+
+  const currentTeacher = mockTeachers.find(t => t.id === user.id);
+  const teacherSubjects = currentTeacher?.subjects || ['General'];
 
   // Filter classes taught by this teacher
   const teacherClasses = mockClasses.filter(c => c.classTeacherId === user.id);
@@ -20,6 +24,9 @@ export default function TeacherDashboard() {
 
   // Today's classes timetable preview (Monday = 1, let's say Monday timetable)
   const todayClasses = mockTimetables.filter(t => t.teacherName === user.name);
+
+  // Filter students who belong to the classes taught by this teacher
+  const teacherStudents = mockStudents.filter(s => teacherClasses.some(c => c.id === s.classId));
 
   // Performance stats mock
   const performanceData = [
@@ -189,6 +196,108 @@ export default function TeacherDashboard() {
           </ul>
         </Card>
       </div>
+
+      {/* Students Results Section */}
+      <Card className="p-6 mt-6" variant="glass">
+        <h3 className="text-base font-bold text-slate-200 mb-4">Students Results</h3>
+        <p className="text-xs text-slate-500 mb-6">List of students by class for easy grading access.</p>
+        
+        <div className="space-y-6">
+          {teacherClasses.map(cls => {
+            const classStudents = teacherStudents.filter(s => s.classId === cls.id);
+            return (
+              <div key={cls.id} className="space-y-3">
+                <h4 className="text-sm font-bold text-blue-400 bg-blue-500/10 inline-block px-3 py-1 rounded-lg">
+                  {cls.name} ({cls.stream || 'No Stream'})
+                </h4>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-white/5 text-slate-400">
+                        <th className="pb-3 text-xs font-semibold uppercase tracking-wider">Student Name</th>
+                        <th className="pb-3 text-xs font-semibold uppercase tracking-wider">Reg No.</th>
+                        <th className="pb-3 text-xs font-semibold uppercase tracking-wider text-right">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {classStudents.map(student => (
+                        <tr key={student.id} className="text-xs hover:bg-white/2 transition-colors">
+                          <td className="py-3 font-semibold text-slate-200">
+                            <div className="flex items-center gap-3">
+                              <img
+                                src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(student.name)}`}
+                                alt={student.name}
+                                className="w-6 h-6 rounded bg-slate-700 shrink-0"
+                              />
+                              {student.name}
+                            </div>
+                          </td>
+                          <td className="py-3 text-slate-400 font-mono">{student.registrationNumber}</td>
+                          <td className="py-3 text-right">
+                            <div className="flex justify-end gap-2">
+                              {teacherSubjects.map(subject => (
+                                <div key={subject} className="flex flex-col items-end gap-1">
+                                  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{subject}</span>
+                                  <select 
+                                    className="px-3 py-1.5 bg-slate-800 border border-white/10 text-slate-200 rounded-lg text-xs outline-none focus:border-blue-500 cursor-pointer"
+                                    defaultValue=""
+                                    onChange={async (e) => {
+                                      const grade = e.target.value;
+                                      if (grade) {
+                                        try {
+                                          e.target.disabled = true; // prevent double submission
+                                          const response = await gradeService.saveQuickGrade(student.id, subject, grade);
+                                          alert(`${response.message}: Grade ${grade} in ${subject} assigned to ${student.name}!`);
+                                        } catch (error) {
+                                          alert('Failed to save grade');
+                                          console.error(error);
+                                        } finally {
+                                          e.target.disabled = false;
+                                        }
+                                      }
+                                    }}
+                                  >
+                                    <option value="" disabled>Grade...</option>
+                                    <optgroup label="Distinction">
+                                      <option value="D1">D1 (Exceptional)</option>
+                                      <option value="D2">D2 (Excellent)</option>
+                                    </optgroup>
+                                    <optgroup label="Credit">
+                                      <option value="C3">C3 (Very Good)</option>
+                                      <option value="C4">C4 (Good)</option>
+                                      <option value="C5">C5 (Satisfactory)</option>
+                                      <option value="C6">C6 (Adequate)</option>
+                                    </optgroup>
+                                    <optgroup label="Pass">
+                                      <option value="P7">P7 (Pass)</option>
+                                      <option value="P8">P8 (Weak Pass)</option>
+                                    </optgroup>
+                                    <optgroup label="Fail">
+                                      <option value="F9">F9 (Fail)</option>
+                                    </optgroup>
+                                  </select>
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                      {classStudents.length === 0 && (
+                        <tr>
+                          <td colSpan={3} className="py-4 text-center text-slate-500 italic text-xs">No students in this class.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            );
+          })}
+          {teacherClasses.length === 0 && (
+            <p className="text-sm text-slate-500 italic">You are not currently assigned as a class teacher to any classes.</p>
+          )}
+        </div>
+      </Card>
     </div>
   );
 }

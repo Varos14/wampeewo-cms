@@ -400,3 +400,25 @@ export const timetableService = {
   }
 };
 
+
+// --- Grades ---
+export const gradeService = {
+  saveQuickGrade: async (studentId: string, subject: string, grade: string): Promise<{ message: string }> => {
+    if (MOCK_MODE) {
+      await delay();
+      return { message: 'Mock grade saved successfully' };
+    }
+    return request<{ message: string }>('/grades/quick', {
+      method: 'POST',
+      body: JSON.stringify({ studentId, subject, grade })
+    });
+  },
+  getQuickGrade: async (studentId: string): Promise<{ grades: { subject: string, grade: string }[] }> => {
+    if (MOCK_MODE) {
+      await delay();
+      return { grades: [] };
+    }
+    return request<{ grades: { subject: string, grade: string }[] }>(`/grades/quick?studentId=${studentId}`);
+  }
+};
+

@@ -34,6 +34,7 @@ import StudentAttendance from './pages/student/Attendance';
 import StudentResults from './pages/student/Results';
 import StudentNotes from './pages/student/Notes';
 import StudentTimetable from './pages/student/Timetable';
+import StudentFeeStatements from './pages/student/FeeStatements';
 
 // Parent Pages
 import ParentDashboard from './pages/parent/Dashboard';
@@ -110,6 +111,7 @@ export const routes: RouteObject[] = [
           { path: 'results', element: <StudentResults /> },
           { path: 'notes', element: <StudentNotes /> },
           { path: 'timetable', element: <StudentTimetable /> },
+          { path: 'fees', element: <StudentFeeStatements /> },
         ],
       },
     ],

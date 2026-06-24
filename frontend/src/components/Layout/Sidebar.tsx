@@ -127,6 +127,7 @@ export const Sidebar: React.FC = () => {
       { to: '/student/results', label: 'Results', icon: <Icons.Results /> },
       { to: '/student/notes', label: 'Notes', icon: <Icons.Notes /> },
       { to: '/student/timetable', label: 'Timetable', icon: <Icons.Timetable /> },
+      { to: '/student/fees', label: 'Fee Statements', icon: <Icons.Fees /> },
     ],
     parent: [
       { to: '/parent', label: 'Dashboard', icon: <Icons.Dashboard /> },
