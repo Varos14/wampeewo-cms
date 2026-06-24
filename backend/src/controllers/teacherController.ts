@@ -8,7 +8,8 @@ export async function listTeachers(_req: Request, res: Response) {
     
     // Fetch all user accounts with role = 'teacher'
     const [rows] = await db.query(
-      'SELECT id, name, email, role, avatar_url as avatarUrl FROM users WHERE role = "teacher"'
+      'SELECT id, name, email, role, avatar_url as avatarUrl FROM users WHERE role = ?',
+      ['teacher']
     );
     const teachers = rows as any[];
 
