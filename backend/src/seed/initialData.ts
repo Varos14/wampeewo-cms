@@ -19,6 +19,17 @@ export async function seedInitialData() {
       )
     `);
 
+    // Migration: ensure avatar_url exists in case the table was created earlier
+    try {
+      await db.query('ALTER TABLE users ADD COLUMN avatar_url VARCHAR(255)');
+      console.log('[seed] Added missing avatar_url column to users table.');
+    } catch (err: any) {
+      // Error 1060 is ER_DUP_FIELDNAME (Duplicate column name)
+      if (err.code !== 'ER_DUP_FIELDNAME') {
+        console.error('[seed] Migration error on users table:', err.message);
+      }
+    }
+
     await db.query(`
       CREATE TABLE IF NOT EXISTS classes (
         id VARCHAR(50) PRIMARY KEY,
