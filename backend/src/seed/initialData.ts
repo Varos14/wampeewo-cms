@@ -259,30 +259,30 @@ export async function seedInitialData() {
 
     // Seed Students
     const studentNames = [
-        {name: 'Gareth Tuwesigye', class: 's1'},
-        {name: 'Farouk Ssekabira', class: 's1'},
-        {name: 'Jonathan Kirungi', class: 's1'},
-        {name: 'Derrick Akeba', class: 's1'},
-        {name: 'Clevous Akoragye', class: 's1'},
-        {name: 'Ismail Nsamba', class: 's2'},
-        {name: 'Hillary Tulinawe', class: 's2'},
-        {name: 'Mercy Kharono', class: 's2'},
-        {name: 'Rogers Wanyama', class: 's2'},
-        {name: 'Walter Ochan', class: 's3'},
-        {name: 'Naula Habiiba Abass', class: 's3'},
-        {name: 'Radley Byamugisha', class: 's3'},
-        {name: 'Erias Mulisa Nsereko', class: 's3'},
-        {name: 'Matha Bamuhamye', class: 's4'},
-        {name: 'Peter Erikosi', class: 's4'},
-        {name: 'Samuel Asianut', class: 's4'},
-        {name: 'Patrick Ngabongiza', class: 's4'}
+        {name: 'Gareth Tuwesigye', class: 's1', gender: 'Male'},
+        {name: 'Farouk Ssekabira', class: 's1', gender: 'Male'},
+        {name: 'Jonathan Kirungi', class: 's1', gender: 'Male'},
+        {name: 'Derrick Akeba', class: 's1', gender: 'Male'},
+        {name: 'Clevous Akoragye', class: 's1', gender: 'Male'},
+        {name: 'Ismail Nsamba', class: 's2', gender: 'Male'},
+        {name: 'Hillary Tulinawe', class: 's2', gender: 'Male'},
+        {name: 'Mercy Kharono', class: 's2', gender: 'Female'},
+        {name: 'Rogers Wanyama', class: 's2', gender: 'Male'},
+        {name: 'Walter Ochan', class: 's3', gender: 'Male'},
+        {name: 'Naula Habiiba Abass', class: 's3', gender: 'Female'},
+        {name: 'Radley Byamugisha', class: 's3', gender: 'Male'},
+        {name: 'Erias Mulisa Nsereko', class: 's3', gender: 'Male'},
+        {name: 'Matha Bamuhamye', class: 's4', gender: 'Female'},
+        {name: 'Peter Erikosi', class: 's4', gender: 'Male'},
+        {name: 'Samuel Asianut', class: 's4', gender: 'Male'},
+        {name: 'Patrick Ngabongiza', class: 's4', gender: 'Male'}
     ];
     
     const studentsArr = [];
     for (const s of studentNames) {
         const emailP = s.name.replace(/[^a-zA-Z]/g, '').toLowerCase();
         const id = pushUser(s.name, 'student', studentPass, emailP);
-        studentsArr.push({ id, classGroup: s.class });
+        studentsArr.push({ id, classGroup: s.class, gender: s.gender });
     }
 
     // Insert all users
@@ -318,7 +318,7 @@ export async function seedInitialData() {
 
         await db.query(
             'INSERT INTO students (id, class_id, registration_number, gender) VALUES (?, ?, ?, ?)',
-            [s.id, classId, 'WNS/2026/' + String(100+regNumCount++), 'Male']
+            [s.id, classId, 'WNS/2026/' + String(100+regNumCount++), s.gender]
         );
     }
 
