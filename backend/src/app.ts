@@ -23,7 +23,7 @@ export function createServer() {
   );
 
   // TEMPORARY: Reset database route for Render free tier
-  app.get('/api/reset-db', async (_req: express.Request, res: express.Response) => {
+  app.get('/reset-db', async (_req: express.Request, res: express.Response) => {
     try {
       const { getDb } = await import('./config/database');
       const db = getDb();
