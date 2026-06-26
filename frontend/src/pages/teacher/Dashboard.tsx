@@ -1,32 +1,42 @@
+import { useEffect } from 'react';
 import { Card } from '../../components/ui/Card';
 import { StatCard } from '../../components/ui/StatCard';
 import { DonutChart } from '../../components/charts/DonutChart';
 import { useAuthStore } from '../../store/authStore';
-import { mockClasses, mockAOIs, mockSubmissions, mockTimetables, mockStudents, mockTeachers } from '../../utils/mockData';
+import { useAppDataStore } from '../../store/appDataStore';
 import { gradeService } from '../../services/api';
 
 export default function TeacherDashboard() {
   const { user } = useAuthStore();
-  
-  if (!user) return null;
+  const { 
+    classes, aois, students, teachers, submissions, 
+    loading, fetchData 
+  } = useAppDataStore();
 
-  const currentTeacher = mockTeachers.find(t => t.id === user.id);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  if (!user) return null;
+  if (loading) return <div className="p-8 text-center text-slate-400 animate-pulse">Loading dashboard...</div>;
+
+  const currentTeacher = teachers.find(t => t.id === user.id);
   const teacherSubjects = currentTeacher?.subjects || ['General'];
 
   // Filter classes taught by this teacher
-  const teacherClasses = mockClasses.filter(c => c.classTeacherId === user.id);
+  const teacherClasses = classes.filter(c => c.classTeacherId === user.id);
   // Total assignments/AOIs created by this teacher
-  const teacherAOIs = mockAOIs.filter(a => a.teacherId === user.id);
+  const teacherAOIs = aois.filter(a => a.teacherId === user.id);
   // Count total submissions waiting for grades
-  const ungradedCount = mockSubmissions.filter(sub => 
+  const ungradedCount = submissions.filter(sub => 
     teacherAOIs.some(aoi => aoi.id === sub.aoiId) && sub.grade === undefined
   ).length;
 
-  // Today's classes timetable preview (Monday = 1, let's say Monday timetable)
-  const todayClasses = mockTimetables.filter(t => t.teacherName === user.name);
+  // Today's classes timetable preview
+  const todayClasses: any[] = []; // Timetable logic can be expanded later
 
   // Filter students who belong to the classes taught by this teacher
-  const teacherStudents = mockStudents.filter(s => teacherClasses.some(c => c.id === s.classId));
+  const teacherStudents = students.filter(s => teacherClasses.some(c => c.id === s.classId));
 
   // Performance stats mock
   const performanceData = [
@@ -139,6 +149,24 @@ export default function TeacherDashboard() {
 
       {/* Timetable preview and announcements */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="p-6" variant="glass">
+          <h3 className="text-base font-bold text-slate-200 mb-4">Messaging Panel</h3>
+          <div className="space-y-3 max-h-64 overflow-y-auto pr-2">
+            <div className="bg-slate-800/50 p-3 rounded-lg border border-white/5">
+              <span className="text-xs font-bold text-slate-200">Admin</span>
+              <p className="text-xs text-slate-400 mt-1">Please ensure all mid-term marks are submitted by Friday.</p>
+            </div>
+            <div className="bg-slate-800/50 p-3 rounded-lg border border-white/5 text-right">
+              <span className="text-xs font-bold text-slate-200">You</span>
+              <p className="text-xs text-slate-400 mt-1">Noted, I will submit mine tomorrow.</p>
+            </div>
+          </div>
+          <div className="mt-4 flex gap-2">
+            <input type="text" placeholder="Type a message..." className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500" />
+            <button className="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded-lg text-xs font-bold">Send</button>
+          </div>
+        </Card>
+
         <Card className="lg:col-span-2 p-6" variant="glass">
           <h3 className="text-base font-bold text-slate-200 mb-4">Lesson Timetable</h3>
           <div className="overflow-x-auto">

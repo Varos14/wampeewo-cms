@@ -1,18 +1,16 @@
 import { 
   User, Student, Teacher, Class, Subject, 
   AOI, Submission, Note, GenericSkill, Attendance, 
-  ExamResult, FeeStatement, Announcement, TimetableEntry 
+  ExamResult, Announcement, TimetableEntry 
 } from '../types';
 import * as mock from '../utils/mockData';
 import { useAuthStore } from '../store/authStore';
 
-// Toggle to connect to real backend once ready
 const MOCK_MODE = false;
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
 const delay = (ms = 400) => new Promise(resolve => setTimeout(resolve, ms));
 
-// Helper for HTTP requests (to be used when mock mode is disabled)
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const token = useAuthStore.getState().token;
   const headers = new Headers(options.headers || {});
@@ -38,58 +36,19 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   return response.json() as Promise<T>;
 }
 
-// -------------------------------------------------------------
-// API Services Hub
-// -------------------------------------------------------------
 
-// --- Authentication ---
-const mockAuthUsers: Record<string, User & { password: string }> = {
-  'admin@wampeewo.com': {
-    id: '1',
-    name: 'Nalule Margaret',
-    email: 'admin@wampeewo.com',
-    role: 'admin',
-    password: 'admin123',
-    avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Nalule%20Margaret'
-  },
-  'teacher@wampeewo.com': {
-    id: '2',
-    name: 'Okello John',
-    email: 'teacher@wampeewo.com',
-    role: 'teacher',
-    password: 'teacher123',
-    avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Okello%20John'
-  },
-  'student@wampeewo.com': {
-    id: '3',
-    name: 'Kato Paul',
-    email: 'student@wampeewo.com',
-    role: 'student',
-    password: 'student123',
-    avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Kato%20Paul'
-  },
-  'parent@wampeewo.com': {
-    id: '4',
-    name: 'Mukasa Ronald',
-    email: 'parent@wampeewo.com',
-    role: 'parent',
-    password: 'parent123',
-    avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Mukasa%20Ronald'
-  },
-};
 
 export const authService = {
   login: async (email: string, password: string) => {
     if (MOCK_MODE) {
       await delay(600);
-      const user = mockAuthUsers[email.toLowerCase().trim()];
-      if (!user || user.password !== password) {
+      const user = mock.mockUsers.find(u => u.email.toLowerCase() === email.toLowerCase().trim());
+      // For mock purposes, password is just their role + '123' (e.g. 'student123')
+      if (!user || password !== `${user.role}123`) {
         throw new Error('Invalid credentials');
       }
-      const { password: _, ...safeUser } = user;
-      return { user: safeUser as User, token: 'mock-jwt-token-wNS-ss-2026' };
+      return { user, token: 'mock-jwt-token-wNS-ss-2026' };
     }
-    // Real API call
     const data = await request<{ user: User; token: string }>('/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
@@ -98,19 +57,16 @@ export const authService = {
   }
 };
 
-// --- Students & User Records ---
 export const studentService = {
-  list: async (filters?: { classId?: string; parentId?: string }): Promise<Student[]> => {
+  list: async (filters?: { classId?: string }): Promise<Student[]> => {
     if (MOCK_MODE) {
       await delay();
       let res = mock.mockStudents;
       if (filters?.classId) res = res.filter(s => s.classId === filters.classId);
-      if (filters?.parentId) res = res.filter(s => s.parentIds.includes(filters.parentId!));
       return res;
     }
     const params = new URLSearchParams();
     if (filters?.classId) params.append('classId', filters.classId);
-    if (filters?.parentId) params.append('parentId', filters.parentId);
     return request<Student[]>(`/students${params.toString() ? `?${params.toString()}` : ''}`);
   },
   getById: async (id: string): Promise<Student | undefined> => {
@@ -163,7 +119,6 @@ export const teacherService = {
   }
 };
 
-// --- Classes & Subjects ---
 export const classService = {
   list: async (): Promise<Class[]> => {
     if (MOCK_MODE) {
@@ -171,6 +126,23 @@ export const classService = {
       return mock.mockClasses;
     }
     return request<Class[]>('/classes');
+  },
+  create: async (data: any): Promise<Class> => {
+    if (MOCK_MODE) {
+      await delay();
+      return { id: 'c' + Date.now(), studentCount: 0, ...data };
+    }
+    return request<Class>('/classes', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+  delete: async (id: string): Promise<void> => {
+    if (MOCK_MODE) {
+      await delay();
+      return;
+    }
+    await request<void>(`/classes/${id}`, { method: 'DELETE' });
   }
 };
 
@@ -182,10 +154,26 @@ export const subjectService = {
       return mock.mockSubjects;
     }
     return request<Subject[]>(`/subjects${classId ? `?classId=${classId}` : ''}`);
+  },
+  create: async (data: any): Promise<Subject> => {
+    if (MOCK_MODE) {
+      await delay();
+      return { id: 's' + Date.now(), ...data };
+    }
+    return request<Subject>('/subjects', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+  delete: async (id: string): Promise<void> => {
+    if (MOCK_MODE) {
+      await delay();
+      return;
+    }
+    await request<void>(`/subjects/${id}`, { method: 'DELETE' });
   }
 };
 
-// --- Activities of Integration (AOIs) & Submissions ---
 export const aoiService = {
   list: async (classId?: string, teacherId?: string): Promise<AOI[]> => {
     if (MOCK_MODE) {
@@ -253,10 +241,21 @@ export const aoiService = {
       method: 'POST',
       body: JSON.stringify({ grade, feedback })
     });
+  },
+  approve: async (id: string, status: string = 'approved'): Promise<AOI> => {
+    if (MOCK_MODE) {
+      await delay();
+      const aoi = mock.mockAOIs.find(a => a.id === id);
+      if (aoi) aoi.status = status as any;
+      return aoi as any;
+    }
+    return request<AOI>(`/aoi/${id}/approve`, {
+      method: 'PUT',
+      body: JSON.stringify({ status })
+    });
   }
 };
 
-// --- Attendance ---
 export const attendanceService = {
   list: async (classId: string, date: string): Promise<Attendance[]> => {
     if (MOCK_MODE) {
@@ -297,7 +296,6 @@ export const attendanceService = {
   }
 };
 
-// --- Exams & Results ---
 export const examService = {
   listResults: async (studentId: string): Promise<ExamResult[]> => {
     if (MOCK_MODE) {
@@ -308,25 +306,7 @@ export const examService = {
   }
 };
 
-// --- Fees & Payments ---
-export const feeService = {
-  getStatement: async (studentId: string): Promise<FeeStatement | undefined> => {
-    if (MOCK_MODE) {
-      await delay();
-      return mock.mockFeeStatements[studentId];
-    }
-    return request<FeeStatement>(`/payments/statement?studentId=${studentId}`);
-  },
-  listStatements: async (): Promise<FeeStatement[]> => {
-    if (MOCK_MODE) {
-      await delay();
-      return Object.values(mock.mockFeeStatements);
-    }
-    return request<FeeStatement[]>('/payments/statements');
-  }
-};
 
-// --- Announcements ---
 export const announcementService = {
   list: async (role: string): Promise<Announcement[]> => {
     if (MOCK_MODE) {
@@ -337,7 +317,6 @@ export const announcementService = {
   }
 };
 
-// --- Notes (Summary Vault) ---
 export const noteService = {
   list: async (studentId: string): Promise<Note[]> => {
     if (MOCK_MODE) {
@@ -389,7 +368,6 @@ export const noteService = {
   }
 };
 
-// --- Timetable ---
 export const timetableService = {
   getByClass: async (classId: string): Promise<TimetableEntry[]> => {
     if (MOCK_MODE) {
@@ -397,11 +375,21 @@ export const timetableService = {
       return mock.mockTimetables.filter(t => t.classId === classId);
     }
     return request<TimetableEntry[]>(`/timetable?classId=${classId}`);
+  },
+  create: async (data: Omit<TimetableEntry, 'id'>): Promise<TimetableEntry> => {
+    if (MOCK_MODE) {
+      await delay();
+      const newEntry: TimetableEntry = { ...data, id: `t${Date.now()}` };
+      mock.mockTimetables.push(newEntry);
+      return newEntry;
+    }
+    return request<TimetableEntry>('/timetable', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
   }
 };
 
-
-// --- Grades ---
 export const gradeService = {
   saveQuickGrade: async (studentId: string, subject: string, grade: string): Promise<{ message: string }> => {
     if (MOCK_MODE) {
@@ -422,3 +410,47 @@ export const gradeService = {
   }
 };
 
+export const materialService = {
+  list: async (filters?: { teacherId?: string }): Promise<any[]> => {
+    if (MOCK_MODE) {
+      await delay();
+      return [];
+    }
+    const params = new URLSearchParams();
+    if (filters?.teacherId) params.append('teacherId', filters.teacherId);
+    return request<any[]>(`/materials?${params.toString()}`);
+  },
+  create: async (data: any): Promise<any> => {
+    if (MOCK_MODE) {
+      await delay();
+      return { id: 'm1', ...data, uploadedAt: new Date().toISOString() };
+    }
+    return request<any>('/materials', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
+};
+
+export const presentationService = {
+  list: async (filters?: { classId?: string; teacherId?: string }): Promise<any[]> => {
+    if (MOCK_MODE) {
+      await delay();
+      return [];
+    }
+    const params = new URLSearchParams();
+    if (filters?.classId) params.append('classId', filters.classId);
+    if (filters?.teacherId) params.append('teacherId', filters.teacherId);
+    return request<any[]>(`/presentations?${params.toString()}`);
+  },
+  create: async (data: any): Promise<any> => {
+    if (MOCK_MODE) {
+      await delay();
+      return { id: 'p1', ...data };
+    }
+    return request<any>('/presentations', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
+};

@@ -2,21 +2,29 @@ import { useEffect, useState } from 'react';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { useAuthStore } from '../../store/authStore';
-import { mockExamResults, mockExams, mockSubjects } from '../../utils/mockData';
+import { useAppDataStore } from '../../store/appDataStore';
+import { mockExamResults, mockExams } from '../../utils/mockData';
 import { getGradeColor } from '../../utils/helpers';
 import { gradeService } from '../../services/api';
 
 export default function StudentResults() {
   const { user } = useAuthStore();
+  const { subjects, loading, fetchData } = useAppDataStore();
   const [quickGrades, setQuickGrades] = useState<{ subject: string, grade: string }[]>([]);
 
   const studentId = user?.id ?? '3';
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   useEffect(() => {
     gradeService.getQuickGrade(studentId)
       .then(res => setQuickGrades(res.grades || []))
       .catch(console.error);
   }, [studentId]);
+
+  if (loading) return <div className="p-8 text-center text-slate-400 animate-pulse">Loading transcripts...</div>;
 
   // Filter exam results for the student
   const myResults = mockExamResults.filter(r => r.studentId === studentId);
@@ -35,7 +43,7 @@ export default function StudentResults() {
   };
 
   const getSubjectName = (subjectId: string) => {
-    return mockSubjects.find(s => s.id === subjectId)?.name ?? 'Unknown Subject';
+    return subjects.find(s => s.id === subjectId)?.name ?? 'Unknown Subject';
   };
 
   return (

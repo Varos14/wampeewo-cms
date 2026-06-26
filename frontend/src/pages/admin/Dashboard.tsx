@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { StatCard } from '../../components/ui/StatCard';
 import { Card } from '../../components/ui/Card';
 import { AreaChart } from '../../components/charts/AreaChart';
-import { BarChart } from '../../components/charts/BarChart';
 import { DonutChart } from '../../components/charts/DonutChart';
 import { getAdminStats } from '../../utils/mockData';
 import { studentService, teacherService, classService, subjectService } from '../../services/api';
@@ -42,7 +41,7 @@ export default function AdminDashboard() {
     { label: 'Register Student', icon: '👤+', color: 'text-indigo-400 bg-indigo-500/10 hover:bg-indigo-500/20', path: '/admin/students?openModal=student' },
     { label: 'Add Teacher', icon: '👨‍🏫+', color: 'text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20', path: '/admin/teachers?openModal=teacher' },
     { label: 'Manage Classes', icon: '🏫', color: 'text-sky-400 bg-sky-500/10 hover:bg-sky-500/20', path: '/admin/classes' },
-    { label: 'Financial Report', icon: '💵', color: 'text-amber-400 bg-amber-500/10 hover:bg-amber-500/20', path: '/admin/fees' },
+    { label: 'Approvals', icon: '✅', color: 'text-amber-400 bg-amber-500/10 hover:bg-amber-500/20', path: '/admin/assignments' },
   ];
 
   // Gender distribution mock
@@ -51,11 +50,7 @@ export default function AdminDashboard() {
     { label: 'Female', value: 640, color: '#f43f5e' },
   ];
 
-  // Fees collections mock
-  const feesData = [
-    { label: 'Term I Billed', value: 600000000 },
-    { label: 'Term I Collected', value: 450000000 },
-  ];
+
 
   return (
     <div className="space-y-6">
@@ -67,48 +62,56 @@ export default function AdminDashboard() {
 
       {/* Stats Cards Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          title="Total Students"
-          value={studentCount !== null ? studentCount : stats.totalStudents}
-          color="indigo"
-          trend={{ value: 4.8, isPositive: true, label: 'vs last term' }}
-          icon={
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
-          }
-        />
-        <StatCard
-          title="Total Teachers"
-          value={teacherCount !== null ? teacherCount : stats.totalTeachers}
-          color="emerald"
-          trend={{ value: 2.1, isPositive: true, label: 'vs last year' }}
-          icon={
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
-            </svg>
-          }
-        />
-        <StatCard
-          title="Active Classes"
-          value={classCount !== null ? classCount : stats.totalClasses}
-          color="blue"
-          icon={
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-            </svg>
-          }
-        />
-        <StatCard
-          title="Total Subjects"
-          value={subjectCount !== null ? subjectCount : stats.totalSubjects}
-          color="amber"
-          icon={
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-          }
-        />
+        <div onClick={() => navigate('/admin/students')} className="cursor-pointer transition-transform hover:scale-105">
+          <StatCard
+            title="Total Students"
+            value={studentCount !== null ? studentCount : stats.totalStudents}
+            color="indigo"
+            trend={{ value: 4.8, isPositive: true, label: 'vs last term' }}
+            icon={
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            }
+          />
+        </div>
+        <div onClick={() => navigate('/admin/teachers')} className="cursor-pointer transition-transform hover:scale-105">
+          <StatCard
+            title="Total Teachers"
+            value={teacherCount !== null ? teacherCount : stats.totalTeachers}
+            color="emerald"
+            trend={{ value: 2.1, isPositive: true, label: 'vs last year' }}
+            icon={
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
+              </svg>
+            }
+          />
+        </div>
+        <div onClick={() => navigate('/admin/classes')} className="cursor-pointer transition-transform hover:scale-105">
+          <StatCard
+            title="Active Classes"
+            value={classCount !== null ? classCount : stats.totalClasses}
+            color="blue"
+            icon={
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+            }
+          />
+        </div>
+        <div onClick={() => navigate('/admin/subjects')} className="cursor-pointer transition-transform hover:scale-105">
+          <StatCard
+            title="Total Subjects"
+            value={subjectCount !== null ? subjectCount : stats.totalSubjects}
+            color="amber"
+            icon={
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            }
+          />
+        </div>
       </div>
 
       {/* Main Charts & Content */}
@@ -136,23 +139,9 @@ export default function AdminDashboard() {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Fees Target vs Collected Bar Chart */}
-        <Card className="p-6 flex flex-col justify-between" variant="glass">
-          <div>
-            <h3 className="text-base font-bold text-slate-200">Term I Fee Collection</h3>
-            <p className="text-2xs text-slate-500 font-semibold uppercase tracking-wider mt-0.5">Shs target vs current collections</p>
-          </div>
-          <div className="mt-4">
-            <BarChart
-              data={feesData}
-              color="#f59e0b"
-              valueFormatter={(v) => `UGX ${(v / 1000000).toFixed(0)}M`}
-            />
-          </div>
-        </Card>
 
-        {/* Quick Actions Panel */}
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="p-6" variant="glass">
           <h3 className="text-base font-bold text-slate-200 mb-4">Quick Tasks</h3>
           <div className="grid grid-cols-2 gap-3">

@@ -1,17 +1,26 @@
+import { useEffect } from 'react';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
+import { Button } from '../../components/ui/Button';
 import { useAuthStore } from '../../store/authStore';
-import { mockClasses, mockTeachers, mockSubjects, mockAOIs } from '../../utils/mockData';
+import { useAppDataStore } from '../../store/appDataStore';
 
 export default function TeacherMyClasses() {
   const { user } = useAuthStore();
+  const { classes, teachers, subjects, aois, loading, fetchData } = useAppDataStore();
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  if (loading) return <div className="p-8 text-center text-slate-400 animate-pulse">Loading classes...</div>;
 
   const teacherId = user?.id ?? '2';
-  const teacherInfo = mockTeachers.find(t => t.id === teacherId);
+  const teacherInfo = teachers.find(t => t.id === teacherId);
   const teacherClassIds = teacherInfo?.classIds ?? [];
 
   // Filter classes taught by this teacher or where they are the class teacher
-  const myClasses = mockClasses.filter(c => c.classTeacherId === teacherId || teacherClassIds.includes(c.id));
+  const myClasses = classes.filter(c => c.classTeacherId === teacherId || teacherClassIds.includes(c.id));
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -23,8 +32,8 @@ export default function TeacherMyClasses() {
       {/* Classes Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {myClasses.map(cls => {
-          const subjectsInClass = mockSubjects.filter(s => s.classId === cls.id);
-          const aoisInClass = mockAOIs.filter(aoi => aoi.classId === cls.id);
+          const subjectsInClass = subjects.filter(s => s.classId === cls.id);
+          const aoisInClass = aois.filter(aoi => aoi.classId === cls.id);
           const isClassTeacher = cls.classTeacherId === teacherId;
 
           return (
@@ -57,9 +66,14 @@ export default function TeacherMyClasses() {
               </div>
 
               {/* Footer */}
-              <div className="border-t border-white/5 pt-3.5 mt-5 flex items-center justify-between text-xs">
-                <span className="text-slate-500 font-medium">Competency Evaluation Projects</span>
-                <span className="font-bold text-indigo-400">{aoisInClass.length} AOIs Assigned</span>
+              <div className="border-t border-white/5 pt-3.5 mt-5 flex flex-col gap-3 text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-500 font-medium">Competency Evaluation Projects</span>
+                  <span className="font-bold text-indigo-400">{aoisInClass.length} AOIs Assigned</span>
+                </div>
+                <Button variant="secondary" size="sm" className="w-full justify-center" onClick={() => alert(`Generating automatic reports for students in ${cls.name}...`)}>
+                  Generate Individual Student Reports
+                </Button>
               </div>
             </Card>
           );

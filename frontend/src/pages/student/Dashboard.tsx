@@ -1,26 +1,37 @@
+import { useEffect } from 'react';
 import { Card } from '../../components/ui/Card';
 import { StatCard } from '../../components/ui/StatCard';
 import { DonutChart } from '../../components/charts/DonutChart';
 import { useAuthStore } from '../../store/authStore';
-import { mockAOIs, mockSubmissions, mockExamResults, mockAnnouncements } from '../../utils/mockData';
+import { useAppDataStore } from '../../store/appDataStore';
 import { formatDate } from '../../utils/helpers';
 import { RubricBadge } from '../../components/ui/Badge';
+import { mockExamResults } from '../../utils/mockData';
 
 export default function StudentDashboard() {
   const { user } = useAuthStore();
+  const { aois, submissions, announcements, loading, fetchData } = useAppDataStore();
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   if (!user) return null;
+  if (loading) return <div className="p-8 text-center text-slate-400 animate-pulse">Loading dashboard...</div>;
+
+  // Assuming user object contains the classId (e.g. s1 -> c1)
+  const studentClassId = 'c1'; // Defaulting for demo if missing in user payload
 
   // Assignments statistics
-  const totalAssignments = mockAOIs.filter(a => a.classId === 'c1').length; // Kato is c1
-  const studentSubmissions = mockSubmissions.filter(s => s.studentId === user.id);
+  const totalAssignments = aois.filter(a => a.classId === studentClassId).length;
+  const studentSubmissions = submissions.filter(s => s.studentId === user.id);
   const gradedAssignments = studentSubmissions.filter(s => s.grade !== undefined).length;
   
-  // Latest exam results (for first term)
+  // Latest exam results (mocked for now)
   const myResults = mockExamResults.filter(r => r.studentId === user.id);
 
   // Filter announcements for students
-  const studentAnnouncements = mockAnnouncements.filter(a => a.targetRoles.includes('student'));
+  const studentAnnouncements = announcements.filter(a => a.targetRoles && a.targetRoles.includes('student'));
 
   return (
     <div className="space-y-6">
@@ -28,6 +39,21 @@ export default function StudentDashboard() {
       <div>
         <h2 className="text-xl font-bold text-slate-100 tracking-tight">Student Desktop</h2>
         <p className="text-xs text-slate-500 mt-1">Review assignments, course syllabuses, grades, and timetables.</p>
+      </div>
+
+      {/* Quick Shortcuts */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[
+          { label: 'Submit Assignment', link: '/student/assignments', icon: '📝' },
+          { label: 'View Timetable', link: '/student/timetable', icon: '📅' },
+          { label: 'Download Notes', link: '/student/materials', icon: '📥' },
+          { label: 'Join Class', link: '/student/presentations', icon: '🎥' }
+        ].map((shortcut) => (
+          <Card key={shortcut.label} className="p-4 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500/50 transition-colors" variant="glass" onClick={() => window.location.href = shortcut.link}>
+            <span className="text-2xl mb-2">{shortcut.icon}</span>
+            <span className="text-xs font-bold text-slate-300">{shortcut.label}</span>
+          </Card>
+        ))}
       </div>
 
       {/* Metrics Row */}
@@ -72,7 +98,7 @@ export default function StudentDashboard() {
           <Card className="p-6" variant="glass">
             <h3 className="text-base font-bold text-slate-200 mb-4">Pending Assignments</h3>
             <div className="space-y-4">
-              {mockAOIs.filter(a => a.classId === 'c1').map((aoi) => {
+              {aois.filter(a => a.classId === studentClassId).map((aoi) => {
                 const sub = studentSubmissions.find(s => s.aoiId === aoi.id);
                 return (
                   <div
@@ -101,12 +127,15 @@ export default function StudentDashboard() {
                   </div>
                 );
               })}
+              {aois.filter(a => a.classId === studentClassId).length === 0 && (
+                <p className="text-sm text-slate-500 italic">No assignments to display.</p>
+              )}
             </div>
           </Card>
 
           {/* School Announcements */}
           <Card className="p-6" variant="glass">
-            <h3 className="text-base font-bold text-slate-200 mb-4">Latest School Notices</h3>
+            <h3 className="text-base font-bold text-slate-200 mb-4">Teacher Communications & Notices</h3>
             <div className="space-y-4">
               {studentAnnouncements.map((ann) => (
                 <div key={ann.id} className="p-4 bg-[#0a1220]/50 border border-white/5 rounded-xl">
@@ -118,6 +147,9 @@ export default function StudentDashboard() {
                   <span className="text-[10px] text-blue-500 font-bold block mt-2.5">{ann.authorName}</span>
                 </div>
               ))}
+              {studentAnnouncements.length === 0 && (
+                <p className="text-sm text-slate-500 italic">No new announcements.</p>
+              )}
             </div>
           </Card>
         </div>
@@ -176,10 +208,7 @@ export default function StudentDashboard() {
                     <p className="text-[10px] text-slate-500 mt-0.5">Excellent performance</p>
                   </div>
                   <div className="text-right flex items-center gap-2">
-                    <span className="font-black text-slate-200">85/100</span>
-                    <span className="px-2 py-0.5 bg-blue-500/10 border border-blue-500/20 text-[10px] font-black text-blue-400 rounded-md">
-                      D1
-                    </span>
+                    <span className="font-bold text-slate-200">N/A</span>
                   </div>
                 </div>
               )}

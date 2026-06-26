@@ -32,3 +32,13 @@ out/
 # OS metadata
 .DS_Store
 Thumbs.db
+
+# SQLite database (local dev data)
+*.sqlite
+
+# Temp fix/debug scripts
+backend/fix_*.js
+backend/fix_*.sql
+backend/inspect_db.js
+test-prod.js
+

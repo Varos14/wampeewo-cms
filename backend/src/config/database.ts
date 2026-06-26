@@ -1,31 +1,40 @@
-import mysql from 'mysql2/promise';
+import sqlite3 from 'sqlite3';
+import { open } from 'sqlite';
+import path from 'path';
 
-let pool: mysql.Pool | null = null;
+let pool: any = null;
 
-export async function connectDatabase(): Promise<mysql.Pool> {
-  const {
-    DB_HOST,
-    DB_PORT,
-    DB_NAME,
-    DB_USER,
-    DB_PASSWORD,
-    DB_POOL_LIMIT,
-  } = process.env;
-
-  pool = mysql.createPool({
-    host: DB_HOST ?? 'localhost',
-    port: Number(DB_PORT ?? 3306),
-    database: DB_NAME ?? 'competency_cms',
-    user: DB_USER ?? 'competency_user',
-    password: DB_PASSWORD ?? 'competency_password',
-    connectionLimit: Number(DB_POOL_LIMIT ?? 10),
-    namedPlaceholders: true,
+export async function connectDatabase() {
+  const db = await open({
+    filename: path.join(__dirname, '../../database.sqlite'),
+    driver: sqlite3.Database
   });
+
+  // Create a wrapper object that matches the mysql2 pool.query signature
+  // which returns [rows, fields]
+  pool = {
+    query: async (sql: string, params: any[] = []) => {
+      // Replace ? placeholders with standard ? or parameterize if needed
+      // sqlite uses ? just like mysql
+      try {
+        if (sql.trim().toUpperCase().startsWith('SELECT') || sql.trim().toUpperCase().startsWith('PRAGMA') || sql.trim().toUpperCase().startsWith('SHOW')) {
+           const rows = await db.all(sql, params);
+           return [rows]; 
+        } else {
+           const result = await db.run(sql, params);
+           return [result];
+        }
+      } catch (error) {
+        console.error('DB Query Error:', sql, error);
+        throw error;
+      }
+    }
+  };
 
   // test connection
   await pool.query('SELECT 1');
   // eslint-disable-next-line no-console
-  console.log('MySQL connected');
+  console.log('SQLite connected successfully. database.sqlite created.');
 
   return pool;
 }

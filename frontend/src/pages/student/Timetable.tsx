@@ -1,16 +1,48 @@
+import { useState, useEffect } from 'react';
 import { Card } from '../../components/ui/Card';
+import { Button } from '../../components/ui/Button';
 import { useAuthStore } from '../../store/authStore';
-import { mockTimetables, mockStudents } from '../../utils/mockData';
+import { useAppDataStore } from '../../store/appDataStore';
+import { timetableService } from '../../services/api';
+import { TimetableEntry } from '../../types';
 
 export default function StudentTimetable() {
   const { user } = useAuthStore();
+  const { students, fetchData } = useAppDataStore();
 
-  const studentId = user?.id ?? '3';
-  const studentInfo = mockStudents.find(s => s.id === studentId) ?? mockStudents[0];
-  const myClassId = studentInfo?.classId ?? 'c1';
+  const [showModal, setShowModal] = useState(false);
+  const [day, setDay] = useState(1);
+  const [subjectName, setSubjectName] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+  const [mySchedule, setMySchedule] = useState<TimetableEntry[]>([]);
+  const [loading, setLoading] = useState(true);
 
   // Filter timetable entries for this student's class stream
-  const mySchedule = mockTimetables.filter(t => t.classId === myClassId);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  useEffect(() => {
+    const studentInfo = students.find(s => s.id === user?.id);
+    const myClassId = studentInfo?.classId ?? 'c1';
+
+    const fetchSchedule = async () => {
+      try {
+        const data = await timetableService.getByClass(myClassId);
+        setMySchedule(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (students.length > 0) {
+      fetchSchedule();
+    }
+  }, [students, user?.id]);
+
+  if (loading) return <div className="p-8 text-center text-slate-400 animate-pulse">Loading timetable...</div>;
 
   const days = [
     { key: 1, name: 'Monday' },
@@ -35,9 +67,14 @@ export default function StudentTimetable() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div>
-        <h2 className="text-xl font-bold text-slate-100 tracking-tight">Class Timetable</h2>
-        <p className="text-xs text-slate-500 mt-1">Your weekly class lectures and lecture hall room assignments.</p>
+      <div className="flex justify-between items-start">
+        <div>
+          <h2 className="text-xl font-bold text-slate-100 tracking-tight">Class & Study Timetable</h2>
+          <p className="text-xs text-slate-500 mt-1">Your weekly class lectures and personal study sessions.</p>
+        </div>
+        <Button variant="primary" onClick={() => setShowModal(true)}>
+          <span className="mr-2">➕</span> Add Study Session
+        </Button>
       </div>
 
       {/* Grid Mon-Fri */}
@@ -81,6 +118,66 @@ export default function StudentTimetable() {
           );
         })}
       </div>
+
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+          <div className="relative w-full max-w-md bg-slate-900 border border-white/10 rounded-2xl shadow-2xl p-6">
+            <h3 className="text-lg font-bold text-slate-100 mb-4">Add Personal Study Session</h3>
+            <form onSubmit={async (e) => {
+              e.preventDefault();
+              try {
+                const studentInfo = students.find(s => s.id === user?.id);
+                const myClassId = studentInfo?.classId ?? 'c1';
+                
+                await timetableService.create({
+                  classId: myClassId,
+                  subjectId: 'self-study',
+                  subjectName: subjectName,
+                  teacherName: 'Self Study', // Indicates a self-study session
+                  dayOfWeek: day as any,
+                  startTime,
+                  endTime,
+                  room: 'Library' // Default room for personal study
+                });
+                setShowModal(false);
+                alert('Study session added to personal timetable!');
+                
+                // Refresh
+                const data = await timetableService.getByClass(myClassId);
+                setMySchedule(data);
+              } catch (e) {
+                console.error(e);
+                alert('Failed to add study session');
+              }
+            }} className="space-y-4">
+              <div>
+                <label className="block text-slate-400 font-medium mb-1 text-xs">Day of Week</label>
+                <select value={day} onChange={e=>setDay(Number(e.target.value))} className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3 py-2 text-slate-200 focus:border-blue-500 text-sm">
+                  {days.map(d => <option key={d.key} value={d.key}>{d.name}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-slate-400 font-medium mb-1 text-xs">Topic / Subject</label>
+                <input required value={subjectName} onChange={e=>setSubjectName(e.target.value)} className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3 py-2 text-slate-200 focus:border-blue-500 text-sm" placeholder="e.g. Physics Revision" />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-slate-400 font-medium mb-1 text-xs">Start Time</label>
+                  <input type="time" required value={startTime} onChange={e=>setStartTime(e.target.value)} className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3 py-2 text-slate-200 focus:border-blue-500 text-sm" />
+                </div>
+                <div>
+                  <label className="block text-slate-400 font-medium mb-1 text-xs">End Time</label>
+                  <input type="time" required value={endTime} onChange={e=>setEndTime(e.target.value)} className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3 py-2 text-slate-200 focus:border-blue-500 text-sm" />
+                </div>
+              </div>
+              <div className="flex justify-end gap-3 pt-4">
+                <Button variant="ghost" onClick={() => setShowModal(false)}>Cancel</Button>
+                <Button variant="primary" type="submit">Add Study Session</Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,23 +1,33 @@
+import { useEffect } from 'react';
 import { Card } from '../../components/ui/Card';
 import { Badge, RubricBadge } from '../../components/ui/Badge';
 import { useAuthStore } from '../../store/authStore';
-import { mockStudents, mockAOIs, mockSubmissions, mockClasses } from '../../utils/mockData';
+import { useAppDataStore } from '../../store/appDataStore';
 
 export default function TeacherGradeBook() {
   const { user } = useAuthStore();
+  const { students, aois, submissions, classes, loading, fetchData } = useAppDataStore();
 
-  // Find classIds this teacher is assigned to (Okello John has c1, c2; David has c1, c3)
-  const teacherClassIds = user?.id === '5' ? ['c1', 'c3'] : ['c1', 'c2'];
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
-  const students = mockStudents.filter(s => teacherClassIds.includes(s.classId));
-  const teacherAOIs = mockAOIs.filter(aoi => aoi.teacherId === (user?.id ?? '2'));
+  if (loading) return <div className="p-8 text-center text-slate-400 animate-pulse">Loading gradebook...</div>;
+
+  // Find classIds this teacher is assigned to
+  const teacherClassIds = classes.filter(c => c.classTeacherId === user?.id).map(c => c.id);
+  // Fallback to demo classes if none assigned for demo purposes
+  const effectiveClassIds = teacherClassIds.length > 0 ? teacherClassIds : ['c1', 'c2'];
+
+  const filteredStudents = students.filter(s => effectiveClassIds.includes(s.classId));
+  const teacherAOIs = aois.filter(aoi => aoi.teacherId === (user?.id ?? '2'));
 
   const getClassName = (classId: string) => {
-    return mockClasses.find(c => c.id === classId)?.name ?? classId;
+    return classes.find(c => c.id === classId)?.name ?? classId;
   };
 
   const getGradeFor = (studentId: string, aoiId: string) => {
-    const sub = mockSubmissions.find(s => s.studentId === studentId && s.aoiId === aoiId);
+    const sub = submissions.find(s => s.studentId === studentId && s.aoiId === aoiId);
     return sub ? sub.grade : undefined;
   };
 
@@ -46,7 +56,7 @@ export default function TeacherGradeBook() {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
-              {students.map(student => (
+              {filteredStudents.map(student => (
                 <tr key={student.id} className="hover:bg-white/2 transition-colors">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
@@ -78,7 +88,7 @@ export default function TeacherGradeBook() {
                   })}
                 </tr>
               ))}
-              {students.length === 0 && (
+              {filteredStudents.length === 0 && (
                 <tr>
                   <td colSpan={2 + teacherAOIs.length} className="px-4 py-8 text-center text-slate-500 text-sm">
                     No students found in your assigned streams.

@@ -1,4 +1,4 @@
-export type UserRole = 'admin' | 'teacher' | 'student' | 'parent';
+export type UserRole = 'admin' | 'teacher' | 'student';
 
 export interface User {
   id: string;
@@ -23,13 +23,9 @@ export interface Student extends User {
   classId: string;
   registrationNumber: string;
   gender: 'Male' | 'Female';
-  parentIds: string[]; // Parent user IDs
 }
 
-export interface Parent extends User {
-  role: 'parent';
-  childIds: string[]; // Student user IDs
-}
+
 
 export interface Class {
   id: string;
@@ -50,7 +46,10 @@ export interface AOI {
   id: string;
   title: string;
   description: string;
-  deadline: string;
+  deadline: string; // Keep for backward compatibility or change to dueDate
+  dueDate?: string;
+  type?: 'assignment' | 'exam';
+  status?: 'draft' | 'pending' | 'approved' | 'rejected';
   classId: string;
   teacherId: string;
   rubric: { skill: string; maxScore: number }[];
@@ -111,23 +110,6 @@ export interface ExamResult {
   remarks?: string;
 }
 
-export interface FeeStatement {
-  studentId: string;
-  billedAmount: number;
-  paidAmount: number;
-  balance: number;
-  payments: FeePayment[];
-}
-
-export interface FeePayment {
-  id: string;
-  amount: number;
-  receiptNumber: string;
-  paymentMethod: 'Bank Slip' | 'Mobile Money' | 'Cash';
-  paymentDate: string; // YYYY-MM-DD
-  term: 1 | 2 | 3;
-  year: number;
-}
 
 export interface Announcement {
   id: string;

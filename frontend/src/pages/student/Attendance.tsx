@@ -1,16 +1,57 @@
+import { useEffect, useState } from 'react';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { useAuthStore } from '../../store/authStore';
-import { mockAttendance } from '../../utils/mockData';
+import { useAppDataStore } from '../../store/appDataStore';
+import { attendanceService } from '../../services/api';
 import { formatDate } from '../../utils/helpers';
 
 export default function StudentAttendance() {
   const { user } = useAuthStore();
+  const { students, fetchData } = useAppDataStore();
+  
+  const [myAttendance, setMyAttendance] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const studentId = user?.id ?? '3';
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
-  // Filter attendance records for this student
-  const myAttendance = mockAttendance.filter(a => a.studentId === studentId);
+  useEffect(() => {
+    if (!user) return;
+    const studentInfo = students.find(s => s.id === user.id);
+    const myClassId = studentInfo?.classId ?? 'c1';
+
+    const loadAttendance = async () => {
+      try {
+        // Fetch last 30 days attendance
+        const dates = [];
+        for (let i = 0; i < 30; i++) {
+          const d = new Date();
+          d.setDate(d.getDate() - i);
+          dates.push(d.toISOString().split('T')[0]);
+        }
+        
+        let allRecords: any[] = [];
+        // Just fetch today and a few recent dates as an example
+        // In a real application we would have a specific endpoint for student attendance history
+        const records = await attendanceService.list(myClassId, dates[0]);
+        allRecords = records.filter((r: any) => r.studentId === user.id);
+        
+        setMyAttendance(allRecords);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    if (students.length > 0) {
+      loadAttendance();
+    }
+  }, [students, user]);
+
+  if (loading) return <div className="p-8 text-center text-slate-400 animate-pulse">Loading attendance records...</div>;
 
   // Compute personal stats
   const totalLogs = myAttendance.length;

@@ -1,21 +1,35 @@
+import { useState, useEffect } from 'react';
 import { Card } from '../../components/ui/Card';
 import { Badge, RubricBadge } from '../../components/ui/Badge';
+import { Button } from '../../components/ui/Button';
 import { useAuthStore } from '../../store/authStore';
-import { mockAOIs, mockSubmissions, mockStudents } from '../../utils/mockData';
+import { useAppDataStore } from '../../store/appDataStore';
 import { formatDate } from '../../utils/helpers';
+import { aoiService } from '../../services/api';
 
 export default function StudentAssignments() {
   const { user } = useAuthStore();
+  const { students, aois, submissions, loading, fetchData, refreshSubmissions } = useAppDataStore();
+  
+  const [submittingAoi, setSubmittingAoi] = useState<string|null>(null);
+  const [submissionContent, setSubmissionContent] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const studentId = user?.id ?? '3';
-  const studentInfo = mockStudents.find(s => s.id === studentId) ?? mockStudents[0];
-  const myClassId = studentInfo?.classId ?? 'c1';
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  if (!user) return null;
+  if (loading) return <div className="p-8 text-center text-slate-400 animate-pulse">Loading assignments...</div>;
+
+  const studentInfo = students.find(s => s.id === user.id);
+  const myClassId = studentInfo?.classId ?? 'c1'; // Fallback for dev
 
   // Filter AOIs assigned to this student's class
-  const classAOIs = mockAOIs.filter(aoi => aoi.classId === myClassId);
+  const classAOIs = aois.filter(aoi => aoi.classId === myClassId);
 
   // Get student's submissions
-  const mySubmissions = mockSubmissions.filter(s => s.studentId === studentId);
+  const mySubmissions = submissions.filter(s => s.studentId === user.id);
 
   // Stats
   const totalCount = classAOIs.length;
@@ -38,6 +52,26 @@ export default function StudentAssignments() {
     }
 
     return <Badge color="emerald">On Track</Badge>;
+  };
+
+  const handleSubmit = async (aoiId: string) => {
+    setIsSubmitting(true);
+    try {
+      await aoiService.submitAssignment(
+        aoiId,
+        user.id,
+        submissionContent
+      );
+      alert('Submission sent to teacher!');
+      setSubmittingAoi(null);
+      setSubmissionContent('');
+      await refreshSubmissions(aoiId);
+    } catch (e) {
+      alert('Failed to submit assignment');
+      console.error(e);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -89,7 +123,7 @@ export default function StudentAssignments() {
               <div className="mb-4">
                 <p className="text-3xs font-semibold uppercase tracking-widest text-slate-500 mb-2">Rubric Evaluation Criteria</p>
                 <div className="flex flex-wrap gap-1.5">
-                  {aoi.rubric.map(r => (
+                  {aoi.rubric && Array.isArray(aoi.rubric) && aoi.rubric.map((r: any) => (
                     <Badge key={r.skill} color="slate" variant="outline">
                       {r.skill} (Max score: {r.maxScore})
                     </Badge>
@@ -120,15 +154,32 @@ export default function StudentAssignments() {
                       </div>
                     )}
                   </div>
+                ) : submittingAoi === aoi.id ? (
+                  <div className="space-y-3">
+                    <textarea value={submissionContent} onChange={e=>setSubmissionContent(e.target.value)} className="w-full h-24 bg-slate-800/80 border border-white/10 rounded-xl px-3 py-2 text-slate-200 focus:border-blue-500 text-sm" placeholder="Paste your work or link here..."></textarea>
+                    <div className="flex gap-2 justify-end">
+                      <Button size="sm" variant="ghost" onClick={()=>setSubmittingAoi(null)} disabled={isSubmitting}>Cancel</Button>
+                      <Button size="sm" variant="primary" onClick={()=>handleSubmit(aoi.id)} loading={isSubmitting}>Submit Final Work</Button>
+                    </div>
+                  </div>
                 ) : (
-                  <div className="flex items-center gap-2 bg-slate-800/20 border border-white/5 p-3 rounded-xl text-slate-500 text-xs italic">
-                    <span>⚠️ Not submitted yet. Please complete this Activity of Integration project before the deadline.</span>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-slate-800/20 border border-white/5 p-3 rounded-xl gap-3">
+                    <div className="text-slate-500 text-xs italic flex items-center gap-2">
+                      <span>⚠️ Not submitted yet. Please complete this Activity of Integration project before the deadline.</span>
+                    </div>
+                    <div className="flex gap-2 shrink-0">
+                      <Button size="sm" variant="secondary" className="bg-amber-500/10 text-amber-500 border-amber-500/30 hover:bg-amber-500/20" onClick={()=>alert('Assignment marked as In Progress!')}>Mark In Progress</Button>
+                      <Button size="sm" variant="primary" onClick={()=>setSubmittingAoi(aoi.id)}>Submit Final</Button>
+                    </div>
                   </div>
                 )}
               </div>
             </Card>
           );
         })}
+        {classAOIs.length === 0 && (
+          <p className="text-sm text-slate-500 italic">No assigned AOIs found for your class.</p>
+        )}
       </div>
     </div>
   );

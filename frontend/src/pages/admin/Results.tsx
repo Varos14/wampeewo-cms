@@ -1,39 +1,90 @@
+import { useState, useMemo, useEffect } from 'react';
 import { Card } from '../../components/ui/Card';
-import { mockExamResults, mockStudents, mockSubjects, mockExams } from '../../utils/mockData';
+import { Button } from '../../components/ui/Button';
+import { mockExamResults, mockExams } from '../../utils/mockData';
 import { getGradeColor } from '../../utils/helpers';
+import { useAppDataStore } from '../../store/appDataStore';
 
 export default function AdminResults() {
+  const { students, subjects, classes, fetchData } = useAppDataStore();
+  const [selectedClassId, setSelectedClassId] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
   const getStudentName = (studentId: string) => {
-    return mockStudents.find(s => s.id === studentId)?.name ?? 'Unknown Student';
+    return students.find(s => s.id === studentId)?.name ?? 'Unknown Student';
   };
 
   const getSubjectName = (subjectId: string) => {
-    return mockSubjects.find(s => s.id === subjectId)?.name ?? 'Unknown Subject';
+    return subjects.find(s => s.id === subjectId)?.name ?? 'Unknown Subject';
   };
 
   const getExamName = (examId: string) => {
     return mockExams.find(e => e.id === examId)?.name ?? 'Unknown Exam';
   };
 
-  // Group exam results by studentId
-  const studentIds = Array.from(new Set(mockExamResults.map(r => r.studentId)));
+  // Filter students based on selected class and search query
+  const filteredStudentIds = useMemo(() => {
+    let filteredStudents = students;
+    if (selectedClassId !== 'all') {
+      filteredStudents = filteredStudents.filter(s => s.classId === selectedClassId);
+    }
+    
+    if (searchQuery.trim() !== '') {
+      const lowerQ = searchQuery.toLowerCase();
+      filteredStudents = filteredStudents.filter(s => 
+        s.name.toLowerCase().includes(lowerQ) || 
+        s.registrationNumber.toLowerCase().includes(lowerQ)
+      );
+    }
+
+    const sIds = new Set(filteredStudents.map(s => s.id));
+    return Array.from(new Set(mockExamResults.filter(r => sIds.has(r.studentId)).map(r => r.studentId)));
+  }, [selectedClassId, searchQuery, students]);
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div>
-        <h2 className="text-xl font-bold text-slate-100 tracking-tight">Exam Results</h2>
-        <p className="text-xs text-slate-500 mt-1">Review student terminal and mid-term results.</p>
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+        <div>
+          <h2 className="text-xl font-bold text-slate-100 tracking-tight">Exam Results & Reports</h2>
+          <p className="text-xs text-slate-500 mt-1">Review student terminal and mid-term results by class stream.</p>
+        </div>
+        <div className="flex flex-col sm:flex-row items-center gap-3">
+          <input 
+            type="text"
+            placeholder="Search by student name or reg no..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full sm:w-64 bg-slate-800 border border-white/10 rounded-xl px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+          />
+          <select
+            value={selectedClassId}
+            onChange={(e) => setSelectedClassId(e.target.value)}
+            className="w-full sm:w-auto bg-slate-800 border border-white/10 rounded-xl px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+          >
+            <option value="all">All Classes</option>
+            {classes.map(c => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Roster of results grouped by student */}
       <div className="space-y-6">
-        {studentIds.map(studentId => {
+        {filteredStudentIds.length === 0 && (
+          <p className="text-slate-500 text-sm">No results found for the selected filters.</p>
+        )}
+        {filteredStudentIds.map(studentId => {
           const studentName = getStudentName(studentId);
           const results = mockExamResults.filter(r => r.studentId === studentId);
 
           return (
             <Card key={studentId} className="p-5" variant="glass">
-              <div className="border-b border-white/5 pb-3 mb-4 flex justify-between items-center">
+              <div className="border-b border-white/5 pb-3 mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <div className="flex items-center gap-3">
                   <img
                     src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(studentName)}`}
@@ -45,6 +96,7 @@ export default function AdminResults() {
                     <p className="text-2xs text-slate-500 font-semibold uppercase tracking-wider">Student Academic Summary</p>
                   </div>
                 </div>
+                <Button variant="secondary" size="sm" onClick={() => alert(`Generating PDF Academic Report for ${studentName}...`)}>Generate Student Report</Button>
               </div>
 
               <div className="overflow-x-auto">

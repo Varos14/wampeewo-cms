@@ -8,7 +8,7 @@ export async function listAOIs(req: Request, res: Response) {
   try {
     const db = getDb();
     
-    let query = 'SELECT id, title, description, deadline, class_id as classId, teacher_id as teacherId, rubric FROM aois WHERE 1=1';
+    let query = 'SELECT id, title, description, deadline, class_id as classId, teacher_id as teacherId, rubric, status, type FROM aois WHERE 1=1';
     const params: any[] = [];
 
     if (classId) {
@@ -36,11 +36,14 @@ export async function listAOIs(req: Request, res: Response) {
 }
 
 export async function createAOI(req: Request, res: Response) {
-  const { title, description, deadline, classId, teacherId, rubric } = req.body;
+  const { title, description, deadline, classId, teacherId, rubric, type } = req.body;
 
   if (!title || !description || !deadline || !classId || !teacherId) {
     return res.status(400).json({ error: 'title, description, deadline, classId, and teacherId are required' });
   }
+
+  const aoiType = type || 'assignment';
+  const status = 'pending';
 
   const id = `aoi_${Date.now()}`;
   const rubricStr = JSON.stringify(rubric ?? []);
@@ -49,8 +52,8 @@ export async function createAOI(req: Request, res: Response) {
     const db = getDb();
 
     await db.query(
-      'INSERT INTO aois (id, title, description, deadline, class_id, teacher_id, rubric) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [id, title, description, deadline, classId, teacherId, rubricStr]
+      'INSERT INTO aois (id, title, description, deadline, class_id, teacher_id, rubric, type, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [id, title, description, deadline, classId, teacherId, rubricStr, aoiType, status]
     );
 
     return res.status(201).json({
@@ -60,10 +63,30 @@ export async function createAOI(req: Request, res: Response) {
       deadline,
       classId,
       teacherId,
-      rubric
+      rubric,
+      type: aoiType,
+      status
     });
   } catch (err) {
     console.error('[createAOI] DB error:', err);
     return res.status(500).json({ error: 'Internal server error creating AOI' });
+  }
+}
+
+export async function approveAOI(req: Request, res: Response) {
+  const { id } = req.params;
+  const { status } = req.body; // 'approved' | 'rejected'
+
+  if (status !== 'approved' && status !== 'rejected') {
+    return res.status(400).json({ error: 'Status must be approved or rejected' });
+  }
+
+  try {
+    const db = getDb();
+    await db.query('UPDATE aois SET status = ? WHERE id = ?', [status, id]);
+    return res.json({ id, status });
+  } catch (err) {
+    console.error('[approveAOI] DB error:', err);
+    return res.status(500).json({ error: 'Internal server error approving AOI' });
   }
 }

@@ -120,13 +120,6 @@ export default function Login() {
           >
             Student Portal
           </button>
-          <button
-            onClick={() => handleQuickLogin('parent@wampeewo.com', 'parent123')}
-            disabled={loading}
-            className="p-2 border border-amber-500/10 hover:border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/10 rounded-xl text-[10px] font-bold text-amber-400 transition-all text-center focus:outline-none"
-          >
-            Parent Portal
-          </button>
         </div>
       </div>
     </div>

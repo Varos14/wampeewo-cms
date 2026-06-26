@@ -1,20 +1,28 @@
+import { useEffect } from 'react';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { useAuthStore } from '../../store/authStore';
-import { mockSubjects, mockTeachers, mockStudents } from '../../utils/mockData';
+import { useAppDataStore } from '../../store/appDataStore';
 
 export default function StudentSubjects() {
   const { user } = useAuthStore();
+  const { students, subjects, teachers, loading, fetchData } = useAppDataStore();
 
-  const studentInfo = mockStudents.find(s => s.id === user?.id) ?? mockStudents[0];
-  const myClassId = studentInfo?.classId ?? 'c1';
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  if (loading) return <div className="p-8 text-center text-slate-400 animate-pulse">Loading subjects...</div>;
+
+  const studentInfo = students.find(s => s.id === user?.id);
+  const myClassId = studentInfo?.classId ?? 'c1'; // Default to c1 for demo
 
   // Filter subjects for the student's class
-  const mySubjects = mockSubjects.filter(s => s.classId === myClassId);
+  const mySubjects = subjects.filter(s => s.classId === myClassId);
 
   const getTeacherForSubject = (subjectName: string) => {
     // Find teacher whose subjects list includes this subject name
-    const teacher = mockTeachers.find(t => 
+    const teacher = teachers.find(t => 
       t.subjects.some(s => s.toLowerCase() === subjectName.toLowerCase())
     );
     return teacher ? teacher.name : 'Staff Member';

@@ -5,6 +5,7 @@ import { Button } from '../../components/ui/Button';
 import { teacherService, classService } from '../../services/api';
 import { Teacher, Class } from '../../types';
 import { useSearchParams } from 'react-router-dom';
+import { TeacherProfileModal } from './TeacherProfileModal';
 
 const COMMON_SUBJECTS = [
   'Mathematics',
@@ -30,6 +31,9 @@ export default function AdminTeachers() {
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [formSuccess, setFormSuccess] = useState<string | null>(null);
+
+  // Profile Modal State
+  const [selectedTeacherId, setSelectedTeacherId] = useState<string | null>(null);
 
   // Form Fields
   const [name, setName] = useState('');
@@ -173,7 +177,7 @@ export default function AdminTeachers() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {teachers.map(teacher => (
-            <Card key={teacher.id} className="p-5" variant="glass">
+            <Card key={teacher.id} className="p-5 cursor-pointer hover:border-blue-500/50 transition-colors" variant="glass" onClick={() => setSelectedTeacherId(teacher.id)}>
               <div className="flex items-start gap-4">
                 <img
                   src={teacher.avatarUrl || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(teacher.name)}`}
@@ -222,6 +226,10 @@ export default function AdminTeachers() {
             <p className="text-slate-500 text-sm italic col-span-2 text-center py-8">No teachers currently registered in the database.</p>
           )}
         </div>
+      )}
+
+      {selectedTeacherId && (
+        <TeacherProfileModal teacherId={selectedTeacherId} onClose={() => setSelectedTeacherId(null)} />
       )}
 
       {/* Modal Dialog */}

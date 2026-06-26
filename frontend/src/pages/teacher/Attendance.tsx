@@ -1,36 +1,49 @@
 import { useState, useEffect } from 'react';
 import { Card } from '../../components/ui/Card';
 import { useAuthStore } from '../../store/authStore';
-import { mockStudents, mockClasses, mockAttendance } from '../../utils/mockData';
+import { useAppDataStore } from '../../store/appDataStore';
+import { attendanceService } from '../../services/api';
 
 export default function TeacherAttendance() {
   const { user } = useAuthStore();
+  const { classes, students, loading, fetchData } = useAppDataStore();
+  
   const [selectedClassId, setSelectedClassId] = useState('c1');
   const [selectedDate, setSelectedDate] = useState('2026-06-16');
   const [attendanceState, setAttendanceState] = useState<Record<string, 'present' | 'absent' | 'excused'>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // Filter classes taught by this teacher.
-  // Okello John (id '2') teaches c1 and c2.
-  const teacherClasses = mockClasses.filter(c => c.classTeacherId === user?.id || selectedClassId === c.id);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
-  const studentsInClass = mockStudents.filter(s => s.classId === selectedClassId);
+  // Filter classes taught by this teacher
+  const teacherClasses = classes.filter(c => c.classTeacherId === user?.id || selectedClassId === c.id);
+  const studentsInClass = students.filter(s => s.classId === selectedClassId);
 
   // Load existing attendance
   useEffect(() => {
-    const state: Record<string, 'present' | 'absent' | 'excused'> = {};
+    if (!selectedClassId || !selectedDate || studentsInClass.length === 0) return;
     
-    studentsInClass.forEach(student => {
-      // Find record for student, date, and class
-      const existing = mockAttendance.find(
-        att => att.studentId === student.id && att.date === selectedDate && att.classId === selectedClassId
-      );
-      state[student.id] = existing ? existing.status : 'present'; // default to present if none exists
-    });
+    const loadAttendance = async () => {
+      try {
+        const records = await attendanceService.list(selectedClassId, selectedDate);
+        const state: Record<string, 'present' | 'absent' | 'excused'> = {};
+        
+        studentsInClass.forEach(student => {
+          const existing = records.find(att => att.studentId === student.id);
+          state[student.id] = existing ? existing.status : 'present';
+        });
 
-    setAttendanceState(state);
-    setIsSubmitted(false);
-  }, [selectedClassId, selectedDate]);
+        setAttendanceState(state);
+        setIsSubmitted(false);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    
+    loadAttendance();
+  }, [selectedClassId, selectedDate, studentsInClass.length]);
 
   const handleStatusChange = (studentId: string, status: 'present' | 'absent' | 'excused') => {
     setAttendanceState(prev => ({
@@ -40,9 +53,25 @@ export default function TeacherAttendance() {
     setIsSubmitted(false);
   };
 
-  const handleSave = () => {
-    setIsSubmitted(true);
+  const handleSave = async () => {
+    if (!user) return;
+    try {
+      const records = studentsInClass.map(s => ({
+        studentId: s.id,
+        classId: selectedClassId,
+        date: selectedDate,
+        status: attendanceState[s.id] || 'present',
+        markedBy: user.id
+      }));
+      await attendanceService.mark(records);
+      setIsSubmitted(true);
+    } catch (e) {
+      console.error(e);
+      alert('Failed to save attendance');
+    }
   };
+
+  if (loading) return <div className="p-8 text-center text-slate-400 animate-pulse">Loading attendance...</div>;
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -85,7 +114,7 @@ export default function TeacherAttendance() {
       {isSubmitted && (
         <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold flex items-center gap-2.5 animate-pulse">
           <span className="text-sm">✓</span>
-          Attendance sheet saved successfully for {mockClasses.find(c => c.id === selectedClassId)?.name} on {selectedDate}.
+          Attendance sheet saved successfully for {classes.find(c => c.id === selectedClassId)?.name} on {selectedDate}.
         </div>
       )}
 

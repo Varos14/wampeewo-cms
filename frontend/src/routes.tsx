@@ -14,7 +14,7 @@ import AdminSubjects from './pages/admin/Subjects';
 import AdminAttendance from './pages/admin/Attendance';
 import AdminExams from './pages/admin/Exams';
 import AdminResults from './pages/admin/Results';
-import AdminFees from './pages/admin/Fees';
+import AdminAssignments from './pages/admin/Assignments';
 import AdminReports from './pages/admin/Reports';
 import AdminSettings from './pages/admin/Settings';
 
@@ -25,6 +25,8 @@ import TeacherAssignments from './pages/teacher/Assignments';
 import TeacherGradeBook from './pages/teacher/GradeBook';
 import TeacherMyClasses from './pages/teacher/MyClasses';
 import TeacherTimetable from './pages/teacher/Timetable';
+import TeacherPresentations from './pages/teacher/Presentations';
+import TeacherMaterials from './pages/teacher/Materials';
 
 // Student Pages
 import StudentDashboard from './pages/student/Dashboard';
@@ -34,13 +36,9 @@ import StudentAttendance from './pages/student/Attendance';
 import StudentResults from './pages/student/Results';
 import StudentNotes from './pages/student/Notes';
 import StudentTimetable from './pages/student/Timetable';
-import StudentFeeStatements from './pages/student/FeeStatements';
+import StudentPresentations from './pages/student/Presentations';
+import StudentMaterials from './pages/student/Materials';
 
-// Parent Pages
-import ParentDashboard from './pages/parent/Dashboard';
-import ParentResults from './pages/parent/Results';
-import ParentAttendance from './pages/parent/Attendance';
-import ParentFeeStatements from './pages/parent/FeeStatements';
 
 export const routes: RouteObject[] = [
   // Public Routes (Auth)
@@ -69,7 +67,7 @@ export const routes: RouteObject[] = [
           { path: 'attendance', element: <AdminAttendance /> },
           { path: 'exams', element: <AdminExams /> },
           { path: 'results', element: <AdminResults /> },
-          { path: 'fees', element: <AdminFees /> },
+          { path: 'assignments', element: <AdminAssignments /> },
           { path: 'reports', element: <AdminReports /> },
           { path: 'settings', element: <AdminSettings /> },
         ],
@@ -91,6 +89,8 @@ export const routes: RouteObject[] = [
           { path: 'gradebook', element: <TeacherGradeBook /> },
           { path: 'classes', element: <TeacherMyClasses /> },
           { path: 'timetable', element: <TeacherTimetable /> },
+          { path: 'presentations', element: <TeacherPresentations /> },
+          { path: 'materials', element: <TeacherMaterials /> },
         ],
       },
     ],
@@ -111,28 +111,14 @@ export const routes: RouteObject[] = [
           { path: 'results', element: <StudentResults /> },
           { path: 'notes', element: <StudentNotes /> },
           { path: 'timetable', element: <StudentTimetable /> },
-          { path: 'fees', element: <StudentFeeStatements /> },
+          { path: 'presentations', element: <StudentPresentations /> },
+          { path: 'materials', element: <StudentMaterials /> },
         ],
       },
     ],
   },
 
-  // Parent Portal Subtree
-  {
-    path: '/parent',
-    element: <RoleGuard allowedRoles={['parent']} />,
-    children: [
-      {
-        element: <DashboardLayout />,
-        children: [
-          { path: '', element: <ParentDashboard /> },
-          { path: 'results', element: <ParentResults /> },
-          { path: 'attendance', element: <ParentAttendance /> },
-          { path: 'fees', element: <ParentFeeStatements /> },
-        ],
-      },
-    ],
-  },
+
 
   // Fallback Catch-all Route
   {

@@ -8,30 +8,24 @@ export const ROLE_LABELS: Record<UserRole, string> = {
   admin: 'Administrator',
   teacher: 'Teacher',
   student: 'Student',
-  parent: 'Parent',
 };
 
-export const ROLE_THEMES: Record<UserRole, { primary: string; bg: string; text: string }> = {
+export const ROLE_COLORS: Record<UserRole, { primary: string, bg: string, text: string }> = {
   admin: {
-    primary: 'indigo-500',
-    bg: 'bg-indigo-500/10',
-    text: 'text-indigo-400',
+    primary: 'blue-500',
+    bg: 'bg-blue-500/10',
+    text: 'text-blue-500'
   },
   teacher: {
     primary: 'emerald-500',
     bg: 'bg-emerald-500/10',
-    text: 'text-emerald-400',
+    text: 'text-emerald-500'
   },
   student: {
-    primary: 'sky-500',
-    bg: 'bg-sky-500/10',
-    text: 'text-sky-400',
-  },
-  parent: {
-    primary: 'amber-500',
-    bg: 'bg-amber-500/10',
-    text: 'text-amber-400',
-  },
+    primary: 'purple-500',
+    bg: 'bg-purple-500/10',
+    text: 'text-purple-500'
+  }
 };
 
 export const GRADES = {

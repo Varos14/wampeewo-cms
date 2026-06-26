@@ -115,8 +115,8 @@ export const Notes: React.FC = () => {
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="Write your study notes here..."
-                rows={5}
-                className="w-full rounded-xl border border-white/5 bg-slate-950/45 px-3 py-2.5 text-xs font-semibold text-slate-200 focus:outline-none focus:border-blue-500/50"
+                rows={10}
+                className="w-full rounded-xl border border-white/5 bg-slate-950/45 px-4 py-3 text-sm font-medium text-slate-200 focus:outline-none focus:border-blue-500/50"
                 required
               />
             </div>
@@ -203,7 +203,7 @@ export const Notes: React.FC = () => {
                     </div>
                   </div>
                 ) : (
-                  <p className="text-xs text-slate-300 mt-3 whitespace-pre-wrap leading-relaxed">
+                  <p className="text-sm md:text-base text-slate-300 mt-4 whitespace-pre-wrap leading-relaxed">
                     {note.content}
                   </p>
                 )}

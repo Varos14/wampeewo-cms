@@ -47,11 +47,7 @@ const Icons = {
       <path strokeLinecap="round" strokeLinejoin="round" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
     </svg>
   ),
-  Fees: () => (
-    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  ),
+
   Reports: () => (
     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
       <path strokeLinecap="round" strokeLinejoin="round" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -82,6 +78,11 @@ const Icons = {
     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
       <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
     </svg>
+  ),
+  Presentations: () => (
+    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+    </svg>
   )
 };
 
@@ -104,10 +105,11 @@ export const Sidebar: React.FC = () => {
       { to: '/admin/teachers', label: 'Teachers', icon: <Icons.Teachers /> },
       { to: '/admin/classes', label: 'Classes', icon: <Icons.Classes /> },
       { to: '/admin/subjects', label: 'Subjects', icon: <Icons.Subjects /> },
+      { to: '/admin/assignments', label: 'Assignments', icon: <Icons.Assignments /> },
       { to: '/admin/attendance', label: 'Attendance', icon: <Icons.Attendance /> },
       { to: '/admin/exams', label: 'Exams', icon: <Icons.Exams /> },
       { to: '/admin/results', label: 'Results', icon: <Icons.Results /> },
-      { to: '/admin/fees', label: 'Fees', icon: <Icons.Fees /> },
+
       { to: '/admin/reports', label: 'Reports', icon: <Icons.Reports /> },
       { to: '/admin/settings', label: 'Settings', icon: <Icons.Settings /> },
     ],
@@ -118,6 +120,8 @@ export const Sidebar: React.FC = () => {
       { to: '/teacher/gradebook', label: 'Grade Book', icon: <Icons.GradeBook /> },
       { to: '/teacher/classes', label: 'My Classes', icon: <Icons.Classes /> },
       { to: '/teacher/timetable', label: 'Timetable', icon: <Icons.Timetable /> },
+      { to: '/teacher/presentations', label: 'Meetings', icon: <Icons.Presentations /> },
+      { to: '/teacher/materials', label: 'Materials', icon: <Icons.Notes /> },
     ],
     student: [
       { to: '/student', label: 'Dashboard', icon: <Icons.Dashboard /> },
@@ -125,16 +129,12 @@ export const Sidebar: React.FC = () => {
       { to: '/student/assignments', label: 'Assignments', icon: <Icons.Assignments /> },
       { to: '/student/attendance', label: 'Attendance', icon: <Icons.Attendance /> },
       { to: '/student/results', label: 'Results', icon: <Icons.Results /> },
-      { to: '/student/notes', label: 'Notes', icon: <Icons.Notes /> },
+      { to: '/student/notes', label: 'My Notes', icon: <Icons.Notes /> },
+      { to: '/student/materials', label: 'Materials', icon: <Icons.Notes /> },
+      { to: '/student/presentations', label: 'Online Classes', icon: <Icons.Presentations /> },
       { to: '/student/timetable', label: 'Timetable', icon: <Icons.Timetable /> },
-      { to: '/student/fees', label: 'Fee Statements', icon: <Icons.Fees /> },
     ],
-    parent: [
-      { to: '/parent', label: 'Dashboard', icon: <Icons.Dashboard /> },
-      { to: '/parent/results', label: 'Results', icon: <Icons.Results /> },
-      { to: '/parent/attendance', label: 'Attendance', icon: <Icons.Attendance /> },
-      { to: '/parent/fees', label: 'Fee Statements', icon: <Icons.Fees /> },
-    ],
+
   };
 
   const currentLinks = links[user.role] || [];
@@ -155,8 +155,9 @@ export const Sidebar: React.FC = () => {
       {/* Sidebar Header/Branding */}
       <div className="h-16 flex items-center justify-between px-5 border-b border-white/5 shrink-0 overflow-hidden">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/35 flex items-center justify-center font-bold text-blue-400">
-            W
+          <div className="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/35 flex items-center justify-center font-bold text-blue-400 overflow-hidden">
+            {/* The user will provide the logo which will be placed here. For now we use the initial */}
+            <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement!.innerText = 'W'; }} />
           </div>
           {!sidebarCollapsed && (
             <span className="font-extrabold tracking-tight text-slate-100 text-sm truncate uppercase">

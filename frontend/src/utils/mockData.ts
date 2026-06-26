@@ -1,7 +1,7 @@
 import { 
-  User, Student, Teacher, Parent, Class, Subject, 
+  User, Student, Teacher, Class, Subject, 
   AOI, Submission, Note, GenericSkill, Attendance, 
-  Exam, ExamResult, FeeStatement, Announcement, TimetableEntry 
+  Exam, ExamResult, Announcement, TimetableEntry 
 } from '../types';
 
 // Mock Users
@@ -9,72 +9,48 @@ export const mockUsers: User[] = [
   { id: '1', name: 'Nalule Margaret', email: 'admin@wampeewo.com', role: 'admin' },
   { id: '2', name: 'Okello John', email: 'teacher@wampeewo.com', role: 'teacher' },
   { id: '3', name: 'Kato Paul', email: 'student@wampeewo.com', role: 'student' },
-  { id: '4', name: 'Mukasa Ronald', email: 'parent@wampeewo.com', role: 'parent' },
   { id: '5', name: 'Nsubuga David', email: 'david@wampeewo.com', role: 'teacher' },
   { id: '6', name: 'Babirye Sarah', email: 'sarah@wampeewo.com', role: 'student' },
   { id: '7', name: 'Wasswa Peter', email: 'peter@wampeewo.com', role: 'student' }
 ];
 
 export const mockTeachers: Teacher[] = [
-  { 
-    id: '2', 
-    name: 'Okello John', 
-    email: 'teacher@wampeewo.com', 
-    role: 'teacher', 
-    subjects: ['Mathematics', 'Physics'], 
-    classIds: ['c1', 'c2'] 
-  },
-  { 
-    id: '5', 
-    name: 'Nsubuga David', 
-    email: 'david@wampeewo.com', 
-    role: 'teacher', 
-    subjects: ['English Literature', 'History'], 
-    classIds: ['c1', 'c3'] 
-  }
+  { id: '2', name: 'Okello John', email: 'teacher@wampeewo.com', role: 'teacher', subjects: ['Mathematics', 'Physics'], classIds: ['c1', 'c2'] },
+  { id: '5', name: 'Nsubuga David', email: 'david@wampeewo.com', role: 'teacher', subjects: ['English Literature', 'History'], classIds: ['c1', 'c3'] },
+  { id: '200', name: 'DOS Saaz Jonathan', email: 'saaz@wampeewo.com', role: 'teacher', subjects: ['Administration'], classIds: ['c1', 'c2', 'c3', 'c4'] },
+  { id: '201', name: 'Mr. Locha Derrick', email: 'locha@wampeewo.com', role: 'teacher', subjects: ['English Literature'], classIds: ['c1', 'c2'] },
+  { id: '202', name: 'Mrs. Aringo Diana', email: 'aringo@wampeewo.com', role: 'teacher', subjects: ['English Literature'], classIds: ['c3', 'c4'] },
+  { id: '203', name: 'Mr. Musisi Deo', email: 'musisi@wampeewo.com', role: 'teacher', subjects: ['Mathematics'], classIds: ['c1', 'c2'] },
+  { id: '204', name: 'Mr. Sembatya Dancan', email: 'sembatya@wampeewo.com', role: 'teacher', subjects: ['Mathematics'], classIds: ['c3', 'c4'] },
+  { id: '205', name: 'Mrs. Asiimwe Doreen', email: 'asiimwe@wampeewo.com', role: 'teacher', subjects: ['Geography'], classIds: ['c1', 'c2'] },
+  { id: '206', name: 'Ms. Ameri Faith', email: 'ameri@wampeewo.com', role: 'teacher', subjects: ['Geography'], classIds: ['c3', 'c4'] },
+  { id: '207', name: 'Madam Eve Najego', email: 'eve@wampeewo.com', role: 'teacher', subjects: ['History'], classIds: ['c1', 'c2'] },
+  { id: '208', name: 'Ms. Kakumakati Brenda', email: 'kakumakati@wampeewo.com', role: 'teacher', subjects: ['History'], classIds: ['c3', 'c4'] },
+  { id: '209', name: 'Mr. Wairagala John-Fisher', email: 'wairagala@wampeewo.com', role: 'teacher', subjects: ['Physics'], classIds: ['c1', 'c2', 'c3', 'c4'] },
+  { id: '210', name: 'Mrs. Bafaki Gift', email: 'bafaki@wampeewo.com', role: 'teacher', subjects: ['Biology'], classIds: ['c1', 'c2', 'c3', 'c4'] }
 ];
 
 export const mockStudents: Student[] = [
-  { 
-    id: '3', 
-    name: 'Kato Paul', 
-    email: 'student@wampeewo.com', 
-    role: 'student', 
-    classId: 'c1', 
-    registrationNumber: 'WNS/2026/089', 
-    gender: 'Male',
-    parentIds: ['4'] 
-  },
-  { 
-    id: '6', 
-    name: 'Babirye Sarah', 
-    email: 'sarah@wampeewo.com', 
-    role: 'student', 
-    classId: 'c1', 
-    registrationNumber: 'WNS/2026/090', 
-    gender: 'Female',
-    parentIds: ['4'] 
-  },
-  { 
-    id: '7', 
-    name: 'Wasswa Peter', 
-    email: 'peter@wampeewo.com', 
-    role: 'student', 
-    classId: 'c2', 
-    registrationNumber: 'WNS/2025/112', 
-    gender: 'Male',
-    parentIds: [] 
-  }
-];
-
-export const mockParents: Parent[] = [
-  { 
-    id: '4', 
-    name: 'Mukasa Ronald', 
-    email: 'parent@wampeewo.com', 
-    role: 'parent', 
-    childIds: ['3', '6'] 
-  }
+  { id: '3', name: 'Kato Paul', email: 'student@wampeewo.com', role: 'student', classId: 'c1', registrationNumber: 'WNS/2026/089', gender: 'Male' },
+  { id: '6', name: 'Babirye Sarah', email: 'sarah@wampeewo.com', role: 'student', classId: 'c1', registrationNumber: 'WNS/2026/090', gender: 'Female' },
+  { id: '7', name: 'Wasswa Peter', email: 'peter@wampeewo.com', role: 'student', classId: 'c2', registrationNumber: 'WNS/2025/112', gender: 'Male' },
+  { id: '100', name: 'Gareth Tuwesigye', email: 'gareth@wampeewo.com', role: 'student', classId: 'c1', registrationNumber: 'WNS/2026/100', gender: 'Male' },
+  { id: '101', name: 'Farouk Ssekabira', email: 'farouk@wampeewo.com', role: 'student', classId: 'c1', registrationNumber: 'WNS/2026/101', gender: 'Male' },
+  { id: '102', name: 'Jonathan Kirungi', email: 'jonathan@wampeewo.com', role: 'student', classId: 'c1', registrationNumber: 'WNS/2026/102', gender: 'Male' },
+  { id: '103', name: 'Derrick Akeba', email: 'derrick@wampeewo.com', role: 'student', classId: 'c1', registrationNumber: 'WNS/2026/103', gender: 'Male' },
+  { id: '104', name: 'Clevous Akoragye', email: 'clevous@wampeewo.com', role: 'student', classId: 'c1', registrationNumber: 'WNS/2026/104', gender: 'Male' },
+  { id: '105', name: 'Ismail Nsamba', email: 'ismail@wampeewo.com', role: 'student', classId: 'c2', registrationNumber: 'WNS/2026/105', gender: 'Male' },
+  { id: '106', name: 'Hillary Tulinawe', email: 'hillary@wampeewo.com', role: 'student', classId: 'c2', registrationNumber: 'WNS/2026/106', gender: 'Male' },
+  { id: '107', name: 'Mercy Kharono', email: 'mercy@wampeewo.com', role: 'student', classId: 'c2', registrationNumber: 'WNS/2026/107', gender: 'Female' },
+  { id: '108', name: 'Rogers Wanyama', email: 'rogers@wampeewo.com', role: 'student', classId: 'c2', registrationNumber: 'WNS/2026/108', gender: 'Male' },
+  { id: '109', name: 'Walter Ochan', email: 'walter@wampeewo.com', role: 'student', classId: 'c3', registrationNumber: 'WNS/2026/109', gender: 'Male' },
+  { id: '110', name: 'Naula Habiiba Abass', email: 'naula@wampeewo.com', role: 'student', classId: 'c3', registrationNumber: 'WNS/2026/110', gender: 'Female' },
+  { id: '111', name: 'Radley Byamugisha', email: 'radley@wampeewo.com', role: 'student', classId: 'c3', registrationNumber: 'WNS/2026/111', gender: 'Male' },
+  { id: '112', name: 'Erias Mulisa Nsereko', email: 'erias@wampeewo.com', role: 'student', classId: 'c3', registrationNumber: 'WNS/2026/112', gender: 'Male' },
+  { id: '113', name: 'Matha Bamuhamye', email: 'matha@wampeewo.com', role: 'student', classId: 'c4', registrationNumber: 'WNS/2026/113', gender: 'Female' },
+  { id: '114', name: 'Peter Erikosi', email: 'peter114@wampeewo.com', role: 'student', classId: 'c4', registrationNumber: 'WNS/2026/114', gender: 'Male' },
+  { id: '115', name: 'Samuel Asianut', email: 'samuel@wampeewo.com', role: 'student', classId: 'c4', registrationNumber: 'WNS/2026/115', gender: 'Male' },
+  { id: '116', name: 'Patrick Ngabongiza', email: 'patrick@wampeewo.com', role: 'student', classId: 'c4', registrationNumber: 'WNS/2026/116', gender: 'Male' }
 ];
 
 // Classes & Subjects
@@ -237,38 +213,15 @@ export const mockExamResults: ExamResult[] = [
   { id: 'er6', examId: 'ex2', studentId: '6', subjectId: 's3', score: 88, grade: 'D1', remarks: 'Outstanding literature insights' }
 ];
 
-// Fee Statements & Payments
-export const mockFeeStatements: Record<string, FeeStatement> = {
-  '3': {
-    studentId: '3',
-    billedAmount: 1200000, // 1.2M UGX
-    paidAmount: 850000,
-    balance: 350000,
-    payments: [
-      { id: 'pay1', amount: 500000, receiptNumber: 'REC-9081', paymentMethod: 'Bank Slip', paymentDate: '2026-05-10', term: 1, year: 2026 },
-      { id: 'pay2', amount: 350000, receiptNumber: 'REC-9243', paymentMethod: 'Mobile Money', paymentDate: '2026-06-01', term: 1, year: 2026 }
-    ]
-  },
-  '6': {
-    studentId: '6',
-    billedAmount: 1200000,
-    paidAmount: 1200000,
-    balance: 0,
-    payments: [
-      { id: 'pay3', amount: 1200000, receiptNumber: 'REC-8991', paymentMethod: 'Bank Slip', paymentDate: '2026-05-08', term: 1, year: 2026 }
-    ]
-  }
-};
-
 // Announcements
 export const mockAnnouncements: Announcement[] = [
   {
     id: 'ann1',
     title: 'Visitation Day Details',
-    content: 'We welcome parents for our Term I Visitation Day on Sunday, June 21, 2026. Gate opens at 9:00 AM. Please clear pending fees.',
+    content: 'We welcome guardians for our Term I Visitation Day on Sunday, June 21, 2026. Gate opens at 9:00 AM. Please clear pending fees.',
     authorId: '1',
     authorName: 'Nalule Margaret (Admin)',
-    targetRoles: ['student', 'parent'],
+    targetRoles: ['student'],
     createdAt: '2026-06-12T08:00:00.000Z'
   },
   {
@@ -277,7 +230,7 @@ export const mockAnnouncements: Announcement[] = [
     content: 'Please note that mid-term tests will begin on Monday, June 29 instead of June 22. Timetables will be uploaded by the end of this week.',
     authorId: '1',
     authorName: 'Nalule Margaret (Admin)',
-    targetRoles: ['student', 'teacher', 'parent'],
+    targetRoles: ['student', 'teacher'],
     createdAt: '2026-06-14T11:30:00.000Z'
   },
   {
@@ -309,11 +262,8 @@ export const getAdminStats = () => ({
   totalClasses: 32,
   totalSubjects: 18,
   attendancePercentage: 94.2,
-  feesCollected: 450000000, // 450M UGX
-  feesTarget: 600000000,    // 600M UGX
   recentActivities: [
     { id: 'act1', type: 'user_created', message: 'New student Babirye Sarah registered', time: '10 mins ago' },
-    { id: 'act2', type: 'payment', message: 'Shs 1,200,000 tuition paid for Babirye Sarah', time: '1 hour ago' },
     { id: 'act3', type: 'aoi_created', message: 'Okello John created new AOI: Renewable Energy Project', time: '2 hours ago' },
     { id: 'act4', type: 'attendance', message: 'Okello John marked attendance for Senior 1 Blue', time: '4 hours ago' }
   ],
@@ -327,3 +277,7 @@ export const getAdminStats = () => ({
     { date: 'Sun', value: 0 }
   ]
 });
+
+// Update mockUsers with all teachers and students dynamically
+mockUsers.push(...mockTeachers.filter(t => !mockUsers.find(u => u.id === t.id)));
+mockUsers.push(...mockStudents.filter(s => !mockUsers.find(u => u.id === s.id)));

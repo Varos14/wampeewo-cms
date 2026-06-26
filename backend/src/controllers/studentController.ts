@@ -4,7 +4,6 @@ import { hashPassword } from '../utils/bcrypt';
 
 export async function listStudents(req: Request, res: Response) {
   const classId = req.query.classId as string | undefined;
-  const parentId = req.query.parentId as string | undefined;
 
   try {
     const db = getDb();
@@ -23,11 +22,7 @@ export async function listStudents(req: Request, res: Response) {
       params.push(classId);
     }
     
-    if (parentId) {
-      query += ' JOIN student_parents sp ON s.id = sp.student_id';
-      conditions.push('sp.parent_id = ?');
-      params.push(parentId);
-    }
+
 
     if (conditions.length > 0) {
       query += ' WHERE ' + conditions.join(' AND ');
@@ -93,9 +88,6 @@ export async function createStudent(req: Request, res: Response) {
     registrationNumber,
     gender,
     classId,
-    parentName,
-    parentEmail,
-    parentPassword,
   } = req.body;
 
   if (!name || !email || !password || !registrationNumber || !gender || !classId) {
@@ -150,42 +142,7 @@ export async function createStudent(req: Request, res: Response) {
       );
     }
 
-    // Handle optional parent creation/linking
-    let parentId: string | null = null;
-    if (parentName && parentEmail && parentPassword) {
-      // Check if parent email already exists
-      const [existingParentUser] = await conn.query(
-        'SELECT id, role FROM users WHERE email = ?',
-        [parentEmail.toLowerCase().trim()]
-      );
-      const parentUserRows = existingParentUser as any[];
 
-      if (parentUserRows.length > 0) {
-        if (parentUserRows[0].role !== 'parent') {
-          await conn.rollback();
-          return res.status(400).json({ error: 'Parent email is already registered with another role' });
-        }
-        parentId = parentUserRows[0].id;
-      } else {
-        // Create new parent user
-        parentId = 'parent_' + Math.random().toString(36).substring(2, 11);
-        const parentHashedPass = await hashPassword(parentPassword);
-        const parentAvatarUrl = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(parentName)}`;
-
-        await conn.query(
-          'INSERT INTO users (id, name, email, password_hash, role, avatar_url) VALUES (?, ?, ?, ?, ?, ?)',
-          [parentId, parentName, parentEmail.toLowerCase().trim(), parentHashedPass, 'parent', parentAvatarUrl]
-        );
-
-        await conn.query('INSERT INTO parents (id) VALUES (?)', [parentId]);
-      }
-
-      // Link student and parent
-      await conn.query(
-        'INSERT INTO student_parents (student_id, parent_id) VALUES (?, ?)',
-        [studentId, parentId]
-      );
-    }
 
     await conn.commit();
 
@@ -198,7 +155,6 @@ export async function createStudent(req: Request, res: Response) {
         registrationNumber,
         gender,
         classId,
-        parentId,
       }
     });
 

@@ -50,7 +50,7 @@ export const Header: React.FC = () => {
       { title: 'Attendance', path: '/admin/attendance' },
       { title: 'Exams', path: '/admin/exams' },
       { title: 'Results', path: '/admin/results' },
-      { title: 'Fees', path: '/admin/fees' },
+
       { title: 'Reports', path: '/admin/reports' },
       { title: 'Settings', path: '/admin/settings' },
     ],
@@ -70,12 +70,6 @@ export const Header: React.FC = () => {
       { title: 'Results', path: '/student/results' },
       { title: 'Notes', path: '/student/notes' },
       { title: 'Timetable', path: '/student/timetable' },
-    ],
-    parent: [
-      { title: 'Dashboard', path: '/parent' },
-      { title: 'Results', path: '/parent/results' },
-      { title: 'Attendance', path: '/parent/attendance' },
-      { title: 'Fee Statements', path: '/parent/fees' },
     ]
   };
 

@@ -5,6 +5,7 @@ import { Button } from '../../components/ui/Button';
 import { studentService, classService } from '../../services/api';
 import { Student, Class } from '../../types';
 import { useSearchParams } from 'react-router-dom';
+import { StudentProfileModal } from './StudentProfileModal';
 
 export default function AdminStudents() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -20,6 +21,9 @@ export default function AdminStudents() {
   const [formError, setFormError] = useState<string | null>(null);
   const [formSuccess, setFormSuccess] = useState<string | null>(null);
 
+  // Profile Modal State
+  const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
+
   // Form Fields
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -27,12 +31,6 @@ export default function AdminStudents() {
   const [regNumber, setRegNumber] = useState('');
   const [gender, setGender] = useState<'Male' | 'Female'>('Male');
   const [classId, setClassId] = useState('');
-
-  // Parent Optional Fields
-  const [linkParent, setLinkParent] = useState(false);
-  const [parentName, setParentName] = useState('');
-  const [parentEmail, setParentEmail] = useState('');
-  const [parentPassword, setParentPassword] = useState('');
 
   const loadData = async () => {
     setLoading(true);
@@ -84,17 +82,6 @@ export default function AdminStudents() {
       classId
     };
 
-    if (linkParent) {
-      if (!parentName || !parentEmail || !parentPassword) {
-        setFormError('Please fill out all parent details or disable the link parent option.');
-        setSubmitting(false);
-        return;
-      }
-      payload.parentName = parentName;
-      payload.parentEmail = parentEmail;
-      payload.parentPassword = parentPassword;
-    }
-
     try {
       await studentService.create(payload);
       setFormSuccess('Student registered successfully!');
@@ -105,10 +92,6 @@ export default function AdminStudents() {
       setPassword('');
       setRegNumber('');
       setGender('Male');
-      setLinkParent(false);
-      setParentName('');
-      setParentEmail('');
-      setParentPassword('');
 
       // Reload lists
       await loadData();
@@ -202,7 +185,7 @@ export default function AdminStudents() {
               </thead>
               <tbody className="divide-y divide-white/5">
                 {filtered.map(student => (
-                  <tr key={student.id} className="hover:bg-white/3 transition-colors">
+                  <tr key={student.id} className="hover:bg-white/5 transition-colors cursor-pointer" onClick={() => setSelectedStudentId(student.id)}>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         <img
@@ -232,6 +215,10 @@ export default function AdminStudents() {
             )}
           </div>
         </Card>
+      )}
+
+      {selectedStudentId && (
+        <StudentProfileModal studentId={selectedStudentId} onClose={() => setSelectedStudentId(null)} />
       )}
 
       {/* Modal Dialog */}
@@ -328,60 +315,6 @@ export default function AdminStudents() {
                   </select>
                 </div>
               </div>
-
-              {/* Link Parent Section */}
-              <div className="pt-2 border-t border-white/5">
-                <label className="flex items-center gap-2 text-slate-300 font-semibold cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={linkParent}
-                    onChange={e => setLinkParent(e.target.checked)}
-                    className="rounded bg-slate-800 border-white/10 text-blue-600 focus:ring-0 focus:ring-offset-0"
-                  />
-                  <span>Create & Link Parent Account</span>
-                </label>
-              </div>
-
-              {linkParent && (
-                <div className="space-y-4 p-4 rounded-xl bg-slate-800/40 border border-white/5 animate-slide-down">
-                  <p className="text-2xs font-bold text-slate-400 uppercase tracking-widest">Parent Details</p>
-                  <div>
-                    <label className="block text-slate-400 font-medium mb-1">Parent Full Name</label>
-                    <input
-                      type="text"
-                      required={linkParent}
-                      placeholder="e.g. Mukasa Ronald"
-                      value={parentName}
-                      onChange={e => setParentName(e.target.value)}
-                      className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500"
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-slate-400 font-medium mb-1">Parent Email</label>
-                      <input
-                        type="email"
-                        required={linkParent}
-                        placeholder="parent@wampeewo.com"
-                        value={parentEmail}
-                        onChange={e => setParentEmail(e.target.value)}
-                        className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 font-medium mb-1">Parent Password</label>
-                      <input
-                        type="password"
-                        required={linkParent}
-                        placeholder="••••••••"
-                        value={parentPassword}
-                        onChange={e => setParentPassword(e.target.value)}
-                        className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500"
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
 
               {/* Action Buttons */}
               <div className="flex justify-end gap-3 pt-4 border-t border-white/5">

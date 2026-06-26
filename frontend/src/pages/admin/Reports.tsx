@@ -3,9 +3,8 @@ import { StatCard } from '../../components/ui/StatCard';
 import { Badge } from '../../components/ui/Badge';
 import { 
   mockStudents, mockTeachers, mockClasses, mockSubjects, 
-  mockAttendance, mockFeeStatements, mockAOIs, mockSubmissions 
+  mockAttendance, mockAOIs, mockSubmissions 
 } from '../../utils/mockData';
-import { formatCurrency } from '../../utils/helpers';
 
 export default function AdminReports() {
   // 1. Core Counts
@@ -19,12 +18,6 @@ export default function AdminReports() {
   const presentAtt = mockAttendance.filter(a => a.status === 'present').length;
   const attRate = totalAtt > 0 ? (presentAtt / totalAtt) * 100 : 0;
 
-  // 3. Fees Report Math
-  const statements = Object.values(mockFeeStatements);
-  const totalBilled = statements.reduce((acc, curr) => acc + curr.billedAmount, 0);
-  const totalCollected = statements.reduce((acc, curr) => acc + curr.paidAmount, 0);
-  const totalOutstanding = statements.reduce((acc, curr) => acc + curr.balance, 0);
-  const feeRate = totalBilled > 0 ? (totalCollected / totalBilled) * 100 : 0;
 
   // 4. AOI Activity Math
   const totalAOIs = mockAOIs.length;
@@ -84,38 +77,6 @@ export default function AdminReports() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Fees Collection Summary */}
-        <Card className="p-5" variant="glass">
-          <h3 className="font-bold text-slate-200 text-sm border-b border-white/5 pb-3 mb-4">Financial Collection Summary</h3>
-          
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white/1 p-3 rounded-xl border border-white/5">
-                <span className="text-3xs font-semibold uppercase tracking-widest text-slate-500">Collected Revenue</span>
-                <p className="text-sm font-bold text-emerald-400 mt-1">{formatCurrency(totalCollected)}</p>
-              </div>
-              <div className="bg-white/1 p-3 rounded-xl border border-white/5">
-                <span className="text-3xs font-semibold uppercase tracking-widest text-slate-500">Outstanding Invoices</span>
-                <p className="text-sm font-bold text-rose-400 mt-1">{formatCurrency(totalOutstanding)}</p>
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <div className="flex justify-between text-xs font-semibold text-slate-400">
-                <span>Fee Compliance Rate</span>
-                <span>{feeRate.toFixed(1)}%</span>
-              </div>
-              <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden border border-white/5">
-                <div className="bg-emerald-500 h-2 rounded-full" style={{ width: `${feeRate}%` }} />
-              </div>
-            </div>
-
-            <div className="text-3xs text-slate-500 italic mt-2 leading-relaxed">
-              * Based on {statements.length} active billing profiles of students. Total billed: {formatCurrency(totalBilled)}.
-            </div>
-          </div>
-        </Card>
-
         {/* AOI Activity Report */}
         <Card className="p-5" variant="glass">
           <h3 className="font-bold text-slate-200 text-sm border-b border-white/5 pb-3 mb-4">Activities of Integration (AOI)</h3>
@@ -145,31 +106,31 @@ export default function AdminReports() {
             </div>
           </div>
         </Card>
+
+        {/* Attendance & Demographics */}
+        <Card className="p-5" variant="glass">
+          <h3 className="font-bold text-slate-200 text-sm border-b border-white/5 pb-3 mb-4">Attendance Performance</h3>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex-1 space-y-1">
+              <div className="flex justify-between text-xs font-semibold text-slate-400">
+                <span>Term Attendance Rate</span>
+                <span>{attRate.toFixed(1)}%</span>
+              </div>
+              <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden border border-white/5">
+                <div className="bg-blue-500 h-2 rounded-full" style={{ width: `${attRate}%` }} />
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 bg-white/2 border border-white/5 px-4 py-3 rounded-xl">
+              <div className="w-2 h-2 rounded-full bg-emerald-500" />
+              <div>
+                <p className="text-xs font-bold text-slate-300">Daily Log Summary</p>
+                <p className="text-3xs text-slate-500 mt-0.5">Total checked profiles: {totalAtt}</p>
+              </div>
+            </div>
+          </div>
+        </Card>
       </div>
-
-      {/* Attendance & Demographics */}
-      <Card className="p-5" variant="glass">
-        <h3 className="font-bold text-slate-200 text-sm border-b border-white/5 pb-3 mb-4">Attendance Performance</h3>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex-1 space-y-1">
-            <div className="flex justify-between text-xs font-semibold text-slate-400">
-              <span>Term Attendance Rate</span>
-              <span>{attRate.toFixed(1)}%</span>
-            </div>
-            <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden border border-white/5">
-              <div className="bg-blue-500 h-2 rounded-full" style={{ width: `${attRate}%` }} />
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3 bg-white/2 border border-white/5 px-4 py-3 rounded-xl">
-            <div className="w-2 h-2 rounded-full bg-emerald-500" />
-            <div>
-              <p className="text-xs font-bold text-slate-300">Daily Log Summary</p>
-              <p className="text-3xs text-slate-500 mt-0.5">Total checked profiles: {totalAtt}</p>
-            </div>
-          </div>
-        </div>
-      </Card>
     </div>
   );
 }
