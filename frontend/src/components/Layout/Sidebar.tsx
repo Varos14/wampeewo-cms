@@ -153,11 +153,15 @@ export const Sidebar: React.FC = () => {
       className={`fixed lg:static inset-y-0 left-0 z-50 flex flex-col h-full bg-[#09101d] text-slate-100 border-r border-white/5 transition-all duration-300 ease-in-out shrink-0 overflow-hidden ${sidebarWidth} ${displayClass}`}
     >
       {/* Sidebar Header/Branding */}
-      <div className="h-16 flex items-center justify-between px-5 border-b border-white/5 shrink-0 overflow-hidden">
+      <div className="h-16 flex items-center justify-between px-4 border-b border-white/5 shrink-0 overflow-hidden">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/35 flex items-center justify-center font-bold text-blue-400 overflow-hidden">
-            {/* The user will provide the logo which will be placed here. For now we use the initial */}
-            <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement!.innerText = 'W'; }} />
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center overflow-hidden shrink-0 bg-white/5">
+            <img
+              src="/logo.png"
+              alt="Wampeewo Ntake SS Logo"
+              className="w-full h-full object-contain"
+              onError={(e) => { e.currentTarget.style.display = 'none'; (e.currentTarget.parentElement as HTMLElement).innerText = 'W'; }}
+            />
           </div>
           {!sidebarCollapsed && (
             <span className="font-extrabold tracking-tight text-slate-100 text-sm truncate uppercase">
@@ -166,6 +170,7 @@ export const Sidebar: React.FC = () => {
           )}
         </div>
       </div>
+
 
       {/* Nav Links */}
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1 scrollbar-thin">

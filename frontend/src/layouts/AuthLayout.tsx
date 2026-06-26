@@ -7,8 +7,13 @@ export default function AuthLayout() {
       <div className="w-full max-w-md animate-slide-up">
         {/* School Crest Placeholder / Branding */}
         <div className="flex flex-col items-center mb-8 text-center">
-          <div className="w-16 h-16 bg-blue-600/15 border border-blue-500/30 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/5 mb-3 text-2xl font-black text-blue-400">
-            W
+          <div className="w-24 h-24 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/5 mb-3 overflow-hidden">
+            <img
+              src="/logo.png"
+              alt="Wampeewo Ntake SS"
+              className="w-full h-full object-contain"
+              onError={(e) => { e.currentTarget.style.display = 'none'; (e.currentTarget.parentElement as HTMLElement).innerHTML = '<span class="text-3xl font-black text-blue-400">W</span>'; }}
+            />
           </div>
           <h1 className="text-2xl font-extrabold text-slate-100 tracking-tight">{SCHOOL_NAME}</h1>
           <p className="text-xs font-semibold text-blue-400 uppercase tracking-widest mt-1">{SCHOOL_MOTTO}</p>

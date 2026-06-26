@@ -107,14 +107,14 @@ export default function Login() {
             Administrator
           </button>
           <button
-            onClick={() => handleQuickLogin('teacher@wampeewo.com', 'teacher123')}
+            onClick={() => handleQuickLogin('mrlochaderrick@wampeewo.com', 'teacher123')}
             disabled={loading}
             className="p-2 border border-emerald-500/10 hover:border-emerald-500/30 bg-emerald-500/5 hover:bg-emerald-500/10 rounded-xl text-[10px] font-bold text-emerald-400 transition-all text-center focus:outline-none"
           >
             Teacher Portal
           </button>
           <button
-            onClick={() => handleQuickLogin('student@wampeewo.com', 'student123')}
+            onClick={() => handleQuickLogin('garethtuwesigye@wampeewo.com', 'student123')}
             disabled={loading}
             className="p-2 border border-sky-500/10 hover:border-sky-500/30 bg-sky-500/5 hover:bg-sky-500/10 rounded-xl text-[10px] font-bold text-sky-400 transition-all text-center focus:outline-none"
           >
