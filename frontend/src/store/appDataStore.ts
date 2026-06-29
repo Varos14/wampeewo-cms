@@ -15,7 +15,7 @@ interface AppDataState {
   announcements: Announcement[];
   loading: boolean;
   fetched: boolean;
-  fetchData: () => Promise<void>;
+  fetchData: (force?: boolean) => Promise<void>;
   refreshSubmissions: (aoiId?: string) => Promise<void>;
 }
 
@@ -30,17 +30,17 @@ export const useAppDataStore = create<AppDataState>((set, get) => ({
   loading: false,
   fetched: false,
   
-  fetchData: async () => {
-    if (get().fetched) return; // Only fetch once to optimize
+  fetchData: async (force = false) => {
+    if (get().fetched && !force) return; // Only fetch once to optimize
     set({ loading: true });
     try {
       const [cls, stu, tch, sub, aoi, ann] = await Promise.all([
-        classService.list(),
-        studentService.list(),
-        teacherService.list(),
-        subjectService.list(),
-        aoiService.list(),
-        announcementService.list('student').catch(() => []) // Fetch general announcements
+        classService.list().catch(() => get().classes),
+        studentService.list().catch(() => get().students),
+        teacherService.list().catch(() => get().teachers),
+        subjectService.list().catch(() => get().subjects),
+        aoiService.list().catch(() => get().aois),
+        announcementService.list('student').catch(() => get().announcements)
       ]);
       
       set({

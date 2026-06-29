@@ -5,13 +5,16 @@ import { useUiStore } from '../../store/uiStore';
 import { Avatar } from '../ui/Avatar';
 import { announcementService } from '../../services/api';
 import { Announcement } from '../../types';
+import { useSyncStore } from '../../store/syncStore';
 
 export const Header: React.FC = () => {
   const { user, logout } = useAuthStore();
   const { toggleSidebar, toggleMobileSidebar, unreadNotificationsCount, setUnreadNotificationsCount } = useUiStore();
+  const { isOnline, syncQueue, isSyncing, flushQueue, removeFromQueue, setOnline } = useSyncStore();
   const navigate = useNavigate();
   const [profileOpen, setProfileOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [syncOpen, setSyncOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<{title: string, path: string}[]>([]);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -167,12 +170,149 @@ export const Header: React.FC = () => {
           )}
         </div>
 
+        {/* Sync Dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => {
+              setSyncOpen(!syncOpen);
+              setNotificationsOpen(false);
+              setProfileOpen(false);
+            }}
+            className={`relative p-2 rounded-xl focus:outline-none transition-colors ${
+              !isOnline 
+                ? 'text-amber-500 hover:text-amber-400 hover:bg-amber-500/10' 
+                : syncQueue.length > 0 
+                  ? 'text-blue-400 hover:text-blue-300 hover:bg-blue-500/10'
+                  : 'text-emerald-500 hover:text-emerald-400 hover:bg-emerald-500/10'
+            }`}
+            title={!isOnline ? "Working Offline" : syncQueue.length > 0 ? "Pending Sync" : "Online & Synced"}
+          >
+            {isSyncing ? (
+              <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89M21 8h-5V3" />
+              </svg>
+            ) : !isOnline ? (
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 3l18 18M18.364 5.636a9 9 0 01-1.282 11.231M15.536 8.464a5 5 0 01-.192 6.82M9 11.536a5 5 0 00-1.282 3.12M5.636 5.636a9 9 0 00-1.282 12.728" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            )}
+            {syncQueue.length > 0 && (
+              <span className={`absolute -top-0.5 -right-0.5 w-4 h-4 text-[8px] font-black text-white rounded-full flex items-center justify-center border border-[#09101d] ${
+                !isOnline ? 'bg-amber-600' : 'bg-blue-600'
+              }`}>
+                {syncQueue.length}
+              </span>
+            )}
+          </button>
+
+          {syncOpen && (
+            <>
+              <div className="fixed inset-0 z-40" onClick={() => setSyncOpen(false)} />
+              <div className="absolute right-0 mt-2 w-80 bg-[#0f1624] border border-white/5 rounded-xl shadow-xl z-50 p-3 animate-slide-up max-h-120 overflow-y-auto">
+                <div className="border-b border-white/5 pb-2 mb-2">
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Offline Sync Manager</span>
+                    <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${
+                      !isOnline ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                    }`}>
+                      {!isOnline ? 'Offline' : 'Online'}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between mt-2">
+                    <label className="text-[10px] text-slate-400 font-semibold flex items-center gap-1.5 cursor-pointer">
+                      <input 
+                        type="checkbox"
+                        checked={!isOnline}
+                        onChange={(e) => setOnline(!e.target.checked)}
+                        className="rounded border-white/10 bg-slate-950/50 text-blue-600 focus:ring-0 w-3 h-3 accent-blue-600 cursor-pointer"
+                      />
+                      Force Simulate Offline Mode
+                    </label>
+                  </div>
+                </div>
+
+                {syncQueue.length === 0 ? (
+                  <div className="py-6 text-center">
+                    <svg className="w-8 h-8 text-emerald-500/30 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p className="text-xs font-bold text-slate-300">All data synchronized</p>
+                    <p className="text-[10px] text-slate-500 mt-1">Changes are saved to the server in real-time.</p>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-[10px] text-slate-500 font-bold">{syncQueue.length} pending operation{syncQueue.length > 1 ? 's' : ''}</span>
+                      {isOnline && (
+                        <button
+                          onClick={() => flushQueue()}
+                          disabled={isSyncing}
+                          className="text-[10px] text-blue-400 hover:text-blue-300 font-bold flex items-center gap-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          <svg className={`w-3 h-3 ${isSyncing ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89M21 8h-5V3" />
+                          </svg>
+                          Sync Now
+                        </button>
+                      )}
+                    </div>
+                    <div className="space-y-1.5 max-h-60 overflow-y-auto pr-1">
+                      {syncQueue.map((item) => (
+                        <div key={item.id} className="p-2 bg-slate-900/50 hover:bg-slate-800/40 rounded-lg border border-white/5 flex flex-col gap-1 transition-all">
+                          <div className="flex justify-between items-start gap-2">
+                            <span className="text-[11px] font-bold text-slate-200 leading-normal line-clamp-2">
+                              {item.description}
+                            </span>
+                            <button
+                              onClick={() => removeFromQueue(item.id)}
+                              className="text-slate-500 hover:text-rose-400 p-0.5 rounded transition-colors"
+                              title="Discard action"
+                            >
+                              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              </svg>
+                            </button>
+                          </div>
+                          <div className="flex justify-between items-center mt-1">
+                            <span className="text-[9px] text-slate-500 font-semibold uppercase tracking-wider">
+                              {new Date(item.timestamp).toLocaleTimeString()}
+                            </span>
+                            <span className={`text-[8px] font-black uppercase px-1.5 py-0.5 rounded ${
+                              item.status === 'syncing' 
+                                ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' 
+                                : item.status === 'failed'
+                                  ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                                  : 'bg-slate-800 text-slate-400'
+                            }`}>
+                              {item.status}
+                            </span>
+                          </div>
+                          {item.error && (
+                            <span className="text-[9px] font-semibold text-rose-400 bg-rose-500/5 p-1 rounded border border-rose-500/10 mt-1 break-words">
+                              Error: {item.error}
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+
         {/* Notifications Dropdown */}
         <div className="relative">
           <button 
             onClick={() => {
               setNotificationsOpen(!notificationsOpen);
               setProfileOpen(false);
+              setSyncOpen(false);
               setUnreadNotificationsCount(0); // clear count when opened
             }}
             className="relative p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 rounded-xl focus:outline-none transition-colors"
