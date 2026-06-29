@@ -15,6 +15,10 @@ export default function AdminDashboard() {
   const [teacherCount, setTeacherCount] = useState<number | null>(null);
   const [classCount, setClassCount] = useState<number | null>(null);
   const [subjectCount, setSubjectCount] = useState<number | null>(null);
+  const [genderData, setGenderData] = useState<{ label: string; value: number; color: string }[]>([
+    { label: 'Male', value: 610, color: '#3b82f6' },
+    { label: 'Female', value: 640, color: '#f43f5e' },
+  ]);
 
   useEffect(() => {
     async function loadCounts() {
@@ -29,6 +33,15 @@ export default function AdminDashboard() {
         setTeacherCount(tchs.length);
         setClassCount(clss.length);
         setSubjectCount(subjs.length);
+
+        if (studs.length > 0) {
+          const maleCount = studs.filter((s: any) => s.gender === 'Male').length;
+          const femaleCount = studs.filter((s: any) => s.gender === 'Female').length;
+          setGenderData([
+            { label: 'Male', value: maleCount, color: '#3b82f6' },
+            { label: 'Female', value: femaleCount, color: '#f43f5e' },
+          ]);
+        }
       } catch (err) {
         console.error('Failed to load dashboard dynamic counts:', err);
       }
@@ -42,12 +55,6 @@ export default function AdminDashboard() {
     { label: 'Add Teacher', icon: '👨‍🏫+', color: 'text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20', path: '/admin/teachers?openModal=teacher' },
     { label: 'Manage Classes', icon: '🏫', color: 'text-sky-400 bg-sky-500/10 hover:bg-sky-500/20', path: '/admin/classes' },
     { label: 'Approvals', icon: '✅', color: 'text-amber-400 bg-amber-500/10 hover:bg-amber-500/20', path: '/admin/assignments' },
-  ];
-
-  // Gender distribution mock
-  const genderData = [
-    { label: 'Male', value: 610, color: '#3b82f6' },
-    { label: 'Female', value: 640, color: '#f43f5e' },
   ];
 
 
@@ -133,7 +140,7 @@ export default function AdminDashboard() {
             <h3 className="text-base font-bold text-slate-200">Student Gender Ratio</h3>
             <p className="text-2xs text-slate-500 font-semibold uppercase tracking-wider mt-0.5">Total registered enrollment</p>
           </div>
-          <div className="my-auto py-6">
+          <div className="flex items-center justify-center py-4 w-full h-full min-h-[140px] shrink-0">
             <DonutChart data={genderData} size={130} centerText={`${studentCount !== null ? studentCount : '1,250'}`} centerLabel="Enrolled" />
           </div>
         </Card>

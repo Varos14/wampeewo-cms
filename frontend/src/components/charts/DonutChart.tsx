@@ -85,9 +85,9 @@ export const DonutChart: React.FC<DonutChartProps> = ({
     const dispText = centerText || String(total);
 
     return (
-      <div className="flex flex-col sm:flex-row items-center gap-6">
+      <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-6 w-full flex-wrap">
         <div className="relative shrink-0" style={{ width: size, height: size }}>
-          <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+          <svg width="100%" height="100%" viewBox={`0 0 ${size} ${size}`} className="w-full h-full">
             {/* Base Circle */}
             <circle
               cx={center}
@@ -121,7 +121,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({
         </div>
 
         {/* Legend */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 min-w-[140px]">
           {segments.map((seg, idx) => (
             <div key={idx} className="flex items-center gap-2 text-xs">
               <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: seg.color }} />

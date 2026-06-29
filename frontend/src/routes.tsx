@@ -1,5 +1,7 @@
 import { RouteObject, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
+import Signup from './pages/Signup';
+import ForgotPassword from './pages/ForgotPassword';
 import NotFound from './pages/NotFound';
 import AuthLayout from './layouts/AuthLayout';
 import DashboardLayout from './layouts/DashboardLayout';
@@ -48,6 +50,8 @@ export const routes: RouteObject[] = [
     children: [
       { path: '', element: <Navigate to="/login" replace /> },
       { path: 'login', element: <Login /> },
+      { path: 'signup', element: <Signup /> },
+      { path: 'forgot-password', element: <ForgotPassword /> },
     ],
   },
 

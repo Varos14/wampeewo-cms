@@ -1,35 +1,27 @@
 import { Outlet } from 'react-router-dom';
-import { SCHOOL_NAME, SCHOOL_MOTTO } from '../utils/constants';
 
 export default function AuthLayout() {
   return (
-    <div className="min-h-screen bg-radial-auth flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md animate-slide-up">
-        {/* School Crest Placeholder / Branding */}
-        <div className="flex flex-col items-center mb-8 text-center">
-          <div className="w-24 h-24 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/5 mb-3 overflow-hidden">
-            <img
-              src="/logo.png"
-              alt="Wampeewo Ntake SS"
-              className="w-full h-full object-contain"
-              onError={(e) => { e.currentTarget.style.display = 'none'; (e.currentTarget.parentElement as HTMLElement).innerHTML = '<span class="text-3xl font-black text-blue-400">W</span>'; }}
-            />
+    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 relative overflow-hidden bg-radial-auth">
+      <div className="w-full max-w-[420px] animate-slide-up flex flex-col items-center z-10">
+        
+        {/* Shield Logo & Branding */}
+        <div className="flex flex-col items-center mb-6 text-center">
+          <div className="flex items-center gap-3">
+            {/* Actual school logo image */}
+            <img src="/logo.png" alt="Wampeewo School Logo" className="w-14 h-14 object-contain" />
+            <div className="text-left">
+              <h1 className="text-3xl font-bold text-white tracking-wide leading-tight">Wampeewo</h1>
+              <p className="text-md font-normal text-slate-300 tracking-wider">Competency CMS</p>
+            </div>
           </div>
-          <h1 className="text-2xl font-extrabold text-slate-100 tracking-tight">{SCHOOL_NAME}</h1>
-          <p className="text-xs font-semibold text-blue-400 uppercase tracking-widest mt-1">{SCHOOL_MOTTO}</p>
+          <p className="text-lg text-slate-200 mt-4 font-normal">Welcome Back!</p>
         </div>
 
-        {/* Content Panel */}
-        <div className="glass-panel rounded-2xl p-8 border border-white/5 shadow-2xl relative overflow-hidden">
-          {/* Subtle decoration gradient */}
-          <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl pointer-events-none" />
+        {/* Content Panel (Login Card) */}
+        <div className="w-full bg-[#0b1329]/80 rounded-[24px] p-8 border border-blue-500/10 shadow-[0_0_50px_rgba(59,130,246,0.1)] backdrop-blur-md relative overflow-hidden">
           <Outlet />
         </div>
-
-        {/* Footer */}
-        <p className="text-center text-xs text-slate-600 font-medium mt-6">
-          &copy; {new Date().getFullYear()} {SCHOOL_NAME}. All rights reserved.
-        </p>
       </div>
     </div>
   );
