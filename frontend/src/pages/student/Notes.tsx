@@ -83,7 +83,7 @@ export const Notes: React.FC = () => {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h2 className="text-xl font-bold text-slate-100 tracking-tight">Summary Vault</h2>
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Summary Vault</h2>
         <p className="text-xs text-slate-500 mt-1">Write down class notes, curriculum summaries, and study resources.</p>
       </div>
 
@@ -96,38 +96,38 @@ export const Notes: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Create Note Form */}
         <Card className="p-6 h-fit" variant="glass">
-          <h3 className="text-base font-bold text-slate-200 mb-4">Create Study Note</h3>
+          <h3 className="text-base font-bold text-slate-800 mb-4">Create Study Note</h3>
           <form onSubmit={handleCreate} className="space-y-4">
             <div>
-              <label className="block text-2xs font-bold text-slate-400 uppercase tracking-widest mb-1.5">Note Title</label>
+              <label className="block text-2xs font-bold text-slate-600 uppercase tracking-widest mb-1.5">Note Title</label>
               <input
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Physics Formulas"
-                className="w-full rounded-xl border border-white/5 bg-slate-950/45 px-3 py-2.5 text-xs font-semibold text-slate-200 focus:outline-none focus:border-blue-500/50"
+                className="w-full rounded-xl border border-black/5 bg-slate-950/45 px-3 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-blue-500/50"
                 required
               />
             </div>
             <div>
-              <label className="block text-2xs font-bold text-slate-400 uppercase tracking-widest mb-1.5">Note Details</label>
+              <label className="block text-2xs font-bold text-slate-600 uppercase tracking-widest mb-1.5">Note Details</label>
               <textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="Write your study notes here..."
                 rows={10}
-                className="w-full rounded-xl border border-white/5 bg-slate-950/45 px-4 py-3 text-sm font-medium text-slate-200 focus:outline-none focus:border-blue-500/50"
+                className="w-full rounded-xl border border-black/5 bg-slate-950/45 px-4 py-3 text-sm font-medium text-slate-800 focus:outline-none focus:border-blue-500/50"
                 required
               />
             </div>
             <div>
-              <label className="block text-2xs font-bold text-slate-400 uppercase tracking-widest mb-1.5">Tags (Comma-separated)</label>
+              <label className="block text-2xs font-bold text-slate-600 uppercase tracking-widest mb-1.5">Tags (Comma-separated)</label>
               <input
                 type="text"
                 value={tagsInput}
                 onChange={(e) => setTagsInput(e.target.value)}
                 placeholder="e.g. physics, light, term1"
-                className="w-full rounded-xl border border-white/5 bg-slate-950/45 px-3 py-2.5 text-xs font-semibold text-slate-200 focus:outline-none focus:border-blue-500/50"
+                className="w-full rounded-xl border border-black/5 bg-slate-950/45 px-3 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-blue-500/50"
               />
             </div>
             <Button type="submit" className="w-full text-xs font-bold">
@@ -138,7 +138,7 @@ export const Notes: React.FC = () => {
 
         {/* Notes List */}
         <div className="lg:col-span-2 space-y-4">
-          <h3 className="text-base font-bold text-slate-200 mb-2">My Saved Notes ({notes.length})</h3>
+          <h3 className="text-base font-bold text-slate-800 mb-2">My Saved Notes ({notes.length})</h3>
           
           {loading ? (
             <div className="py-12 text-center text-xs text-slate-500">Loading notes...</div>
@@ -151,7 +151,7 @@ export const Notes: React.FC = () => {
               <Card key={note.id} className="p-5" variant="glass">
                 <div className="flex justify-between items-start">
                   <div>
-                    <h4 className="text-sm font-bold text-slate-200">{note.title}</h4>
+                    <h4 className="text-sm font-bold text-slate-800">{note.title}</h4>
                     <span className="text-3xs text-slate-500 font-semibold uppercase tracking-widest mt-1 block">
                       Saved: {formatDate(note.createdAt)}
                     </span>
@@ -162,13 +162,13 @@ export const Notes: React.FC = () => {
                         setEditingNoteId(note.id);
                         setEditingContent(note.content);
                       }}
-                      className="p-1.5 text-slate-400 hover:text-blue-400 hover:bg-blue-500/15 rounded-lg transition"
+                      className="p-1.5 text-slate-600 hover:text-blue-400 hover:bg-blue-500/15 rounded-lg transition"
                     >
                       ✏️
                     </button>
                     <button
                       onClick={() => handleDelete(note.id)}
-                      className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 rounded-lg transition"
+                      className="p-1.5 text-slate-600 hover:text-rose-400 hover:bg-rose-500/15 rounded-lg transition"
                     >
                       🗑️
                     </button>
@@ -182,7 +182,7 @@ export const Notes: React.FC = () => {
                       value={editingContent}
                       onChange={(e) => setEditingContent(e.target.value)}
                       rows={4}
-                      className="w-full rounded-xl border border-white/5 bg-slate-950/45 px-3 py-2.5 text-xs font-semibold text-slate-200 focus:outline-none focus:border-blue-500/50"
+                      className="w-full rounded-xl border border-black/5 bg-slate-950/45 px-3 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-blue-500/50"
                     />
                     <div className="flex gap-2">
                       <Button
@@ -203,7 +203,7 @@ export const Notes: React.FC = () => {
                     </div>
                   </div>
                 ) : (
-                  <p className="text-sm md:text-base text-slate-300 mt-4 whitespace-pre-wrap leading-relaxed">
+                  <p className="text-sm md:text-base text-slate-700 mt-4 whitespace-pre-wrap leading-relaxed">
                     {note.content}
                   </p>
                 )}
@@ -214,7 +214,7 @@ export const Notes: React.FC = () => {
                     {note.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="px-2 py-0.5 bg-slate-800/50 border border-slate-700/40 text-[9px] font-bold text-slate-400 rounded-md uppercase tracking-wider"
+                        className="px-2 py-0.5 bg-white/50 border border-slate-700/40 text-[9px] font-bold text-slate-600 rounded-md uppercase tracking-wider"
                       >
                         {tag}
                       </span>
@@ -230,3 +230,5 @@ export const Notes: React.FC = () => {
   );
 };
 export default Notes;
+
+

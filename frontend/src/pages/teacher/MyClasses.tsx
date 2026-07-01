@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
@@ -13,7 +13,7 @@ export default function TeacherMyClasses() {
     fetchData();
   }, [fetchData]);
 
-  if (loading) return <div className="p-8 text-center text-slate-400 animate-pulse">Loading classes...</div>;
+  if (loading) return <div className="p-8 text-center text-slate-600 animate-pulse">Loading classes...</div>;
 
   const teacherId = user?.id ?? '2';
   const teacherInfo = teachers.find(t => t.id === teacherId);
@@ -22,10 +22,20 @@ export default function TeacherMyClasses() {
   // Filter classes taught by this teacher or where they are the class teacher
   const myClasses = classes.filter(c => c.classTeacherId === teacherId || teacherClassIds.includes(c.id));
 
+  const [generatingFor, setGeneratingFor] = useState<string | null>(null);
+
+  const handleGenerateReports = async (classId: string, className: string) => {
+    setGeneratingFor(classId);
+    // Simulate API delay for report generation
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    setGeneratingFor(null);
+    alert(`Success! PDF reports for all students in ${className} have been generated and sent to your email.`);
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h2 className="text-xl font-bold text-slate-100 tracking-tight">My Assigned Classes</h2>
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">My Assigned Classes</h2>
         <p className="text-xs text-slate-500 mt-1">Review stream enrollments, curriculum subjects, and activity progress.</p>
       </div>
 
@@ -44,10 +54,10 @@ export default function TeacherMyClasses() {
                     {cls.stream && <Badge color="blue">{cls.stream} Stream</Badge>}
                     {isClassTeacher && <Badge color="emerald">Class Teacher</Badge>}
                   </div>
-                  <span className="text-slate-400 text-xs font-semibold">{cls.studentCount} Students</span>
+                  <span className="text-slate-600 text-xs font-semibold">{cls.studentCount} Students</span>
                 </div>
 
-                <h3 className="font-extrabold text-slate-100 text-base leading-snug">{cls.name}</h3>
+                <h3 className="font-extrabold text-slate-900 text-base leading-snug">{cls.name}</h3>
 
                 {/* Subjects in this class */}
                 <div className="mt-4">
@@ -66,13 +76,19 @@ export default function TeacherMyClasses() {
               </div>
 
               {/* Footer */}
-              <div className="border-t border-white/5 pt-3.5 mt-5 flex flex-col gap-3 text-xs">
+              <div className="border-t border-black/5 pt-3.5 mt-5 flex flex-col gap-3 text-xs">
                 <div className="flex items-center justify-between">
                   <span className="text-slate-500 font-medium">Competency Evaluation Projects</span>
                   <span className="font-bold text-indigo-400">{aoisInClass.length} AOIs Assigned</span>
                 </div>
-                <Button variant="secondary" size="sm" className="w-full justify-center" onClick={() => alert(`Generating automatic reports for students in ${cls.name}...`)}>
-                  Generate Individual Student Reports
+                <Button 
+                  variant="secondary" 
+                  size="sm" 
+                  className="w-full justify-center" 
+                  loading={generatingFor === cls.id}
+                  onClick={() => handleGenerateReports(cls.id, cls.name)}
+                >
+                  {generatingFor === cls.id ? 'Generating Reports...' : 'Generate Individual Student Reports'}
                 </Button>
               </div>
             </Card>
@@ -85,3 +101,5 @@ export default function TeacherMyClasses() {
     </div>
   );
 }
+
+

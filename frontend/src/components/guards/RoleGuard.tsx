@@ -23,3 +23,4 @@ export const RoleGuard: React.FC<RoleGuardProps> = ({ allowedRoles }) => {
   // Render children (or nested routes via Outlet)
   return <Outlet />;
 };
+

@@ -24,7 +24,7 @@ export default function TeacherAssignments() {
   }, [fetchData]);
 
   if (!user) return null;
-  if (loading) return <div className="p-8 text-center text-slate-400 animate-pulse">Loading assignments...</div>;
+  if (loading) return <div className="p-8 text-center text-slate-600 animate-pulse">Loading assignments...</div>;
 
   // Filter AOIs by teacher ID (fallback to all if no teacher user ID found, but default is Okello John ID '2')
   const teacherAOIs = aois.filter(aoi => aoi.teacherId === user.id || aoi.teacherId === '2');
@@ -49,7 +49,7 @@ export default function TeacherAssignments() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-start">
         <div>
-          <h2 className="text-xl font-bold text-slate-100 tracking-tight">Competence Assignments (AOIs)</h2>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Competence Assignments (AOIs)</h2>
           <p className="text-xs text-slate-500 mt-1">Review Activities of Integration (AOIs) and grade student submissions.</p>
         </div>
         <Button variant="primary" className="bg-red-600 hover:bg-red-500 text-white" onClick={() => setShowModal(true)}>
@@ -80,9 +80,9 @@ export default function TeacherAssignments() {
             <div key={aoi.id} className="space-y-3">
               {/* AOI Details Card */}
               <Card className="p-5" variant="glass">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 pb-3 mb-4 gap-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-black/5 pb-3 mb-4 gap-2">
                   <div>
-                    <h3 className="font-bold text-slate-200 text-sm">{aoi.title}</h3>
+                    <h3 className="font-bold text-slate-800 text-sm">{aoi.title}</h3>
                     <div className="flex items-center gap-2 mt-1">
                       <Badge color={aoi.status === 'approved' ? 'emerald' : aoi.status === 'rejected' ? 'rose' : 'amber'}>
                         {aoi.status?.toUpperCase() || 'PENDING'}
@@ -92,11 +92,11 @@ export default function TeacherAssignments() {
                   </div>
                   <div className="text-right">
                     <span className="text-slate-500 text-2xs font-semibold uppercase tracking-wider block">Deadline</span>
-                    <span className="text-slate-300 font-bold text-xs">{formatDate(aoi.deadline, 'PPP p')}</span>
+                    <span className="text-slate-700 font-bold text-xs">{formatDate(aoi.deadline, 'PPP p')}</span>
                   </div>
                 </div>
 
-                <p className="text-xs text-slate-400 leading-relaxed mb-4">{aoi.description}</p>
+                <p className="text-xs text-slate-600 leading-relaxed mb-4">{aoi.description}</p>
 
                 {/* Rubric skills */}
                 <div>
@@ -112,7 +112,7 @@ export default function TeacherAssignments() {
               </Card>
 
               {/* Submissions for this AOI */}
-              <div className="pl-4 border-l border-white/5 space-y-3">
+              <div className="pl-4 border-l border-black/5 space-y-3">
                 <h4 className="text-2xs font-bold text-slate-500 uppercase tracking-widest pl-1">
                   Student Submissions ({aoiSubs.length})
                 </h4>
@@ -121,8 +121,8 @@ export default function TeacherAssignments() {
                   {aoiSubs.map(sub => {
                     const student = getStudentInfo(sub.studentId);
                     return (
-                      <Card key={sub.id} className="p-4 bg-white/2 border border-white/5 hover:border-white/10 transition-colors" variant="glass">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-2.5 mb-3">
+                      <Card key={sub.id} className="p-4 bg-white/2 border border-black/5 hover:border-black/10 transition-colors" variant="glass">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-black/5 pb-2.5 mb-3">
                           <div className="flex items-center gap-2.5">
                             <img
                               src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(student.name)}`}
@@ -130,7 +130,7 @@ export default function TeacherAssignments() {
                               className="w-7 h-7 rounded bg-slate-700 shrink-0"
                             />
                             <div>
-                              <p className="font-semibold text-slate-200 text-xs">{student.name}</p>
+                              <p className="font-semibold text-slate-800 text-xs">{student.name}</p>
                               <p className="text-3xs text-slate-500 font-mono">{student.regNo}</p>
                             </div>
                           </div>
@@ -140,14 +140,14 @@ export default function TeacherAssignments() {
                           </div>
                         </div>
 
-                        <p className="text-xs text-slate-300 bg-white/1 p-2.5 rounded-lg border border-white/5 font-medium leading-relaxed mb-3">
+                        <p className="text-xs text-slate-700 bg-white/50 p-2.5 rounded-lg border border-black/5 font-medium leading-relaxed mb-3">
                           {sub.content}
                         </p>
 
                         {sub.feedback ? (
                           <div className="bg-blue-500/5 border border-blue-500/10 rounded-lg p-2.5 text-2xs">
                             <span className="font-bold text-blue-400 block mb-0.5">Teacher Feedback</span>
-                            <p className="text-slate-400 italic font-medium">"{sub.feedback}"</p>
+                            <p className="text-slate-600 italic font-medium">"{sub.feedback}"</p>
                           </div>
                         ) : (
                           <div className="text-2xs text-slate-500 italic">No feedback provided yet. Click to grade.</div>
@@ -166,8 +166,8 @@ export default function TeacherAssignments() {
       </div>
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-          <div className="relative w-full max-w-md bg-slate-900 border border-white/10 rounded-2xl shadow-2xl p-6">
-            <h3 className="text-lg font-bold text-slate-100 mb-4">Create Assignment (Needs Approval)</h3>
+          <div className="relative w-full max-w-md bg-white border border-black/10 rounded-2xl shadow-2xl p-6">
+            <h3 className="text-lg font-bold text-slate-900 mb-4">Create Assignment (Needs Approval)</h3>
             <form onSubmit={async (e) => {
               e.preventDefault();
               if(!user) return;
@@ -193,27 +193,27 @@ export default function TeacherAssignments() {
               }
             }} className="space-y-4">
               <div>
-                <label className="block text-slate-400 font-medium mb-1 text-xs">Title</label>
-                <input required value={title} onChange={e=>setTitle(e.target.value)} className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3 py-2 text-slate-200 focus:border-blue-500 text-sm" />
+                <label className="block text-slate-600 font-medium mb-1 text-xs">Title</label>
+                <input required value={title} onChange={e=>setTitle(e.target.value)} className="w-full bg-white/80 border border-black/10 rounded-xl px-3 py-2 text-slate-800 focus:border-blue-500 text-sm" />
               </div>
               <div>
-                <label className="block text-slate-400 font-medium mb-1 text-xs">Description</label>
-                <textarea required value={description} onChange={e=>setDescription(e.target.value)} className="w-full h-20 bg-slate-800/80 border border-white/10 rounded-xl px-3 py-2 text-slate-200 focus:border-blue-500 text-sm" />
+                <label className="block text-slate-600 font-medium mb-1 text-xs">Description</label>
+                <textarea required value={description} onChange={e=>setDescription(e.target.value)} className="w-full h-20 bg-white/80 border border-black/10 rounded-xl px-3 py-2 text-slate-800 focus:border-blue-500 text-sm" />
               </div>
               <div>
-                <label className="block text-slate-400 font-medium mb-1 text-xs">Type</label>
-                <select value={type} onChange={e=>setType(e.target.value as 'assignment'|'exam')} className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3 py-2 text-slate-200 focus:border-blue-500 text-sm">
+                <label className="block text-slate-600 font-medium mb-1 text-xs">Type</label>
+                <select value={type} onChange={e=>setType(e.target.value as 'assignment'|'exam')} className="w-full bg-white/80 border border-black/10 rounded-xl px-3 py-2 text-slate-800 focus:border-blue-500 text-sm">
                   <option value="assignment">Assignment</option>
                   <option value="exam">Exam</option>
                 </select>
               </div>
               <div>
-                <label className="block text-slate-400 font-medium mb-1 text-xs">Class ID</label>
-                <input required value={classId} onChange={e=>setClassId(e.target.value)} className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3 py-2 text-slate-200 focus:border-blue-500 text-sm" placeholder="e.g. c1" />
+                <label className="block text-slate-600 font-medium mb-1 text-xs">Class ID</label>
+                <input required value={classId} onChange={e=>setClassId(e.target.value)} className="w-full bg-white/80 border border-black/10 rounded-xl px-3 py-2 text-slate-800 focus:border-blue-500 text-sm" placeholder="e.g. c1" />
               </div>
               <div>
-                <label className="block text-slate-400 font-medium mb-1 text-xs">Due Date</label>
-                <input type="datetime-local" required value={dueDate} onChange={e=>setDueDate(e.target.value)} className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3 py-2 text-slate-200 focus:border-blue-500 text-sm" />
+                <label className="block text-slate-600 font-medium mb-1 text-xs">Due Date</label>
+                <input type="datetime-local" required value={dueDate} onChange={e=>setDueDate(e.target.value)} className="w-full bg-white/80 border border-black/10 rounded-xl px-3 py-2 text-slate-800 focus:border-blue-500 text-sm" />
               </div>
               <div className="flex justify-end gap-3 pt-4">
                 <Button variant="ghost" onClick={() => setShowModal(false)}>Cancel</Button>
@@ -226,3 +226,5 @@ export default function TeacherAssignments() {
     </div>
   );
 }
+
+

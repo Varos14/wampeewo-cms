@@ -12,7 +12,7 @@ export default function TeacherGradeBook() {
     fetchData();
   }, [fetchData]);
 
-  if (loading) return <div className="p-8 text-center text-slate-400 animate-pulse">Loading gradebook...</div>;
+  if (loading) return <div className="p-8 text-center text-slate-600 animate-pulse">Loading gradebook...</div>;
 
   // Find classIds this teacher is assigned to
   const teacherClassIds = classes.filter(c => c.classTeacherId === user?.id).map(c => c.id);
@@ -34,7 +34,7 @@ export default function TeacherGradeBook() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h2 className="text-xl font-bold text-slate-100 tracking-tight">Competence Gradebook</h2>
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Competence Gradebook</h2>
         <p className="text-xs text-slate-500 mt-1">Cross-reference student performance scores against Activity of Integration (AOI) rubrics.</p>
       </div>
 
@@ -43,11 +43,11 @@ export default function TeacherGradeBook() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left border-collapse">
             <thead>
-              <tr className="border-b border-white/5 bg-white/1">
-                <th className="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider min-w-[200px]">Student Name</th>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Class Stream</th>
+              <tr className="border-b border-black/5 bg-white/50">
+                <th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider min-w-[200px]">Student Name</th>
+                <th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider">Class Stream</th>
                 {teacherAOIs.map(aoi => (
-                  <th key={aoi.id} className="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider min-w-[160px]">
+                  <th key={aoi.id} className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider min-w-[160px]">
                     <div className="truncate w-36" title={aoi.title}>
                       {aoi.title}
                     </div>
@@ -55,9 +55,9 @@ export default function TeacherGradeBook() {
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-black/5">
               {filteredStudents.map(student => (
-                <tr key={student.id} className="hover:bg-white/2 transition-colors">
+                <tr key={student.id} className="hover:bg-black/5 transition-colors">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
                       <img
@@ -66,7 +66,7 @@ export default function TeacherGradeBook() {
                         className="w-8 h-8 rounded bg-slate-700 shrink-0"
                       />
                       <div>
-                        <p className="font-semibold text-slate-200 text-xs">{student.name}</p>
+                        <p className="font-semibold text-slate-800 text-xs">{student.name}</p>
                         <p className="text-3xs text-slate-500 font-mono">{student.registrationNumber}</p>
                       </div>
                     </div>
@@ -102,3 +102,5 @@ export default function TeacherGradeBook() {
     </div>
   );
 }
+
+

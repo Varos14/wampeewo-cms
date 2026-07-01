@@ -42,12 +42,12 @@ export default function AdminAssignments() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h2 className="text-xl font-bold text-slate-100 tracking-tight">Assignment Approvals</h2>
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Assignment Approvals</h2>
         <p className="text-xs text-slate-500 mt-1">Review and approve teacher-created assignments and exams.</p>
       </div>
 
       {loading ? (
-        <div className="text-slate-400">Loading...</div>
+        <div className="text-slate-600">Loading...</div>
       ) : (
         <div className="grid grid-cols-1 gap-4">
           {assignments.length === 0 && (
@@ -62,10 +62,10 @@ export default function AdminAssignments() {
                 <div>
                   <div className="flex items-center gap-3 mb-2">
                     <Badge color={aoi.type === 'exam' ? 'rose' : 'blue'}>{aoi.type}</Badge>
-                    <span className="text-slate-400 text-2xs font-semibold">{formatDate(aoi.dueDate || aoi.deadline, 'PPP')}</span>
+                    <span className="text-slate-600 text-2xs font-semibold">{formatDate(aoi.dueDate || aoi.deadline, 'PPP')}</span>
                   </div>
-                  <h3 className="font-bold text-slate-100 text-base">{aoi.title}</h3>
-                  <p className="text-sm text-slate-400 mt-1 line-clamp-2">{aoi.description}</p>
+                  <h3 className="font-bold text-slate-900 text-base">{aoi.title}</h3>
+                  <p className="text-sm text-slate-600 mt-1 line-clamp-2">{aoi.description}</p>
                   <div className="mt-3 text-xs text-slate-500 flex gap-4">
                     <span>Due: {new Date(aoi.dueDate || aoi.deadline).toLocaleDateString()}</span>
                     <span>Teacher: {teacherName}</span>
@@ -100,3 +100,5 @@ export default function AdminAssignments() {
     </div>
   );
 }
+
+

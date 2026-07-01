@@ -49,7 +49,7 @@ export default function AdminResults() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-100 tracking-tight">Exam Results & Reports</h2>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Exam Results & Reports</h2>
           <p className="text-xs text-slate-500 mt-1">Review student terminal and mid-term results by class stream.</p>
         </div>
         <div className="flex flex-col sm:flex-row items-center gap-3">
@@ -58,12 +58,12 @@ export default function AdminResults() {
             placeholder="Search by student name or reg no..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full sm:w-64 bg-slate-800 border border-white/10 rounded-xl px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+            className="w-full sm:w-64 bg-white border border-black/10 rounded-xl px-4 py-2 text-sm text-slate-800 focus:outline-none focus:border-blue-500"
           />
           <select
             value={selectedClassId}
             onChange={(e) => setSelectedClassId(e.target.value)}
-            className="w-full sm:w-auto bg-slate-800 border border-white/10 rounded-xl px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+            className="w-full sm:w-auto bg-white border border-black/10 rounded-xl px-4 py-2 text-sm text-slate-800 focus:outline-none focus:border-blue-500"
           >
             <option value="all">All Classes</option>
             {classes.map(c => (
@@ -84,7 +84,7 @@ export default function AdminResults() {
 
           return (
             <Card key={studentId} className="p-5" variant="glass">
-              <div className="border-b border-white/5 pb-3 mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+              <div className="border-b border-black/5 pb-3 mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <div className="flex items-center gap-3">
                   <img
                     src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(studentName)}`}
@@ -92,7 +92,7 @@ export default function AdminResults() {
                     className="w-8 h-8 rounded bg-slate-700 shrink-0"
                   />
                   <div>
-                    <h3 className="font-bold text-slate-200 text-sm">{studentName}</h3>
+                    <h3 className="font-bold text-slate-800 text-sm">{studentName}</h3>
                     <p className="text-2xs text-slate-500 font-semibold uppercase tracking-wider">Student Academic Summary</p>
                   </div>
                 </div>
@@ -102,7 +102,7 @@ export default function AdminResults() {
               <div className="overflow-x-auto">
                 <table className="w-full text-xs text-left">
                   <thead>
-                    <tr className="border-b border-white/5 text-slate-400 bg-white/1">
+                    <tr className="border-b border-black/5 text-slate-600 bg-white/50">
                       <th className="px-3 py-2 font-semibold uppercase tracking-wider">Exam</th>
                       <th className="px-3 py-2 font-semibold uppercase tracking-wider">Subject</th>
                       <th className="px-3 py-2 font-semibold uppercase tracking-wider">Score</th>
@@ -110,15 +110,15 @@ export default function AdminResults() {
                       <th className="px-3 py-2 font-semibold uppercase tracking-wider">Remarks</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-white/5">
+                  <tbody className="divide-y divide-black/5">
                     {results.map(res => (
-                      <tr key={res.id} className="hover:bg-white/2 transition-colors">
-                        <td className="px-3 py-3 text-slate-400 font-medium">{getExamName(res.examId)}</td>
-                        <td className="px-3 py-3 text-slate-200 font-semibold">{getSubjectName(res.subjectId)}</td>
+                      <tr key={res.id} className="hover:bg-black/5 transition-colors">
+                        <td className="px-3 py-3 text-slate-600 font-medium">{getExamName(res.examId)}</td>
+                        <td className="px-3 py-3 text-slate-800 font-semibold">{getSubjectName(res.subjectId)}</td>
                         <td className="px-3 py-3">
                           <div className="flex items-center gap-2">
-                            <span className="font-bold text-slate-200">{res.score}%</span>
-                            <div className="w-16 bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                            <span className="font-bold text-slate-800">{res.score}%</span>
+                            <div className="w-16 bg-white rounded-full h-1.5 overflow-hidden">
                               <div 
                                 className="bg-indigo-500 h-1.5 rounded-full" 
                                 style={{ width: `${res.score}%` }} 
@@ -131,7 +131,7 @@ export default function AdminResults() {
                             {res.grade}
                           </span>
                         </td>
-                        <td className="px-3 py-3 text-slate-400 italic">{res.remarks ?? '—'}</td>
+                        <td className="px-3 py-3 text-slate-600 italic">{res.remarks ?? '—'}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -144,3 +144,5 @@ export default function AdminResults() {
     </div>
   );
 }
+
+

@@ -20,7 +20,7 @@ export default function StudentAssignments() {
   }, [fetchData]);
 
   if (!user) return null;
-  if (loading) return <div className="p-8 text-center text-slate-400 animate-pulse">Loading assignments...</div>;
+  if (loading) return <div className="p-8 text-center text-slate-600 animate-pulse">Loading assignments...</div>;
 
   const studentInfo = students.find(s => s.id === user.id);
   const myClassId = studentInfo?.classId ?? 'c1'; // Fallback for dev
@@ -77,7 +77,7 @@ export default function StudentAssignments() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h2 className="text-xl font-bold text-slate-100 tracking-tight">My Class Assignments</h2>
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">My Class Assignments</h2>
         <p className="text-xs text-slate-500 mt-1">Review active Activities of Integration (AOIs) and check grading feedback.</p>
       </div>
 
@@ -86,7 +86,7 @@ export default function StudentAssignments() {
         {[
           { label: 'Total AOIs', value: totalCount, color: 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400' },
           { label: 'Submitted', value: submittedCount, color: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' },
-          { label: 'Pending', value: pendingCount, color: pendingCount > 0 ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : 'bg-slate-500/10 border-slate-500/20 text-slate-400' },
+          { label: 'Pending', value: pendingCount, color: pendingCount > 0 ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' : 'bg-slate-500/10 border-slate-500/20 text-slate-600' },
         ].map(s => (
           <div key={s.label} className={`rounded-2xl border p-4 ${s.color}`}>
             <p className="text-2xl font-extrabold">{s.value}</p>
@@ -103,12 +103,12 @@ export default function StudentAssignments() {
           return (
             <Card key={aoi.id} className="p-5" variant="glass">
               {/* Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 pb-3 mb-4 gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-black/5 pb-3 mb-4 gap-2">
                 <div>
-                  <h3 className="font-bold text-slate-200 text-sm">{aoi.title}</h3>
+                  <h3 className="font-bold text-slate-800 text-sm">{aoi.title}</h3>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-slate-500 text-3xs font-semibold uppercase tracking-wider">Deadline:</span>
-                    <span className="text-slate-400 text-2xs font-semibold">{formatDate(aoi.deadline, 'PPP p')}</span>
+                    <span className="text-slate-600 text-2xs font-semibold">{formatDate(aoi.deadline, 'PPP p')}</span>
                   </div>
                 </div>
                 <div>
@@ -117,7 +117,7 @@ export default function StudentAssignments() {
               </div>
 
               {/* Description */}
-              <p className="text-xs text-slate-400 leading-relaxed mb-4">{aoi.description}</p>
+              <p className="text-xs text-slate-600 leading-relaxed mb-4">{aoi.description}</p>
 
               {/* Rubric badges */}
               <div className="mb-4">
@@ -132,15 +132,15 @@ export default function StudentAssignments() {
               </div>
 
               {/* Submission Status */}
-              <div className="border-t border-white/5 pt-4 mt-4 space-y-3">
+              <div className="border-t border-black/5 pt-4 mt-4 space-y-3">
                 <p className="text-2xs font-bold uppercase tracking-widest text-slate-500 pl-1">My Submission State</p>
                 {submission ? (
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between bg-white/2 border border-white/5 p-3 rounded-xl">
+                    <div className="flex items-center justify-between bg-white/2 border border-black/5 p-3 rounded-xl">
                       <div className="flex items-center gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                         <div>
-                          <p className="text-xs font-semibold text-slate-300">Submitted</p>
+                          <p className="text-xs font-semibold text-slate-700">Submitted</p>
                           <p className="text-3xs text-slate-500 mt-0.5">{formatDate(submission.submittedAt, 'PP p')}</p>
                         </div>
                       </div>
@@ -150,20 +150,20 @@ export default function StudentAssignments() {
                     {submission.feedback && (
                       <div className="bg-blue-500/5 border border-blue-500/10 p-3 rounded-xl">
                         <span className="font-bold text-blue-400 text-2xs block mb-0.5">Teacher's Evaluation Review</span>
-                        <p className="text-slate-400 italic text-2xs leading-relaxed">"{submission.feedback}"</p>
+                        <p className="text-slate-600 italic text-2xs leading-relaxed">"{submission.feedback}"</p>
                       </div>
                     )}
                   </div>
                 ) : submittingAoi === aoi.id ? (
                   <div className="space-y-3">
-                    <textarea value={submissionContent} onChange={e=>setSubmissionContent(e.target.value)} className="w-full h-24 bg-slate-800/80 border border-white/10 rounded-xl px-3 py-2 text-slate-200 focus:border-blue-500 text-sm" placeholder="Paste your work or link here..."></textarea>
+                    <textarea value={submissionContent} onChange={e=>setSubmissionContent(e.target.value)} className="w-full h-24 bg-white/80 border border-black/10 rounded-xl px-3 py-2 text-slate-800 focus:border-blue-500 text-sm" placeholder="Paste your work or link here..."></textarea>
                     <div className="flex gap-2 justify-end">
                       <Button size="sm" variant="ghost" onClick={()=>setSubmittingAoi(null)} disabled={isSubmitting}>Cancel</Button>
                       <Button size="sm" variant="primary" onClick={()=>handleSubmit(aoi.id)} loading={isSubmitting}>Submit Final Work</Button>
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-slate-800/20 border border-white/5 p-3 rounded-xl gap-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-white/20 border border-black/5 p-3 rounded-xl gap-3">
                     <div className="text-slate-500 text-xs italic flex items-center gap-2">
                       <span>⚠️ Not submitted yet. Please complete this Activity of Integration project before the deadline.</span>
                     </div>
@@ -184,3 +184,4 @@ export default function StudentAssignments() {
     </div>
   );
 }
+

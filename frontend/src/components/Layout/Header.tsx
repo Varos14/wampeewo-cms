@@ -99,7 +99,7 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-30 h-16 bg-[#09101d]/60 backdrop-blur-md border-b border-white/5 px-4 md:px-6 flex items-center justify-between shrink-0">
+    <header className="sticky top-0 z-30 h-16 bg-[#0f172a]/95 backdrop-blur-md border-b border-white/10 px-4 md:px-6 flex items-center justify-between shrink-0 shadow-sm">
       {/* Mobile Toggle & Sidebar collapse button */}
       <div className="flex items-center gap-3">
         <button

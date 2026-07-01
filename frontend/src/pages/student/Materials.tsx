@@ -27,12 +27,12 @@ export default function StudentMaterials() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h2 className="text-xl font-bold text-slate-100 tracking-tight">Learning Materials</h2>
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Learning Materials</h2>
         <p className="text-xs text-slate-500 mt-1">Access notes and handouts uploaded by your teachers.</p>
       </div>
 
       {loading ? (
-        <div className="text-slate-400 text-sm">Loading materials...</div>
+        <div className="text-slate-600 text-sm">Loading materials...</div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {materials.length === 0 && (
@@ -41,10 +41,10 @@ export default function StudentMaterials() {
           {materials.map(mat => (
             <Card key={mat.id} className="p-5 flex flex-col justify-between" variant="glass">
               <div>
-                <h3 className="font-bold text-slate-100 text-base mb-1">{mat.title}</h3>
-                <p className="text-xs text-slate-400 mb-4">{mat.description}</p>
+                <h3 className="font-bold text-slate-900 text-base mb-1">{mat.title}</h3>
+                <p className="text-xs text-slate-600 mb-4">{mat.description}</p>
               </div>
-              <div className="flex justify-between items-center mt-2 pt-3 border-t border-white/5">
+              <div className="flex justify-between items-center mt-2 pt-3 border-t border-black/5">
                 <span className="text-2xs text-slate-500">{new Date(mat.uploadedAt).toLocaleDateString()}</span>
                 <a 
                   href={mat.fileUrl} 
@@ -62,3 +62,5 @@ export default function StudentMaterials() {
     </div>
   );
 }
+
+

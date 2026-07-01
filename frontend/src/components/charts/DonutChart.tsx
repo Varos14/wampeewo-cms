@@ -55,7 +55,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-            <span className="text-xl font-bold text-slate-100">{dispText}</span>
+            <span className="text-xl font-bold text-slate-900">{dispText}</span>
             {centerLabel && <span className="text-2xs text-slate-500 font-semibold uppercase tracking-wider mt-0.5">{centerLabel}</span>}
           </div>
         </div>
@@ -115,7 +115,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({
             ))}
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-            <span className="text-xl font-bold text-slate-100">{dispText}</span>
+            <span className="text-xl font-bold text-slate-900">{dispText}</span>
             {centerLabel && <span className="text-2xs text-slate-500 font-semibold uppercase tracking-wider mt-0.5">{centerLabel}</span>}
           </div>
         </div>
@@ -125,8 +125,8 @@ export const DonutChart: React.FC<DonutChartProps> = ({
           {segments.map((seg, idx) => (
             <div key={idx} className="flex items-center gap-2 text-xs">
               <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: seg.color }} />
-              <span className="text-slate-300 font-medium">{seg.label}:</span>
-              <span className="text-slate-100 font-bold">{seg.value}</span>
+              <span className="text-slate-700 font-medium">{seg.label}:</span>
+              <span className="text-slate-900 font-bold">{seg.value}</span>
               <span className="text-slate-500 font-semibold">({Math.round(seg.percentage)}%)</span>
             </div>
           ))}
@@ -137,3 +137,4 @@ export const DonutChart: React.FC<DonutChartProps> = ({
 
   return null;
 };
+

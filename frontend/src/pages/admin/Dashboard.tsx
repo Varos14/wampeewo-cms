@@ -63,7 +63,7 @@ export default function AdminDashboard() {
     <div className="space-y-6">
       {/* Header and Title */}
       <div>
-        <h2 className="text-xl font-bold text-slate-100 tracking-tight">System Overview</h2>
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">System Overview</h2>
         <p className="text-xs text-slate-500 mt-1">Real-time statistics & administration hub for Wampeewo Ntake SS.</p>
       </div>
 
@@ -126,7 +126,7 @@ export default function AdminDashboard() {
         {/* Attendance Trend Chart */}
         <Card className="lg:col-span-2 p-6 flex flex-col justify-between" variant="glass">
           <div>
-            <h3 className="text-base font-bold text-slate-200">Daily Attendance Trends</h3>
+            <h3 className="text-base font-bold text-slate-800">Daily Attendance Trends</h3>
             <p className="text-2xs text-slate-500 font-semibold uppercase tracking-wider mt-0.5">Average weekly attendance: {stats.attendancePercentage}%</p>
           </div>
           <div className="mt-6">
@@ -137,7 +137,7 @@ export default function AdminDashboard() {
         {/* Gender Demographics */}
         <Card className="p-6 flex flex-col justify-between" variant="glass">
           <div>
-            <h3 className="text-base font-bold text-slate-200">Student Gender Ratio</h3>
+            <h3 className="text-base font-bold text-slate-800">Student Gender Ratio</h3>
             <p className="text-2xs text-slate-500 font-semibold uppercase tracking-wider mt-0.5">Total registered enrollment</p>
           </div>
           <div className="flex items-center justify-center py-4 w-full h-full min-h-[140px] shrink-0">
@@ -150,13 +150,13 @@ export default function AdminDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="p-6" variant="glass">
-          <h3 className="text-base font-bold text-slate-200 mb-4">Quick Tasks</h3>
+          <h3 className="text-base font-bold text-slate-800 mb-4">Quick Tasks</h3>
           <div className="grid grid-cols-2 gap-3">
             {quickActions.map((action, idx) => (
               <button
                 key={idx}
                 onClick={() => navigate(action.path)}
-                className={`p-4 rounded-xl border border-white/5 flex flex-col items-center justify-center text-center transition-all hover:scale-102 focus:outline-none ${action.color}`}
+                className={`p-4 rounded-xl border border-black/5 flex flex-col items-center justify-center text-center transition-all hover:scale-102 focus:outline-none ${action.color}`}
               >
                 <span className="text-xl mb-1.5">{action.icon}</span>
                 <span className="text-xs font-bold">{action.label}</span>
@@ -167,13 +167,13 @@ export default function AdminDashboard() {
 
         {/* Recent Activities */}
         <Card className="p-6" variant="glass">
-          <h3 className="text-base font-bold text-slate-200 mb-4">Recent System Log</h3>
+          <h3 className="text-base font-bold text-slate-800 mb-4">Recent System Log</h3>
           <div className="space-y-4">
             {stats.recentActivities.map((act) => (
               <div key={act.id} className="flex gap-3 text-xs">
                 <div className="w-2 h-2 rounded-full bg-blue-500 shrink-0 mt-1.5" />
                 <div className="min-w-0 flex-1">
-                  <p className="text-slate-300 font-medium leading-relaxed">{act.message}</p>
+                  <p className="text-slate-700 font-medium leading-relaxed">{act.message}</p>
                   <span className="text-slate-500 text-3xs font-semibold uppercase tracking-widest mt-1 block">
                     {act.time}
                   </span>
@@ -186,3 +186,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+

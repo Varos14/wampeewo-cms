@@ -71,12 +71,12 @@ export default function TeacherAttendance() {
     }
   };
 
-  if (loading) return <div className="p-8 text-center text-slate-400 animate-pulse">Loading attendance...</div>;
+  if (loading) return <div className="p-8 text-center text-slate-600 animate-pulse">Loading attendance...</div>;
 
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h2 className="text-xl font-bold text-slate-100 tracking-tight">Mark Attendance</h2>
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Mark Attendance</h2>
         <p className="text-xs text-slate-500 mt-1">Take daily student attendance for your assigned streams.</p>
       </div>
 
@@ -88,7 +88,7 @@ export default function TeacherAttendance() {
             <select
               value={selectedClassId}
               onChange={e => setSelectedClassId(e.target.value)}
-              className="w-full bg-slate-800/50 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500/50"
+              className="w-full bg-white/50 border border-black/10 rounded-xl px-4 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-blue-500/50"
             >
               {teacherClasses.map(c => (
                 <option key={c.id} value={c.id}>
@@ -104,7 +104,7 @@ export default function TeacherAttendance() {
               type="date"
               value={selectedDate}
               onChange={e => setSelectedDate(e.target.value)}
-              className="w-full bg-slate-800/50 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500/50"
+              className="w-full bg-white/50 border border-black/10 rounded-xl px-4 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-blue-500/50"
             />
           </div>
         </div>
@@ -123,17 +123,17 @@ export default function TeacherAttendance() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-white/5 text-left bg-white/1">
-                <th className="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Student Name</th>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Reg No.</th>
-                <th className="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider text-right">Attendance Status</th>
+              <tr className="border-b border-black/5 text-left bg-white/50">
+                <th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider">Student Name</th>
+                <th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider">Reg No.</th>
+                <th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider text-right">Attendance Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-black/5">
               {studentsInClass.map(student => {
                 const currentStatus = attendanceState[student.id] ?? 'present';
                 return (
-                  <tr key={student.id} className="hover:bg-white/2 transition-colors">
+                  <tr key={student.id} className="hover:bg-black/5 transition-colors">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         <img
@@ -142,14 +142,14 @@ export default function TeacherAttendance() {
                           className="w-8 h-8 rounded bg-slate-700 shrink-0"
                         />
                         <div>
-                          <p className="font-semibold text-slate-200">{student.name}</p>
+                          <p className="font-semibold text-slate-800">{student.name}</p>
                           <p className="text-2xs text-slate-500">{student.email}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-3 font-mono text-xs text-slate-400">{student.registrationNumber}</td>
+                    <td className="px-4 py-3 font-mono text-xs text-slate-600">{student.registrationNumber}</td>
                     <td className="px-4 py-3 text-right">
-                      <div className="inline-flex gap-1 bg-slate-800/85 p-1 rounded-lg border border-white/5">
+                      <div className="inline-flex gap-1 bg-white/80 p-1 rounded-lg border border-black/5">
                         {[
                           { key: 'present', label: 'Present', activeColor: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/20' },
                           { key: 'absent', label: 'Absent', activeColor: 'bg-rose-500/20 text-rose-400 border-rose-500/20' },
@@ -161,7 +161,7 @@ export default function TeacherAttendance() {
                               key={opt.key}
                               onClick={() => handleStatusChange(student.id, opt.key as 'present' | 'absent' | 'excused')}
                               className={`px-3 py-1 text-2xs font-bold rounded-md border border-transparent transition-all ${
-                                isActive ? opt.activeColor : 'text-slate-500 hover:text-slate-300'
+                                isActive ? opt.activeColor : 'text-slate-500 hover:text-slate-700'
                               }`}
                             >
                               {opt.label}
@@ -183,7 +183,7 @@ export default function TeacherAttendance() {
         </div>
 
         {studentsInClass.length > 0 && (
-          <div className="p-4 bg-white/1 border-t border-white/5 flex justify-end">
+          <div className="p-4 bg-white/50 border-t border-black/5 flex justify-end">
             <button
               onClick={handleSave}
               className="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all hover:scale-102"
@@ -196,3 +196,5 @@ export default function TeacherAttendance() {
     </div>
   );
 }
+
+

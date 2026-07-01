@@ -17,7 +17,7 @@ export default function StudentDashboard() {
   }, [fetchData]);
 
   if (!user) return null;
-  if (loading) return <div className="p-8 text-center text-slate-400 animate-pulse">Loading dashboard...</div>;
+  if (loading) return <div className="p-8 text-center text-slate-600 animate-pulse">Loading dashboard...</div>;
 
   // Assuming user object contains the classId (e.g. s1 -> c1)
   const studentClassId = 'c1'; // Defaulting for demo if missing in user payload
@@ -37,7 +37,7 @@ export default function StudentDashboard() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-bold text-slate-100 tracking-tight">Student Desktop</h2>
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Student Desktop</h2>
         <p className="text-xs text-slate-500 mt-1">Review assignments, course syllabuses, grades, and timetables.</p>
       </div>
 
@@ -51,7 +51,7 @@ export default function StudentDashboard() {
         ].map((shortcut) => (
           <Card key={shortcut.label} className="p-4 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500/50 transition-colors" variant="glass" onClick={() => window.location.href = shortcut.link}>
             <span className="text-2xl mb-2">{shortcut.icon}</span>
-            <span className="text-xs font-bold text-slate-300">{shortcut.label}</span>
+            <span className="text-xs font-bold text-slate-700">{shortcut.label}</span>
           </Card>
         ))}
       </div>
@@ -96,18 +96,18 @@ export default function StudentDashboard() {
         <div className="lg:col-span-2 space-y-6">
           {/* Upcoming Assignments list */}
           <Card className="p-6" variant="glass">
-            <h3 className="text-base font-bold text-slate-200 mb-4">Pending Assignments</h3>
+            <h3 className="text-base font-bold text-slate-800 mb-4">Pending Assignments</h3>
             <div className="space-y-4">
               {aois.filter(a => a.classId === studentClassId).map((aoi) => {
                 const sub = studentSubmissions.find(s => s.aoiId === aoi.id);
                 return (
                   <div
                     key={aoi.id}
-                    className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-800/30 border border-white/5 rounded-xl transition hover:border-blue-500/20"
+                    className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white/50 border border-black/5 rounded-xl transition hover:border-blue-500/20"
                   >
                     <div>
-                      <h4 className="text-sm font-bold text-slate-200">{aoi.title}</h4>
-                      <p className="text-2xs text-slate-400 mt-1 max-w-md line-clamp-1">{aoi.description}</p>
+                      <h4 className="text-sm font-bold text-slate-800">{aoi.title}</h4>
+                      <p className="text-2xs text-slate-600 mt-1 max-w-md line-clamp-1">{aoi.description}</p>
                       <p className="text-3xs font-semibold text-slate-500 uppercase tracking-widest mt-1.5">
                         Deadline: {formatDate(aoi.deadline, 'PPP p')}
                       </p>
@@ -116,7 +116,7 @@ export default function StudentDashboard() {
                       {sub ? (
                         <div className="flex items-center gap-2">
                           <RubricBadge grade={sub.grade} />
-                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Submitted</span>
+                          <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">Submitted</span>
                         </div>
                       ) : (
                         <span className="inline-flex px-2.5 py-1 bg-blue-500/10 border border-blue-500/20 rounded-xl text-3xs font-bold text-blue-400 uppercase tracking-wider">
@@ -135,15 +135,15 @@ export default function StudentDashboard() {
 
           {/* School Announcements */}
           <Card className="p-6" variant="glass">
-            <h3 className="text-base font-bold text-slate-200 mb-4">Teacher Communications & Notices</h3>
+            <h3 className="text-base font-bold text-slate-800 mb-4">Teacher Communications & Notices</h3>
             <div className="space-y-4">
               {studentAnnouncements.map((ann) => (
-                <div key={ann.id} className="p-4 bg-[#0a1220]/50 border border-white/5 rounded-xl">
+                <div key={ann.id} className="p-4 bg-white/50 border border-black/5 rounded-xl">
                   <div className="flex justify-between items-start">
-                    <h4 className="text-xs font-bold text-slate-200">{ann.title}</h4>
+                    <h4 className="text-xs font-bold text-slate-800">{ann.title}</h4>
                     <span className="text-3xs text-slate-500 font-semibold uppercase tracking-widest">{formatDate(ann.createdAt)}</span>
                   </div>
-                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">{ann.content}</p>
+                  <p className="text-xs text-slate-600 mt-2 leading-relaxed">{ann.content}</p>
                   <span className="text-[10px] text-blue-500 font-bold block mt-2.5">{ann.authorName}</span>
                 </div>
               ))}
@@ -159,7 +159,7 @@ export default function StudentDashboard() {
           {/* Attendance Ring */}
           <Card className="p-6 flex flex-col justify-between" variant="glass">
             <div>
-              <h3 className="text-base font-bold text-slate-200">Term Attendance</h3>
+              <h3 className="text-base font-bold text-slate-800">Term Attendance</h3>
               <p className="text-2xs text-slate-500 font-semibold uppercase tracking-wider mt-0.5">Academic Term I</p>
             </div>
             <div className="my-6">
@@ -167,15 +167,15 @@ export default function StudentDashboard() {
             </div>
             <div className="flex justify-around text-center mt-2">
               <div>
-                <span className="text-sm font-bold text-slate-200">8</span>
+                <span className="text-sm font-bold text-slate-800">8</span>
                 <p className="text-3xs text-slate-500 font-semibold uppercase tracking-widest mt-0.5">Present</p>
               </div>
               <div>
-                <span className="text-sm font-bold text-slate-200">1</span>
+                <span className="text-sm font-bold text-slate-800">1</span>
                 <p className="text-3xs text-slate-500 font-semibold uppercase tracking-widest mt-0.5">Excused</p>
               </div>
               <div>
-                <span className="text-sm font-bold text-slate-200">0</span>
+                <span className="text-sm font-bold text-slate-800">0</span>
                 <p className="text-3xs text-slate-500 font-semibold uppercase tracking-widest mt-0.5">Absent</p>
               </div>
             </div>
@@ -183,18 +183,18 @@ export default function StudentDashboard() {
 
           {/* Recent Exam Results preview */}
           <Card className="p-6" variant="glass">
-            <h3 className="text-base font-bold text-slate-200 mb-4">Latest Exam Scores</h3>
+            <h3 className="text-base font-bold text-slate-800 mb-4">Latest Exam Scores</h3>
             <div className="space-y-3">
               {myResults.map((res) => (
                 <div key={res.id} className="flex justify-between items-center text-xs">
                   <div>
-                    <span className="font-bold text-slate-300">
+                    <span className="font-bold text-slate-700">
                       {res.subjectId === 's1' ? 'Mathematics' : res.subjectId === 's2' ? 'Physics' : 'English Literature'}
                     </span>
                     <p className="text-[10px] text-slate-500 mt-0.5">{res.remarks}</p>
                   </div>
                   <div className="text-right flex items-center gap-2">
-                    <span className="font-black text-slate-200">{res.score}/100</span>
+                    <span className="font-black text-slate-800">{res.score}/100</span>
                     <span className="px-2 py-0.5 bg-blue-500/10 border border-blue-500/20 text-[10px] font-black text-blue-400 rounded-md">
                       {res.grade}
                     </span>
@@ -204,11 +204,11 @@ export default function StudentDashboard() {
               {myResults.length === 0 && (
                 <div className="flex justify-between items-center text-xs">
                   <div>
-                    <span className="font-bold text-slate-300">Mathematics</span>
+                    <span className="font-bold text-slate-700">Mathematics</span>
                     <p className="text-[10px] text-slate-500 mt-0.5">Excellent performance</p>
                   </div>
                   <div className="text-right flex items-center gap-2">
-                    <span className="font-bold text-slate-200">N/A</span>
+                    <span className="font-bold text-slate-800">N/A</span>
                   </div>
                 </div>
               )}
@@ -219,3 +219,4 @@ export default function StudentDashboard() {
     </div>
   );
 }
+

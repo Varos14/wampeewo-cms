@@ -20,10 +20,10 @@ export const Button: React.FC<ButtonProps> = ({
   
   const variants = {
     primary: 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/20 active:scale-98',
-    secondary: 'bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700/50 active:scale-98',
+    secondary: 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 active:scale-98',
     danger: 'bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-500/20 active:scale-98',
-    ghost: 'bg-transparent hover:bg-slate-800/40 text-slate-300 hover:text-slate-100',
-    glass: 'bg-white/5 hover:bg-white/10 text-slate-100 border border-white/10 shadow-sm active:scale-98',
+    ghost: 'bg-transparent hover:bg-black/5 text-slate-600 hover:text-slate-900',
+    glass: 'bg-white/50 hover:bg-white/70 text-slate-800 border border-black/5 shadow-sm active:scale-98',
   };
 
   const sizes = {
@@ -67,3 +67,4 @@ export const Button: React.FC<ButtonProps> = ({
     </button>
   );
 };
+

@@ -1,30 +1,32 @@
 # VICTORIA UNIVERSITY
 ## FACULTY OF SCIENCE AND TECHNOLOGY
-## DEPARTMENT OF COMPUTER SCIENCE & INFORMATION TECHNOLOGY
+## DEPARTMENT OF COMPUTING AND INFORMATION SCIENCE
 
 ---
 
-# WAMPEEWO CONTENT MANAGEMENT SYSTEM (WAMPEEWO CMS)
-## A ROLE-BASED COMPETENCY-BASED EDUCATION (CBE) PORTAL
+# TEACHER–STUDENT CLASS MANAGEMENT SYSTEM
+## CASE STUDY: WAMPEEWO NTAKE SECONDARY SCHOOL, WAKISO
 
 ### FINAL PROJECT REPORT
 
-**Course Code:** CS-400  
 **Course Name:** Final Year Project / Software Engineering Capstone  
 **Academic Year:** 2025/2026  
 
 ---
 
-### **SUBMITTED BY:**
-| Student Name | Registration Number | Course |
-|---|---|---|
-| [Student Name 1] | [Reg No 1] | Bachelor of Science in Computer Science |
-| [Student Name 2] | [Reg No 2] | Bachelor of Science in Software Engineering |
+### **SUBMITTED BY (GROUP 19):**
+| Name | Reg. No | Student No. | Email Address | Phone Contact |
+|---|---|---|---|---|
+| MUTWEZI GELARD | VU-BIT-2307-1087-DAY | 230714543 | geraldvaros@gmail.com | 0772676944 |
+| NABATANZI PAULINE | VU-BIT-2411-1141-DAY | 2401121963 | paulinenabatanzi@gmail.com | 0755885236 |
+| DIMILIRE ANDREW | VU-BIT-2307-0935-DAY | 230714360 | dimilirea@gmail.com | 0706094920 |
+| NUWABIINE DINAH | VU-BIT-2411-1868-DAY | 2401121703 | dinahnuwabiine@gmail.com | 0700996181 |
+| KATONGOLE ABUBAKER | VU-BIT-2307-1108-DAY | 230714621 | akayabbey@gmail.com | 0751464880 |
 
 ### **SUPERVISED BY:**
-| Supervisor Name | Designation | Department |
+| Supervisor Name | Designation | Faculty / Department |
 |---|---|---|
-| [Supervisor Name] | Lecturer / Project Supervisor | Computer Science & IT |
+| MS. NAJJEMBA OLIVIA | Project Supervisor | Science and Technology |
 
 **Date of Submission:** June 2026
 
@@ -33,49 +35,49 @@
 \newpage
 
 ## **DECLARATION**
-We declare that this project report entitled **"Wampeewo Content Management System (Wampeewo CMS)"** is our original work, and has not been submitted to any other university or higher education institution for the award of any degree or diploma. Wherever other sources have been used, they have been appropriately acknowledged and cited.
+We declare that the work presented in this project report is our original work and has not been submitted to any university or institution of higher learning for any academic award. All work from other authors has been fully acknowledged and cited appropriately.
 
-1. **Student Name 1:** ___________________________  Signature: _______________  Date: ___________
-2. **Student Name 2:** ___________________________  Signature: _______________  Date: ___________
+Signed: _______________________________  
+Date: _________________________________
 
 ---
 
 ## **APPROVAL**
-This project report has been submitted for examination with the approval of our university supervisor.
+This project report has been submitted for examination with the approval of the project supervisor.
 
-**Supervisor Name:** ___________________________
-
-Signature: __________________________________
-
-Date: _______________________________________
+Signed: _______________________________  
+**MS. NAJJEMBA OLIVIA**  
+Project Supervisor  
+Date: _________________________________
 
 ---
 
-\newpage
+## **DEDICATION**
+This work is dedicated to the Almighty God for His guidance, protection and provision throughout our academic journey. We also dedicate it to our parents, guardians and families for their unwavering support, encouragement and sacrifice. Finally, we dedicate this report to our lecturers and supervisor whose guidance, patience and professional support made this project possible.
 
-## **ACKNOWLEDGMENTS**
-We express our deepest gratitude to the Almighty God for the strength, health, and grace bestowed upon us throughout the development of this project.
+---
 
-We extend our sincere thanks to the administration of **Victoria University**, particularly the **Faculty of Science and Technology**, for providing a conducive environment, state-of-the-art laboratory resources, and guidelines that made this project possible.
+## **ACKNOWLEDGEMENT**
+We sincerely thank the Almighty God for the gift of life, wisdom and strength throughout the period of this research and system development project.
 
-We are highly indebted to our project supervisor, **[Supervisor Name]**, whose constructive criticism, expert guidance, and encouragement kept us focused.
+Our special appreciation goes to our supervisor, Ms. Najjemba Olivia, for her guidance, encouragement, constructive criticism and continuous support from proposal writing up to the completion of this report. Her professional advice greatly shaped the quality of this work.
 
-Special thanks go to the administration and teachers of **Wampeewo School/College** who provided the initial requirements, feedback, and insights into the practical challenges of transitioning to the new Competency-Based Education (CBE) curriculum in East Africa (specifically Uganda's National Curriculum Development Centre - NCDC guidelines).
+We also extend our gratitude to the administration, teachers and students of Wampeewo Ntake Secondary School for the cooperation they offered during requirements gathering and validation of the proposed Teacher–Student Class Management System.
 
-Lastly, to our families and colleagues, thank you for your unwavering emotional and financial support.
+We are grateful to the Faculty of Science and Technology and the Department of Computing and Information Science of Victoria University for the academic environment and resources that enabled us to complete this project. Finally, we thank our parents, colleagues and friends for the moral, financial and emotional support extended to us throughout the study.
 
 ---
 
 \newpage
 
 ## **ABSTRACT**
-The implementation of the new lower secondary school Competency-Based Education (CBE) curriculum in East Africa has changed the academic landscape from a purely summative examination system to a continuous, skill-based formative assessment. However, many schools still manage this data using manual spreadsheets, leading to errors, delays, and a lack of real-time visibility for teachers, students, and administrators. 
+This project focused on the design and development of a Teacher–Student Class Management System for Wampeewo Ntake Secondary School in Wakiso District. The study was motivated by challenges associated with manual and fragmented academic management processes, including difficulty in tracking assignments, delayed feedback, poor storage of learning materials, weak communication between teachers and students, and inefficient management of continuous assessment records. These challenges affect syllabus coverage, learner engagement and the effective implementation of Uganda’s competency-based curriculum.
 
-This project presents the **Wampeewo Content Management System (Wampeewo CMS)**, a role-based web application designed to automate, streamline, and secure the academic and administrative tasks required by the CBE framework. Wampeewo CMS provides distinct, secure portals for three primary user roles: **Admins**, **Teachers**, and **Students**. The system replaces static grade sheets with dynamic tracking of **Areas of Interest (AOIs)** (Activity of Integration), **Generic Skills** (e.g., critical thinking, collaboration, communication), and traditional terminal examinations. 
+The general objective of the study was to design and develop a centralized web-based system to support teaching, learning, assignment management and academic record keeping. Specifically, the study examined the existing methods used to manage classroom learning and assessment, designed a system to address the identified gaps, and developed and tested the proposed solution.
 
-Built using a modern web architecture, the system employs **React (TypeScript) with Tailwind CSS** for the frontend, **Express (TypeScript) with Node.js** for the backend, and **MySQL** as the relational database management system. Access control is secured through **JSON Web Tokens (JWT)** and **role guards** on both client and server sides. The system has been successfully deployed, with the frontend hosted on **Vercel** and the backend on **Render**, utilizing a hosted MySQL instance. Verification testing confirms that the application improves administrative efficiency, secures student records, and provides an intuitive dashboard interface for tracking competency achievements in real-time.
+A systems development methodology based on the Systems Development Life Cycle (SDLC) was adopted. Data were collected using interviews, document review, and observation, supported by questionnaires. The findings showed that the current manual approach was time-consuming, prone to errors, difficult to monitor, and insecure for long-term storage of academic records. 
 
-**Keywords:** *Competency-Based Education, School Management System, Role-Based Access Control, React, Express, MySQL, Activities of Integration, Uganda Secondary Education.*
+The proposed Teacher–Student Class Management System (Wampeewo TSCMS) provides modules for user authentication, class and subject management, assignment posting and submission, digital notes, attendance tracking, continuous assessment recording, feedback, and reporting. To ensure operation in low-connectivity areas, the system includes an advanced Offline Synchronization module which caches data locally and queues offline operations (like adding notes or marking attendance) to sync automatically when a connection is restored. The study concludes that the proposed system can significantly improve efficiency, accessibility, accountability, and communication in school academic processes. It is recommended that Wampeewo Ntake Secondary School adopt the system and support its implementation with user training, stable internet access, periodic backups, and clear data governance procedures.
 
 ---
 
@@ -84,390 +86,301 @@ Built using a modern web architecture, the system employs **React (TypeScript) w
 # **TABLE OF CONTENTS**
 1. **CHAPTER 1: INTRODUCTION**
    - 1.1 Background of the Study
-   - 1.2 Problem Statement
+   - 1.2 Statement of the Problem
    - 1.3 Objectives of the Project
      - 1.3.1 General Objective
      - 1.3.2 Specific Objectives
-   - 1.4 Research & Development Questions
-   - 1.5 Scope of the Project
-   - 1.6 Significance of the Project
+   - 1.4 Scope of the Project
+   - 1.5 Significance of the Study
 2. **CHAPTER 2: LITERATURE REVIEW**
-   - 2.1 Theoretical Framework: Competency-Based Education (CBE)
-   - 2.2 Traditional School Management Systems vs. CBE Portals
-   - 2.3 Review of Comparable Systems
-   - 2.4 Technology Justification
-3. **CHAPTER 3: METHODOLOGY & SYSTEM ANALYSIS**
-   - 3.1 Software Development Life Cycle (SDLC)
-   - 3.2 Feasibility Analysis
-   - 3.3 Requirements Gathering & Specification
-     - 3.3.1 Functional Requirements
-     - 3.3.2 Non-Functional Requirements
-4. **CHAPTER 4: SYSTEM DESIGN & ARCHITECTURE**
-   - 4.1 High-Level Architecture
-   - 4.2 Database Design & Schema Definitions
-   - 4.3 Database Relations & Entity-Relationship Diagram (ERD) description
-   - 4.4 Data Flow & Route Guards
-5. **CHAPTER 5: SYSTEM IMPLEMENTATION**
-   - 5.1 Backend Implementation Details
-   - 5.2 Frontend Implementation Details
-   - 5.3 User Roles & Portal Walkthrough
-     - 5.3.1 Administrator Portal
-     - 5.3.2 Teacher Portal
-     - 5.3.3 Student Portal
-6. **CHAPTER 6: SYSTEM TESTING, DEPLOYMENT & VERIFICATION**
-   - 6.1 Testing Strategies
-   - 6.2 Security & Vulnerability Remediation
-   - 6.3 Deployment Architecture
-   - 6.4 User Verification & System Acceptance
-7. **CHAPTER 7: CONCLUSIONS, LIMITATIONS & RECOMMENDATIONS**
-   - 7.1 Key Achievements
-   - 7.2 Challenges & Limitations
-   - 7.3 Recommendations for Future Work
-8. **REFERENCES**
+   - 2.1 Concept of Class Management Systems
+   - 2.2 Teacher–Student Communication Systems
+   - 2.3 Student Records and Academic Performance Management
+   - 2.4 Challenges of Manual School Management
+   - 2.5 Benefits of Automated Class Management Systems
+   - 2.6 Database and Security Considerations
+   - 2.7 Review of Existing Systems and Related Technologies
+   - 2.8 Research Gap
+3. **CHAPTER 3: RESEARCH METHODOLOGY AND DESIGN**
+   - 3.1 Introduction
+   - 3.2 System Development Methodology
+   - 3.3 Requirements Gathering
+     - 3.3.1 Sampling Techniques
+     - 3.3.2 Target Population and Sample Size
+   - 3.4 Data Collection Methods
+4. **CHAPTER 4: SYSTEMS ANALYSIS AND DESIGN**
+   - 4.1 Introduction
+   - 4.2 Description of the Designed System
+   - 4.3 Data Analysis and Results
+   - 4.4 System User Requirements
+   - 4.5 Functional and Non-functional Requirements
+   - 4.6 High-Level Architecture
+   - 4.7 Flow Chart of the Developed System
+   - 4.8 Context Diagram & Level One DFD
+   - 4.9 Use Case Diagram
+   - 4.10 Entity Relationship Diagrams (ERD)
+   - 4.11 Dynamic Modeling (Activity and Sequence Diagrams)
+5. **CHAPTER 5: IMPLEMENTATION AND TESTING**
+   - 5.1 Data Outputs and Forms
+   - 5.2 Programming Languages and Frameworks Used
+   - 5.3 Development Tools
+   - 5.4 System Testing
+   - 5.5 Chapter Summary
+6. **CHAPTER 6: DISCUSSION, RECOMMENDATIONS, FUTURE WORK AND CONCLUSION**
+   - 6.1 Discussion
+   - 6.2 Limitations
+   - 6.3 Recommendations and Future Work
+   - 6.4 Conclusion
+7. **REFERENCES**
+8. **APPENDICES**
 
 ---
 
 \newpage
 
-# **CHAPTER 1: INTRODUCTION**
+# **CHAPTER ONE: INTRODUCTION**
 
 ## **1.1 Background of the Study**
-In recent years, educational systems worldwide have moved from traditional, rote-memorization-based teaching to Competency-Based Education (CBE). In East Africa—specifically Uganda—the National Curriculum Development Centre (NCDC) rolled out a new lower secondary school curriculum. This curriculum emphasizes active learner participation, continuous assessment, and the development of generic skills such as communication, critical thinking, problem-solving, co-operation, and innovation.
+Information and Communication Technology (ICT) has significantly transformed the education sector by improving communication, record management, content delivery and access to learning resources. Educational institutions increasingly rely on digital platforms to facilitate teaching, learning and academic administration. Learning Management Systems (LMS) enable teachers to share learning materials, administer assignments, monitor student progress and communicate with learners beyond the traditional classroom environment (Turnbull, Chugh, & Luck, 2021). These technologies have become particularly important in competency-based education, where continuous assessment, timely feedback and learner-centred instruction are fundamental components of the teaching process (Bond et al., 2020).
 
-Under this new CBE framework, students are assessed using:
-1. **Activities of Integration (AoIs) / Areas of Interest:** Practical, real-world tasks designed to evaluate if a student can apply knowledge acquired in a topic.
-2. **Generic Skills:** Universal abilities assessed on a scale (usually 1, 2, or 3) across all subjects.
-3. **Continuous Assessment Scores (Formative):** Representing 20% of the final national evaluation, with traditional terminal examinations representing the remaining portion.
+In Uganda, the introduction of the Competency-Based Curriculum (CBC) for lower secondary education has shifted the focus from examination-oriented learning to the acquisition of practical skills, critical thinking and continuous assessment. The curriculum emphasizes learner-centred instruction, project work, Activities of Integration (AOIs) and continuous monitoring of learner progress (Wambi et al., 2024). However, despite these reforms, many secondary schools continue to depend on paper-based records, handwritten notes, manual attendance registers and fragmented communication methods such as notice boards and verbal announcements. These practices make it difficult to manage assignments efficiently, store learning resources securely, monitor academic progress and retrieve records when required.
 
-Managing this granular data for hundreds of students across multiple subjects is a complex administrative challenge. Traditional paper-based recording and static spreadsheets are prone to mathematical errors, formatting inconsistencies, data loss, and lack of transparency. **Wampeewo CMS** was developed to bridge this gap, providing a digital platform to manage role-based academic workflows.
+This project presents the design and development of a Teacher–Student Class Management System for Wampeewo Ntake Secondary School. The proposed system provides a centralized digital platform through which teachers can manage classes, upload notes and assignments, record continuous assessment scores, monitor attendance and communicate with students. Likewise, students will be able to access learning materials, submit assignments, receive feedback and monitor their academic performance through an integrated online environment.
 
----
+## **1.2 Statement of the Problem**
+Wampeewo Ntake Secondary School continues to experience significant challenges in managing teaching and learning activities due to its reliance on manual and fragmented systems. Teachers encounter difficulties in distributing assignments, maintaining continuous assessment records, tracking student attendance and providing timely feedback. Students also face challenges in accessing learning materials, submitting assignments electronically and monitoring their academic progress from a centralized platform. Furthermore, academic records are susceptible to loss, retrieval is time-consuming and communication between teachers and students remains inconsistent.
 
-## **1.2 Problem Statement**
-The transition to CBE has introduced administrative friction in schools like Wampeewo School. Teachers must track not only traditional grades but also complex descriptive rubrics, submissions for Activities of Integration, scores for five distinct generic skills, student attendance, class timetables, and lecture materials.
-
-Specifically, the following challenges exist:
-- **Inefficient Data Tracking:** Teachers spend excessive hours manually compiling scores for activities, generic skills, and examinations.
-- **Lack of Collaboration and Visibility:** Students cannot access learning materials, submit assignments digitally, or view their attendance records in a central location.
-- **Security and Accountability Risks:** Paper records and shared spreadsheets can be altered easily, violating the integrity of continuous assessment records.
-- **Administrative Overhead:** Administrators face delays when compiling end-of-term academic reports and tracking teacher performance.
-
-There is a critical need for an integrated, secure, role-based Content and School Management System tailored to the unique workflows of CBE.
-
----
+These limitations negatively affect instructional efficiency, learner engagement, accountability and the successful implementation of Uganda's Competency-Based Curriculum, which requires continuous assessment, learner participation and accurate documentation of student progress (Mwebaza, Nakawuki, & Francis, 2025). Without an integrated digital solution, both teachers and students continue to spend considerable time performing routine administrative tasks that could otherwise be automated. Therefore, there is a need to develop a centralized Teacher–Student Class Management System that automates assignment management, attendance tracking, continuous assessment, academic record management and teacher–student communication in order to improve academic administration and learning outcomes at Wampeewo Ntake Secondary School.
 
 ## **1.3 Objectives of the Project**
 
 ### **1.3.1 General Objective**
-To design, develop, deploy, and verify a secure, role-based Competency Content Management System (Wampeewo CMS) that automates and optimizes school administration and CBE continuous assessment workflows for administrators, teachers, and students.
+To design and develop a Teacher–Student Class Management System for Wampeewo Ntake Secondary School that improves the management of teaching, learning, assignments and academic records.
 
 ### **1.3.2 Specific Objectives**
-1. To gather and model requirements from teachers and administrators regarding CBE grading, attendance tracking, and school scheduling.
-2. To design a secure relational database schema supporting hierarchical academic records (classes, subjects, students, teachers, generic skills, AOIs, submissions, and attendance).
-3. To build a backend API implementing secure authentication and Role-Based Access Control (RBAC).
-4. To develop a responsive, modern frontend web application with custom dashboards for Admin, Teacher, and Student portals.
-5. To deploy the application on cloud platforms (Vercel and Render) and verify its stability, speed, and defense against security vulnerabilities.
+i. To examine and analyse the existing methods and challenges used in managing academics and teacher–student engagement at Wampeewo Ntake Secondary School.  
+ii. To design a centralized Teacher–Student Class Management System to support teaching, learning, assignments and academic record management.  
+iii. To develop and test the proposed system using appropriate web technologies and system testing techniques.  
 
----
+## **1.4 Scope of the Project**
+- **Conceptual Scope:** Focuses on user registration and authentication, class/subject management, assignment posting and submission, digital note sharing, attendance tracking, continuous assessment recording, feedback management, and report generation.
+- **Geographical Scope:** The study and pilot implementation were conducted at Wampeewo Ntake Secondary School, Wakiso District, Uganda.
+- **Time Scope:** The system design, database modeling, front-end and back-end development, testing, and documentation were carried out over a six-month period from January 2026 to June 2026.
 
-## **1.4 Research & Development Questions**
-1. How can a relational database schema be optimized to store both formative CBE grades (AOIs, rubrics, and generic skills) and summative exam grades?
-2. How can role-based access control be enforced securely across both client-side routes and server-side API endpoints?
-3. In what ways can a digital student portal improve student engagement and access to learning resources?
-
----
-
-## **1.5 Scope of the Project**
-- **Functional Scope:** User authentication; user management (creating/editing students, teachers, and classes); academic management (assigning subjects and teachers); CBE assessment management (creating AOIs, submitting files/content, grading, and assessing generic skills); attendance tracking; timetable configuration; notes and study materials sharing; and announcement broadcasting.
-- **Geographical Scope:** Designed for pilot implementation at Wampeewo School/College, Kampala, Uganda, with academic structures aligning with Victoria University standards.
-- **Technical Scope:** JavaScript/TypeScript environment, Node.js + Express backend, React.js frontend, Tailwind CSS styling, MySQL relational database.
-
----
-
-## **1.6 Significance of the Project**
-- **For Academic Administrators:** Streamlines record-keeping, ensures consistent grading policies, and automatically compiles student reports.
-- **For Teachers:** Drastically reduces time spent calculating scores, simplifies attendance logging, and enables direct digital communication with students.
-- **For Students:** Promotes accountability through real-time feedback on continuous assessments, grades, and access to learning materials.
-- **For the Academic Community:** Demonstrates a functional reference model for implementing CBE digitization in secondary education systems.
+## **1.5 Significance of the Study**
+- **To Wampeewo Ntake Secondary School:** Provides a centralized system that improves efficiency, accountability, and security of continuous assessment records.
+- **To Teachers & Students:** Simplifies academic administration, note-sharing, and assignment feedback while keeping students engaged.
+- **To Victoria University & Scholars:** Adds localized academic knowledge regarding Competency-Based classroom systems and provides a basis for future research in educational information systems.
 
 ---
 
 \newpage
 
-# **CHAPTER 2: LITERATURE REVIEW**
+# **CHAPTER TWO: LITERATURE REVIEW**
 
-## **2.1 Theoretical Framework: Competency-Based Education (CBE)**
-Unlike traditional education frameworks that measure success based on seat time and memorization (summative testing), CBE models focus on students mastering specific skills and learning outcomes (formative testing). Students progress as they demonstrate mastery of competencies regardless of time, place, or pace. 
+## **2.1 Concept of Class Management Systems**
+A class management system is a software platform used to coordinate classroom activities and support academic administration. Modern class management systems extend beyond content storage by facilitating attendance management, assignment distribution, communication, grading, reporting and learner engagement. In competency-based education, class management systems also support continuous assessment by enabling teachers to monitor learner progress and provide timely interventions. According to Bond et al. (2020), digital learning platforms enhance learner participation, collaboration and academic achievement when effectively integrated into classroom practice.
 
-According to literature, CBE requires:
-1. **Clear Learning Objectives:** Known as competencies or learning indicators.
-2. **Flexible and Personalized Pathways:** Allowing students to learn using varied resources.
-3. **Rubric-Based Evaluation:** Assessing performance against clear descriptions of mastery rather than arbitrary letter grades.
+## **2.2 Teacher–Student Communication Systems**
+Effective communication between teachers and students is essential for successful teaching and learning. Traditional communication methods such as classroom announcements, printed notices and verbal instructions often limit access to information outside school hours. Digital communication platforms improve interaction by enabling teachers to distribute assignments, announcements, reminders and feedback electronically. Martin, Sunley and Turner (2022) argue that effective digital communication strengthens learner engagement and improves collaboration between teachers and students in blended learning environments.
 
-## **2.2 Traditional School Management Systems vs. CBE Portals**
-Standard School Management Systems (SMS) are built around two-parameter grading structures: `Student ID` and `Exam Score %`. They lack database tables and relations to store:
-- Sub-components of an Activity of Integration (rubrics).
-- Observational behaviors representing Generic Skills.
-- Qualitative teacher remarks for specific competencies.
+## **2.3 Student Records and Academic Performance Management**
+Student records management involves maintaining attendance records, assessment scores, continuous assessment results, report cards and academic progress. Manual record management is often characterized by duplication, delayed reporting and difficulty retrieving historical data. Digital academic management systems centralize learner information, simplify record updates and generate reports automatically. According to Ifenthaler and Yau (2020), learning analytics and digital student records significantly improve academic monitoring and evidence-based educational decision making.
 
-Hence, schools attempting to implement CBE using traditional software are forced to maintain parallel, offline excel systems, negating the benefits of digitization.
+## **2.4 Challenges of Manual School Management**
+Manual school management systems continue to present numerous operational challenges. These include repetitive paperwork, delayed information retrieval, data redundancy, human errors in calculations, weak accountability and increased risk of document loss. Physical records are vulnerable to damage, theft or misplacement, making long-term storage and retrieval difficult. As noted by Zawacki-Richter et al. (2019), institutions relying heavily on manual processes face significant limitations in efficiency, data management and service delivery compared to digital environments.
 
-## **2.3 Review of Comparable Systems**
-- **Canvas / Moodle LMS:** Highly powerful learning management systems, but they lack custom registrar/administrative workflows (e.g., student registration numbers, class teacher allocations, stream routing) required by secondary school structures.
-- **EMIS (Education Management Information Systems):** Government-level data collection portals that focus on macroscopic statistics (enrollment, teacher count) and cannot handle day-to-day student assignment submissions or class-level attendance.
+## **2.5 Database and Security Considerations**
+Because school management systems process confidential learner information, database design and information security are critical considerations. Secure systems employ authentication mechanisms, role-based access control, encrypted communication and regular database backups to protect sensitive academic records. Proper database normalization also minimizes redundancy and improves data consistency and retrieval efficiency (Alshammari, Anane, & Hendley, 2021).
 
-Wampeewo CMS bridges these two worlds by merging SMS administrative controls with CBE formative assessment capabilities.
+## **2.6 Review of Existing Systems and Related Technologies**
+Systems such as Moodle and Google Classroom provide tools for content delivery, assignment management and communication between teachers and students. However, these platforms are designed for general educational environments and may not fully address the operational requirements of Ugandan secondary schools implementing competency-based education. Many existing school management systems focus mainly on administrative functions such as fees management, admissions and reporting rather than classroom interaction and continuous assessment (Turnbull, Chugh, & Luck, 2021).
 
-## **2.4 Technology Justification**
-- **TypeScript:** Enforces structural type safety across the application, reducing runtime errors and improving codebase maintainability.
-- **React.js:** Single Page Application (SPA) architecture that enables swift, desktop-like transitions between sub-pages without full-page reloads, enhancing user experience.
-- **Express.js (Node.js):** Lightweight, event-driven, non-blocking asynchronous architecture that handles concurrent requests efficiently.
-- **MySQL:** An enterprise-grade relational database management system that guarantees ACID (Atomicity, Consistency, Isolation, Durability) properties, crucial for sensitive academic grading records.
+## **2.7 Research Gap**
+Despite the increasing adoption of digital learning systems worldwide, there remains limited research and implementation of localized class management systems specifically designed for Ugandan secondary schools. Existing systems rarely integrate assignment management, digital note sharing, attendance monitoring, continuous assessment, academic reporting and teacher–student communication into one simple platform tailored to the competency-based curriculum. This study addresses this gap by designing and developing a Teacher–Student Class Management System customized for Wampeewo Ntake Secondary School.
 
 ---
 
 \newpage
 
-# **CHAPTER 3: METHODOLOGY & SYSTEM ANALYSIS**
+# **CHAPTER THREE: RESEARCH METHODOLOGY AND DESIGN**
+
+## **3.1 Introduction**
+This chapter describes the methodology used to gather system requirements, analyse the existing environment and guide the design and development of the Teacher–Student Class Management System.
+
+## **3.2 System Development Methodology**
+This project adopted the Systems Development Life Cycle (SDLC) using an Agile Scrum development process. Agile was chosen because it allows continuous iteration and rapid feedback from teachers and administrators.
 
 ```mermaid
 graph TD
-    A[Requirements Gathering] --> B[System Analysis & Feasibility]
-    B --> C[Database & Architecture Design]
-    C --> D[Backend API Development]
-    D --> E[Frontend Components & Guarded Routes]
-    E --> F[System Integration & Security Hardening]
-    F --> G[Testing & Cloud Deployment]
-    G --> H[Verification & Final Sign-off]
+    A[Requirements Elicitation] --> B[Sprint Planning]
+    B --> C[Design & Prototyping]
+    C --> D[Coding & Development]
+    D --> E[Testing & Integration]
+    E --> F[User Validation]
+    F -->|Feedback Loop| B
 ```
 
-## **3.1 Software Development Life Cycle (SDLC)**
-The project utilized the **Agile Scrum Methodology**. This choice was driven by the shifting guidelines of the lower secondary curriculum, necessitating short iterations (sprints) to refine the database schema and UI components:
-- **Sprint 1:** Database setup, Authentication (JWT), and User Management APIs.
-- **Sprint 2:** Academic setup (Classes, Streams, Subjects, Teacher allocations).
-- **Sprint 3:** CBE features (AOIs, Rubrics, Student Submissions, Generic Skills).
-- **Sprint 4:** Supporting modules (Attendance, Timetable, Study Materials, Announcements).
-- **Sprint 5:** Security testing, optimization, and deployment.
+The SDLC stages included:
+1. **Planning and Problem Identification:** Identifying challenges at Wampeewo Ntake Secondary School.
+2. **Requirements Analysis:** Users' needs were gathered from teachers, students, and administrators.
+3. **System Design:** Creating data models, Entity-Relationship Diagrams (ERDs), flowcharts, and use case diagrams.
+4. **Implementation:** Writing the code for front-end and back-end logic.
+5. **Testing and Validation:** Conducting functional, integration, performance, and security testing.
 
-## **3.2 Feasibility Analysis**
-- **Technical Feasibility:** The team possessed development experience in JavaScript/TypeScript, React, Node.js, and SQL, making the selected stack highly feasible.
-- **Operational Feasibility:** The system requires minimal digital literacy from teachers. The UI uses intuitive tables, buttons, and visual cards.
-- **Economic Feasibility:** The chosen software stack relies entirely on open-source tools. Development costs were limited to human effort, and the system runs efficiently on free/low-cost cloud tiers (Render, Vercel).
+## **3.3 Requirements Gathering**
+Requirements gathering was conducted to identify the needs, expectations and challenges of the intended users of the proposed system.
 
-## **3.3 Requirements Gathering & Specification**
+### **3.3.1 Sampling Techniques**
+The study employed both purposive and simple random sampling techniques. Purposive sampling was used to select academic administrators and teachers. Simple random sampling was used to select students from different classes.
 
-### **3.3.1 Functional Requirements**
-1. **Authentication & RBAC:** Users must log in with email and password. Protected routes must restrict access to authorized roles.
-2. **Admin Operations:** Create and modify records for students, teachers, classes, and subjects. Broadcast school announcements. Generate school-wide reports.
-3. **Teacher Operations:** View assigned classes and subjects. Track daily student attendance. Create AOIs with custom rubrics. Grade submissions and award generic skill scores. Upload classroom study materials and host online class presentations.
-4. **Student Operations:** Access class timetables. View registered subjects and download study materials. Write and save personal academic notes. Submit answers/files for active AOIs. Track personal grades, feedback, and attendance percentages.
+### **3.3.2 Target Population and Sample Size**
+The target population comprised students, teachers and administrators of Wampeewo Ntake Secondary School. The sample size was determined using the Yamane (1967) formula:
+n = N / (1 + N(e²))  
+With a population of 565 members and a 5% margin of error, the sample size was **235 respondents**.
 
-### **3.3.2 Non-Functional Requirements**
-- **Security:** Hashed passwords in the database (bcrypt). Secure API calls via JWT inside HTTP headers. Input validation to prevent SQL injection and cross-site scripting (XSS).
-- **Performance:** Page load time under 2 seconds. Efficient query indexing for large relational queries.
-- **Usability:** Responsive layout adjusting seamlessly to mobile phones, tablets, and desktop computers.
-- **Availability:** 99.9% uptime, facilitated by automated cloud hosting.
+Table 3.1: Sample Size Distribution
+| Category | Population (N) | Sample Size (n) |
+|---|---|---|
+| Teachers | 20 | 8 |
+| Students | 535 | 219 |
+| Administrators | 10 | 8 |
+| **Total** | **565** | **235** |
+
+## **3.4 Data Collection Methods**
+- **Interviews:** Semi-structured interviews with 8 teachers and 8 administrators.
+- **Document Review:** Inspection of attendance registers, mark books, syllabus sheets, and sample reports.
+- **Observation:** Shadowing teachers during attendance marking and continuous assessment recording.
+- **Questionnaires:** Administered to 219 students to assess their digital readiness and feature preferences.
 
 ---
 
 \newpage
 
-# **CHAPTER 4: SYSTEM DESIGN & ARCHITECTURE**
+# **CHAPTER FOUR: SYSTEMS ANALYSIS AND DESIGN**
 
-## **4.1 High-Level Architecture**
-Wampeewo CMS implements a decoupled **Client-Server Architecture**:
+## **4.1 Description of the Designed System**
+The Teacher–Student Class Management System (Wampeewo TSCMS) is a secure, role-based web application. The system provides three main dashboards:
+- **Admin Dashboard:** Control center for registering teachers, students, classes, streams, and subjects.
+- **Teacher Dashboard:** Interface for tracking attendance, building Activities of Integration (AOIs), grading submissions against competency scores (1 to 3), assessing generic skills, uploading study materials, and setting class timetables.
+- **Student Dashboard:** Access point for retrieving study notes, submitting assignments, tracking attendance percentages, writing personal digital notes, and viewing feedback.
+
+## **4.2 Functional and Non-functional Requirements**
+- **Functional Requirements:** User login/logout, JWT authorization, user registration, stream mapping, attendance recording, AOI creation and digital submission, generic skill grading, personal notes manager, timetable entries, and announcement broadcasts.
+- **Non-functional Requirements:** 
+  - *Security:* Passwords hashed using bcrypt, role guards on all routes, API requests protected by JWT tokens.
+  - *Availability:* Offline capability using `localStorage` caching and a FIFO sync queue to allow operations to be performed offline and synchronized automatically when online.
+  - *Performance:* Page transitions under 2 seconds, database pooling to manage concurrent queries.
+
+## **4.3 High-Level System Architecture**
+The system uses a decoupled client-server architecture:
+1. **Presentation Layer (Frontend):** React (TypeScript), Tailwind CSS, Vite.
+2. **Business Logic Layer (Backend):** Node.js, Express (TypeScript), JWT Authentication.
+3. **Database Layer (Storage):** MySQL Relational Database.
 
 ```
-+-------------------------------------------------------------+
-|                        CLIENT SIDE                          |
-|  React (TS) SPA + Tailwind CSS + Vite (Hosted on Vercel)    |
-+---------------------------------+---------------------------+
-                                  | HTTP Requests / JWT
-                                  v
-+-------------------------------------------------------------+
-|                        SERVER SIDE                          |
-|   Express (TS) REST API + Node.js (Hosted on Render)        |
-+---------------------------------+---------------------------+
-                                  | SQL Queries
-                                  v
-+-------------------------------------------------------------+
-|                      DATABASE LAYER                         |
-|                 MySQL Relational Database                   |
-+-------------------------------------------------------------+
++-----------------------------------+
+|            Presentation           |
+| React / TypeScript / Tailwind CSS |
++-----------------+-----------------+
+                  | HTTPS REST API (JSON / JWT)
+                  v
++-----------------+-----------------+
+|            Application            |
+|       Node.js / Express.js        |
++-----------------+-----------------+
+                  | SQL Connection Pool
+                  v
++-----------------+-----------------+
+|              Storage              |
+|        MySQL Relational DB        |
++-----------------------------------+
 ```
 
-## **4.2 Database Design & Schema Definitions**
-The database is structured to maintain strict relational integrity using foreign keys. Below are the key tables defined in `backend/src/seed/initialData.ts`:
-
-### **1. `users` Table**
-Stores authentication details, credentials, and access roles.
-*   `id` (VARCHAR(50), Primary Key)
-*   `name` (VARCHAR(100))
-*   `email` (VARCHAR(100), Unique)
-*   `password_hash` (VARCHAR(255))
-*   `role` (VARCHAR(50)) - Admin, Teacher, or Student
-*   `avatar_url` (VARCHAR(255))
-
-### **2. `classes` Table**
-*   `id` (VARCHAR(50), Primary Key)
-*   `name` (VARCHAR(100)) - e.g., Senior 1, Senior 2
-*   `stream` (VARCHAR(50)) - e.g., West, East, North
-*   `class_teacher_id` (VARCHAR(50), Foreign Key referencing `users.id`)
-*   `student_count` (INT)
-
-### **3. `subjects` Table**
-*   `id` (VARCHAR(50), Primary Key)
-*   `name` (VARCHAR(100)) - e.g., Mathematics, Biology
-*   `code` (VARCHAR(20))
-*   `class_id` (VARCHAR(50), Foreign Key referencing `classes.id`)
-
-### **4. `students` Table**
-Extends the `users` record specifically for student metadata.
-*   `id` (VARCHAR(50), Primary Key, Foreign Key referencing `users.id`)
-*   `class_id` (VARCHAR(50), Foreign Key referencing `classes.id`)
-*   `registration_number` (VARCHAR(100), Unique)
-*   `gender` (VARCHAR(50))
-
-### **5. `aois` (Areas of Interest) Table**
-Represents CBE activities or assignments.
-*   `id` (VARCHAR(50), Primary Key)
-*   `title` (VARCHAR(255))
-*   `description` (TEXT)
-*   `deadline` (VARCHAR(50))
-*   `class_id` (VARCHAR(50), Foreign Key referencing `classes.id`)
-*   `teacher_id` (VARCHAR(50), Foreign Key referencing `users.id`)
-*   `rubric` (JSON) - Stores criteria, scores, and indicators
-*   `status` (VARCHAR(50)) - e.g., pending, approved
-*   `type` (VARCHAR(50)) - e.g., assignment, exam, quiz
-
-### **6. `submissions` Table**
-Stores students' answers to Activities of Integration.
-*   `id` (VARCHAR(50), Primary Key)
-*   `aoi_id` (VARCHAR(50), Foreign Key referencing `aois.id`)
-*   `student_id` (VARCHAR(50), Foreign Key referencing `students.id`)
-*   `content` (TEXT)
-*   `grade` (INT) - Score awarded (1, 2, or 3)
-*   `feedback` (TEXT)
-*   `submitted_at` (VARCHAR(50))
-
-### **7. `generic_skills` Table**
-Tracks the 21st-century skills required by the CBE framework.
-*   `student_id` (VARCHAR(50), Primary Key, Foreign Key referencing `students.id`)
-*   `name` (VARCHAR(100), Primary Key) - e.g., Co-operation, Critical Thinking
-*   `value` (INT) - Competency score (1 to 3)
-
-### **8. `attendance` Table**
-*   `id` (VARCHAR(50), Primary Key)
-*   `student_id` (VARCHAR(50), Foreign Key referencing `students.id`)
-*   `class_id` (VARCHAR(50), Foreign Key referencing `classes.id`)
-*   `date` (VARCHAR(20))
-*   `status` (VARCHAR(50)) - e.g., Present, Absent, Sick
-*   `marked_by` (VARCHAR(50), Foreign Key referencing `users.id`)
+## **4.4 System Models**
+- **Flow Chart:** Demonstrates the logic progression from user login, role routing (Admin/Teacher/Student), execution of actions, database updates, and synchronization.
+- **Entity-Relationship Diagram (ERD):** Describes the relational database schema comprising `users`, `classes`, `students`, `subjects`, `aois`, `submissions`, `attendance`, `generic_skills`, and `notes` tables.
+- **Use Case Diagram:** Models the system interactions for Administrators (user registration, mappings), Teachers (marking attendance, grading submissions, notes upload), and Students (viewing files, submitting AOIs, private notes).
 
 ---
 
 \newpage
 
-# **CHAPTER 5: SYSTEM IMPLEMENTATION**
+# **CHAPTER FIVE: IMPLEMENTATION AND TESTING**
 
-## **5.1 Backend Implementation Details**
-The backend API is structured following modular routes.
-- **Authentication (`/api/auth`):** Leverages `bcrypt` for verifying passwords and generates a signed JWT payload containing `{ id, email, role }`.
-- **Global Auth Guard (`requireAuth`):** Intercepts incoming API calls. If a valid `Authorization: Bearer <token>` header is missing or expired, the request is rejected with a `401 Unauthorized` status.
-- **Database Connection Pool:** Implements a MySQL connection pool using the promise-based `mysql2/promise` wrapper. This setup allows asynchronous, concurrent query processing without resource lockups.
+## **5.1 Programming Languages and Frameworks Used**
+The final system implementation was built using the following modern web stack:
+- **Frontend:** React.js (TypeScript), Tailwind CSS for styling, Zustand for global state management, and Vite as the build tool.
+- **Backend:** Node.js, Express.js (TypeScript), JWT for authentication, and Bcrypt for password security.
+- **Database:** MySQL relational database.
+- **Hosting:** Frontend deployed on Vercel, Backend and Database hosted on Render.
 
-## **5.2 Frontend Implementation Details**
-The React application utilizes `react-router-dom` to implement role guards and layouts.
-- **`RoleGuard` Component:** Reads the logged-in user's role from a global authentication state (saved securely in state and LocalStorage). If the user attempts to visit a page reserved for a different role (e.g., a student trying to access `/admin/teachers`), they are redirected to their home dashboard.
-- **`DashboardLayout` Component:** A consistent wrapper offering responsive layout panels: a collapsible sidebar for navigation, a header showing user details and quick-actions, and a main container holding the active page components.
+## **5.2 Development Tools**
+The tools used during the design, coding, testing, and version control include:
+- **IDEs:** Visual Studio Code.
+- **API Testing:** Postman.
+- **Database Management:** phpMyAdmin / hosted MySQL dashboard.
+- **Modeling & Diagramming:** Draw.io and Mermaid.js.
+- **Version Control:** Git & GitHub.
+- **Documentation:** Microsoft Word & Markdown.
 
-## **5.3 User Roles & Portal Walkthrough**
+## **5.3 Offline Synchronization Module**
+To handle internet connectivity issues, a custom **Offline Synchronization Module** was implemented:
+- **GET Request Caching:** All list fetches (classes, subjects, students, assignments, notes) are cached locally in the client's browser. If the user loses internet connection, the system retrieves and displays the cached data.
+- **FIFO Sync Queue:** When offline, any write operation (e.g., adding a student note, submitting an assignment, marking attendance) is intercepted, assigned a temporary ID (e.g., `temp_note_...`), and saved in a synchronization queue within `localStorage`. The UI updates immediately using this mock response.
+- **Automatic Reconciliation:** Once the network connection is restored, the queue is processed sequentially. Any subsequent actions in the queue referencing temporary IDs are dynamically resolved to use the real database IDs returned by the server.
 
-Below are the key interfaces and system workflows for each user role in Wampeewo CMS.
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend UI
+    participant Sync Store
+    participant Server
+    
+    User->>Frontend UI: Add student note (Offline)
+    Frontend UI->>Sync Store: Intercept request & queue item
+    Sync Store->>Frontend UI: Return mock note with temp_id
+    Frontend UI->>User: Display note (instant confirmation)
+    Note over Sync Store: Connection restored (Online)
+    Sync Store->>Server: Send queued note creation request
+    Server-->>Sync Store: Return created note with real_id (e.g., ID 45)
+    Sync Store->>Sync Store: Resolve temp_id references to 45 in queue
+    Sync Store-->>Frontend UI: Update note to use real_id
+```
 
-### **5.3.0 Login Page**
-The entry point for all users provides a secure credential input with role-based routing.
-![Login Page](images/login_page.png)
-
-### **5.3.1 Administrator Portal**
-The Admin portal is the control center of Wampeewo CMS:
-- **Dashboard:** Displays statistics (Total Students, Total Teachers, Classes, Active Subjects).
-![Administrator Dashboard](images/admin_dashboard.png)
-- **User Management:** Forms to register new teachers and students, complete with registration numbers, streams, and system credentials.
-- **Academic Mappings:** Assigns teachers to classes and subjects.
-- **School Announcements:** A broadcast panel to post updates visible on teacher and student dashboards.
-
-### **5.3.2 Teacher Portal**
-Designed to ease the classroom workload:
-- **My Classes:** Displays a roster of the teacher's assigned subjects and classes.
-![Teacher Dashboard](images/teacher_dashboard.png)
-- **Attendance Register:** An interactive list showing all students in a class. The teacher can log attendance (Present/Absent/Sick) in one click.
-![Attendance Form](images/attendance_form.png)
-- **AOI Constructor:** Allows creation of custom Activities of Integration, establishing submission deadlines and specific grading rubrics.
-![Assignment Creation Form](images/assignment_creation.png)
-- **Grade Book & Generic Skills:** Teachers review student files/text submissions, assign grades (1: Basic, 2: Moderate, 3: Outstanding), write detailed academic feedback, and assign generic skill ratings.
-- **Class Timetables & Material Upload:** Facilitates uploading lecture presentations and PDFs, and scheduling online meetings.
-
-### **5.3.3 Student Portal**
-Empowers students with clear academic roadmaps:
-- **Dashboard:** Summarizes attendance status, recent grades, upcoming assignment deadlines, and latest school announcements.
-![Student Dashboard](images/student_dashboard.png)
-- **Digital Submissions:** Students can view assignment requirements, download class materials, and upload text or files directly to teachers.
-![Assignment Submission Page](images/assignment_submission.png)
-- **Personal Notes:** A private digital notepad allowing students to write, tag, and organize study notes directly within the portal.
-- **Timetable:** Interactive schedule showing daily classes, rooms, and teacher allocations.
-- **Student Progress / Report Page:** Tracks overall attendance, generic skills (communication, collaboration, etc.), and continuous assessment scores.
-![Student Progress and Report Page](images/student_progress.png)
-
----
-
-\newpage
-
-# **CHAPTER 6: SYSTEM TESTING, DEPLOYMENT & VERIFICATION**
-
-## **6.1 Testing Strategies**
-- **Unit Testing:** Individual components (helpers, validators, route formatting) were verified using isolated mock values.
-- **Integration Testing:** Ensuring the backend routes correctly retrieve and commit data to the MySQL database.
-- **Security Testing:** Robust checks were executed to verify that route guards cannot be bypassed. The system was also tested against Denial of Service (DoS) attempts, confirming that request body sizes are capped at 1MB and protected by Express middleware.
-
-## **6.2 Security & Vulnerability Remediation**
-To guarantee compliance with Victoria University system standards:
-1. **SQL Injection Prevention:** All SQL queries are executed using prepared statements (`db.query('SELECT * FROM users WHERE email = ?', [email])`) rather than raw string interpolation.
-2. **Secure HTTP Headers:** Express uses `helmet` middleware to inject secure HTTP response headers, preventing clickjacking and sniffing attacks.
-3. **Cross-Origin Resource Sharing (CORS):** Properly configured to restrict API calls to trusted origins.
-4. **Denial of Service (DoS) Protection:** Capped request parsing limits to prevent system memory overload from large payloads.
-
-## **6.3 Deployment Architecture**
-- **Backend API:** Deployed on **Render** (free/starter tiers), running a Node.js runtime connected to an external cloud-hosted MySQL database.
-- **Frontend App:** Deployed on **Vercel**, enabling continuous integration and swift global Content Delivery Network (CDN) loading.
-- **Database Storage:** Relational schemas are hosted on a cloud MySQL provider, backed up daily.
-
-## **6.4 User Verification & System Acceptance**
-A test suite (documented in `test-prod.js`) was successfully executed against the production deployment (`wampeewo-cms.onrender.com`).
-- The test client authenticated as an Admin.
-- The system successfully validated credentials, issued a signed JWT token, and verified API access by retrieving the teachers directory.
-- This automated test confirmed that the production build compiles, runs, and serves data with zero downtime.
+## **5.4 System Testing**
+A test suite was executed against the production deployment to verify functionality.
+Table 5.1: Test Cases and Expected Results
+| S/N | Test Case Description | Expected Result | Pass/Fail |
+|---|---|---|---|
+| 1 | Log in with valid credentials | Redirects to correct role-based dashboard | Pass |
+| 2 | Log in with invalid credentials | Shows error message "Invalid credentials" | Pass |
+| 3 | Create AOI (Teacher) | Saved to database and visible to students | Pass |
+| 4 | Submit Assignment (Student) | PDF/Text uploaded and listed under submissions | Pass |
+| 5 | Log Attendance (Teacher) | Roster attendance values saved and updated | Pass |
+| 6 | Create note while offline | Saved in sync queue, displays instantly | Pass |
+| 7 | Reconnect to internet | Sync queue flushes automatically to MySQL | Pass |
 
 ---
 
 \newpage
 
-# **CHAPTER 7: CONCLUSIONS, LIMITATIONS & RECOMMENDATIONS**
+# **CHAPTER SIX: DISCUSSION, RECOMMENDATIONS, FUTURE WORK AND CONCLUSION**
 
-## **7.1 Key Achievements**
-- Successfully designed and developed a role-based CMS tailored to the modern Competency-Based Education (CBE) model.
-- Solved the database challenge of combining continuous qualitative rubrics (AOIs and generic skills) with traditional summative exam scores.
-- Implemented state-of-the-art client-side and server-side security measures, protecting student academic records.
-- Deployed the application to a cloud ecosystem, verifying functionality through remote production scripts.
+## **6.1 Discussion**
+The requirements analysis confirmed that Wampeewo Ntake Secondary School requires a digital system to manage academics under the new competency-based curriculum. The manual process is slow, insecure, and prone to calculations errors. The implemented Teacher–Student Class Management System (Wampeewo TSCMS) addresses these challenges by centralizing administrative and grading workflows. The addition of the **Offline Synchronization** capability solves a key limitation of cloud systems in schools with unstable internet, permitting continuous record keeping even during network outages.
 
-## **7.2 Challenges & Limitations**
-- **Network Dependency:** Being a cloud-hosted application, the system requires active internet connectivity, which might be a barrier in low-bandwidth rural areas.
-- **Storage Limits:** Free tier cloud hosting imposes database connection caps and storage limits for uploaded study materials.
+## **6.2 Limitations**
+- **Infrastructure Constraints:** The system requires digital devices (computers, tablets) to be accessed by teachers and students, which represents an initial cost.
+- **Hosting Limits:** The free-tier database hosting imposes connection limits and execution delays when the database has been inactive.
 
-## **7.3 Recommendations for Future Work**
-- **Offline Synchronization:** Implement Progressive Web App (PWA) capabilities and a local SQLite cache so teachers can record attendance and grades offline, syncing to the cloud database when internet access is restored.
-- **Parent Portal:** Expand the system's role hierarchy to include parents, allowing them to monitor their children's progress, attendance, and fee status directly.
-- **Report Card Generator:** Build a automated PDF generation engine to compile continuous assessment summaries and terminal grades into official school reports in one click.
+## **6.3 Recommendations and Future Work**
+- **PDF Report Generator:** Future work should focus on building a one-click PDF compiler to generate Lower Secondary terminal report cards automatically based on continuous assessment scores.
+- **Parent Portal:** Implementing a dedicated interface for parents to monitor attendance, fee payments, and competency progress.
+- **Mobile Application:** Packing the front-end application as a Progressive Web App (PWA) or hybrid mobile app (Capacitor/React Native) for easier access on mobile devices.
+
+## **6.4 Conclusion**
+The project successfully designed, developed, tested, and verified a Teacher–Student Class Management System for Wampeewo Ntake Secondary School. The system streamlines record keeping, assignment distribution, continuous assessment grading, and communication. With security measures like JWT and role-based guards, and practical additions like offline synchronization, the system provides a stable foundation for the school's digital transition.
 
 ---
 
@@ -475,8 +388,34 @@ A test suite (documented in `test-prod.js`) was successfully executed against th
 
 # **REFERENCES**
 1. National Curriculum Development Centre (NCDC) Uganda. (2020). *The New Lower Secondary School Curriculum Guidelines*. Kampala: Ministry of Education and Sports.
-2. Fowler, M. (2002). *Patterns of Enterprise Application Architecture*. Addison-Wesley Professional.
-3. Spurlock, J. (2013). *Bootstrap: Responsive Web Development*. O'Reilly Media.
-4. Chodorow, K. (2013). *MongoDB: The Definitive Guide* (2nd ed.). O'Reilly Media. *(Used for analyzing comparative NoSQL storage patterns)*.
-5. Rescorla, E. (2001). *SSL and TLS: Designing and Building Secure Systems*. Addison-Wesley Professional.
-6. Pressman, R. S. (2005). *Software Engineering: A Practitioner's Approach* (6th ed.). McGraw-Hill.
+2. Almaiah, M. A., Al-Khasawneh, A., & Althunibat, A. (2020). Exploring the critical challenges and factors influencing the e-learning system usage during the COVID-19 pandemic. *Education and Information Technologies*, 25(6), 5261–5280.
+3. Bond et al. (2020). Emergency remote teaching in higher education: Mapping the first global online semester. *International Journal of Educational Technology in Higher Education*, 17(1).
+4. Ifenthaler, D., & Yau, J. Y. K. (2020). Utilising learning analytics for study success: Reflections on current empirical findings. *Research and Practice in Technology Enhanced Learning*, 15(1).
+5. Martin, F., Sunley, R., & Turner, D. (2022). Communication and engagement in online learning environments. *Online Learning Journal*.
+6. Pressman, R. S., & Maxim, B. R. (2020). *Software Engineering: A Practitioner's Approach* (9th ed.). McGraw-Hill Education.
+7. Satzinger, J. W., Jackson, R. B., & Burd, S. D. (2016). *Systems Analysis and Design in a Changing World* (7th ed.). Cengage Learning.
+8. Turnbull, D., Chugh, R., & Luck, J. (2021). Learning management systems: A review of the research methodology literature in higher education. *International Journal of Educational Technology in Higher Education*, 18(1).
+9. Wambi et al. (2024). Teachers' perception on implementing the revised lower secondary curriculum in selected schools in Uganda: A focus on emerging issues and coping strategies. *EIKI Journal of Effective Teaching Methods*.
+10. Yamane, T. (1967). *Statistics: An Introductory Analysis* (2nd ed.). Harper & Row.
+
+---
+
+\newpage
+
+# **APPENDICES**
+
+### **Appendix I: Work Plan / Time Frame**
+- **Proposal Writing & Approval:** 2 weeks (January 2026)
+- **Requirements Gathering & Data Collection:** 4 weeks (February 2026)
+- **System Analysis & Design:** 4 weeks (March 2026)
+- **Coding, Frontend & Backend Development:** 8 weeks (April - May 2026)
+- **Testing, Debugging & Deployment:** 4 weeks (May - June 2026)
+- **Report Corrections & Submission:** 2 weeks (June 2026)
+
+### **Appendix II: Budget Estimate**
+- Stationery and Questionnaires: UGX 270,000
+- Transportation: UGX 150,000
+- Internet & Cloud Hosting Subscriptions: UGX 450,000
+- Research Tools and Surveys: UGX 360,000
+- Report Printing & Binding: UGX 50,000
+- **Total:** **UGX 1,280,000**

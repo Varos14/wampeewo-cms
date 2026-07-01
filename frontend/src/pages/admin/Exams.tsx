@@ -10,7 +10,7 @@ export default function AdminExams() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h2 className="text-xl font-bold text-slate-100 tracking-tight">Exams Schedule</h2>
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Exams Schedule</h2>
         <p className="text-xs text-slate-500 mt-1">View school-wide scheduled examinations and grading boundaries.</p>
       </div>
 
@@ -29,12 +29,12 @@ export default function AdminExams() {
                 <Badge color="amber">Term {exam.term}</Badge>
                 <span className="text-slate-500 font-semibold text-xs tracking-wider">{exam.year}</span>
               </div>
-              <h3 className="font-bold text-slate-100 text-sm leading-snug">{exam.name}</h3>
+              <h3 className="font-bold text-slate-900 text-sm leading-snug">{exam.name}</h3>
             </div>
             
-            <div className="border-t border-white/5 pt-3 mt-4 flex items-center justify-between text-xs">
-              <span className="text-slate-400">Target Class</span>
-              <span className="font-bold text-slate-300">{getClassName(exam.classId)}</span>
+            <div className="border-t border-black/5 pt-3 mt-4 flex items-center justify-between text-xs">
+              <span className="text-slate-600">Target Class</span>
+              <span className="font-bold text-slate-700">{getClassName(exam.classId)}</span>
             </div>
           </Card>
         ))}
@@ -42,3 +42,5 @@ export default function AdminExams() {
     </div>
   );
 }
+
+

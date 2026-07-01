@@ -144,7 +144,7 @@ export default function AdminTeachers() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-start">
         <div>
-          <h2 className="text-xl font-bold text-slate-100 tracking-tight">Teaching Staff</h2>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Teaching Staff</h2>
           <p className="text-xs text-slate-500 mt-1">Manage all instructors, subjects, and classroom streams.</p>
         </div>
         <Button variant="primary" size="md" onClick={() => setShowModal(true)}>
@@ -154,7 +154,7 @@ export default function AdminTeachers() {
 
       {/* Staff Count Stat */}
       {loading ? (
-        <div className="h-10 w-32 bg-slate-800/40 rounded-2xl animate-pulse" />
+        <div className="h-10 w-32 bg-white/40 rounded-2xl animate-pulse" />
       ) : (
         <div className="inline-flex items-center gap-3 px-5 py-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
           <span className="text-2xl font-extrabold text-emerald-400">{teachers.length}</span>
@@ -166,7 +166,7 @@ export default function AdminTeachers() {
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {[1, 2].map(i => (
-            <div key={i} className="h-44 rounded-2xl bg-slate-800/40 border border-white/5 animate-pulse" />
+            <div key={i} className="h-44 rounded-2xl bg-white/40 border border-black/5 animate-pulse" />
           ))}
         </div>
       ) : error ? (
@@ -182,10 +182,10 @@ export default function AdminTeachers() {
                 <img
                   src={teacher.avatarUrl || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(teacher.name)}`}
                   alt={teacher.name}
-                  className="w-14 h-14 rounded-xl bg-slate-800 shrink-0 object-cover"
+                  className="w-14 h-14 rounded-xl bg-white shrink-0 object-cover"
                 />
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-bold text-slate-100 text-base">{teacher.name}</h3>
+                  <h3 className="font-bold text-slate-900 text-base">{teacher.name}</h3>
                   <p className="text-xs text-slate-500 mt-0.5">{teacher.email}</p>
 
                   <div className="mt-3">
@@ -235,8 +235,8 @@ export default function AdminTeachers() {
       {/* Modal Dialog */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-          <div className="relative w-full max-w-lg bg-slate-900 border border-white/10 rounded-2xl shadow-2xl p-6 my-8 max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg font-bold text-slate-100 mb-4">Register New Teacher</h3>
+          <div className="relative w-full max-w-lg bg-white border border-black/10 rounded-2xl shadow-2xl p-6 my-8 max-h-[90vh] overflow-y-auto">
+            <h3 className="text-lg font-bold text-slate-900 mb-4">Register New Teacher</h3>
 
             {formError && (
               <div className="mb-4 p-3 rounded-xl border border-rose-500/20 bg-rose-500/10 text-xs text-rose-400">
@@ -252,54 +252,54 @@ export default function AdminTeachers() {
             <form onSubmit={handleSubmit} className="space-y-4 text-xs">
               {/* Name */}
               <div>
-                <label className="block text-slate-400 font-medium mb-1">Full Name</label>
+                <label className="block text-slate-600 font-medium mb-1">Full Name</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Okello John"
                   value={name}
                   onChange={e => setName(e.target.value)}
-                  className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                  className="w-full bg-white/80 border border-black/10 rounded-xl px-3.5 py-2.5 text-slate-800 placeholder-slate-500 focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               {/* Email & Password */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-slate-400 font-medium mb-1">Email Address</label>
+                  <label className="block text-slate-600 font-medium mb-1">Email Address</label>
                   <input
                     type="email"
                     required
                     placeholder="teacher@wampeewo.com"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                    className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white/80 border border-black/10 rounded-xl px-3.5 py-2.5 text-slate-800 placeholder-slate-500 focus:outline-none focus:border-blue-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-400 font-medium mb-1">Custom Password</label>
+                  <label className="block text-slate-600 font-medium mb-1">Custom Password</label>
                   <input
                     type="password"
                     required
                     placeholder="••••••••"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
-                    className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white/80 border border-black/10 rounded-xl px-3.5 py-2.5 text-slate-800 placeholder-slate-500 focus:outline-none focus:border-blue-500"
                   />
                 </div>
               </div>
 
               {/* Subjects Multi-select */}
               <div>
-                <label className="block text-slate-400 font-medium mb-1.5">Assign Subjects (Select all that apply)</label>
-                <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto p-3 border border-white/5 rounded-xl bg-slate-800/40">
+                <label className="block text-slate-600 font-medium mb-1.5">Assign Subjects (Select all that apply)</label>
+                <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto p-3 border border-black/5 rounded-xl bg-white/40">
                   {COMMON_SUBJECTS.map(subj => (
-                    <label key={subj} className="flex items-center gap-2 text-slate-300 cursor-pointer hover:text-white">
+                    <label key={subj} className="flex items-center gap-2 text-slate-700 cursor-pointer hover:text-white">
                       <input
                         type="checkbox"
                         checked={selectedSubjects.includes(subj)}
                         onChange={() => handleToggleSubject(subj)}
-                        className="rounded bg-slate-800 border-white/10 text-emerald-600 focus:ring-0 focus:ring-offset-0"
+                        className="rounded bg-white border-black/10 text-emerald-600 focus:ring-0 focus:ring-offset-0"
                       />
                       <span>{subj}</span>
                     </label>
@@ -309,15 +309,15 @@ export default function AdminTeachers() {
 
               {/* Classes Multi-select */}
               <div>
-                <label className="block text-slate-400 font-medium mb-1.5">Assign Class Streams (Select all that apply)</label>
-                <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto p-3 border border-white/5 rounded-xl bg-slate-800/40">
+                <label className="block text-slate-600 font-medium mb-1.5">Assign Class Streams (Select all that apply)</label>
+                <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto p-3 border border-black/5 rounded-xl bg-white/40">
                   {classes.map(cls => (
-                    <label key={cls.id} className="flex items-center gap-2 text-slate-300 cursor-pointer hover:text-white">
+                    <label key={cls.id} className="flex items-center gap-2 text-slate-700 cursor-pointer hover:text-white">
                       <input
                         type="checkbox"
                         checked={selectedClasses.includes(cls.id)}
                         onChange={() => handleToggleClass(cls.id)}
-                        className="rounded bg-slate-800 border-white/10 text-blue-600 focus:ring-0 focus:ring-offset-0"
+                        className="rounded bg-white border-black/10 text-blue-600 focus:ring-0 focus:ring-offset-0"
                       />
                       <span>{cls.name}</span>
                     </label>
@@ -326,7 +326,7 @@ export default function AdminTeachers() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex justify-end gap-3 pt-4 border-t border-white/5">
+              <div className="flex justify-end gap-3 pt-4 border-t border-black/5">
                 <Button
                   variant="ghost"
                   size="md"
@@ -347,3 +347,5 @@ export default function AdminTeachers() {
     </div>
   );
 }
+
+

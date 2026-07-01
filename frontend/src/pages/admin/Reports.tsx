@@ -28,7 +28,7 @@ export default function AdminReports() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h2 className="text-xl font-bold text-slate-100 tracking-tight">Executive Reports</h2>
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Executive Reports</h2>
         <p className="text-xs text-slate-500 mt-1">Consolidated institutional reporting statistics for Wampeewo Ntake SS.</p>
       </div>
 
@@ -79,27 +79,27 @@ export default function AdminReports() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* AOI Activity Report */}
         <Card className="p-5" variant="glass">
-          <h3 className="font-bold text-slate-200 text-sm border-b border-white/5 pb-3 mb-4">Activities of Integration (AOI)</h3>
+          <h3 className="font-bold text-slate-800 text-sm border-b border-black/5 pb-3 mb-4">Activities of Integration (AOI)</h3>
           
           <div className="space-y-4">
             <div className="grid grid-cols-3 gap-2 text-center">
-              <div className="bg-white/1 p-2.5 rounded-xl border border-white/5">
+              <div className="bg-white/50 p-2.5 rounded-xl border border-black/5">
                 <span className="text-3xs font-semibold uppercase tracking-widest text-slate-500 block">Total AOIs</span>
                 <span className="text-base font-extrabold text-indigo-400 mt-1 inline-block">{totalAOIs}</span>
               </div>
-              <div className="bg-white/1 p-2.5 rounded-xl border border-white/5">
+              <div className="bg-white/50 p-2.5 rounded-xl border border-black/5">
                 <span className="text-3xs font-semibold uppercase tracking-widest text-slate-500 block">Submissions</span>
                 <span className="text-base font-extrabold text-blue-400 mt-1 inline-block">{totalSubmissions}</span>
               </div>
-              <div className="bg-white/1 p-2.5 rounded-xl border border-white/5">
+              <div className="bg-white/50 p-2.5 rounded-xl border border-black/5">
                 <span className="text-3xs font-semibold uppercase tracking-widest text-slate-500 block">Graded</span>
                 <span className="text-base font-extrabold text-emerald-400 mt-1 inline-block">{gradedSubmissions}</span>
               </div>
             </div>
 
-            <div className="flex items-center justify-between p-3 rounded-xl bg-white/2 border border-white/5">
+            <div className="flex items-center justify-between p-3 rounded-xl bg-white/2 border border-black/5">
               <div>
-                <p className="text-xs font-semibold text-slate-300">Pending Evaluation</p>
+                <p className="text-xs font-semibold text-slate-700">Pending Evaluation</p>
                 <p className="text-2xs text-slate-500">Submissions awaiting teacher reviews</p>
               </div>
               <Badge color="amber" variant="solid">{ungradedSubmissions} Ungraded</Badge>
@@ -109,22 +109,22 @@ export default function AdminReports() {
 
         {/* Attendance & Demographics */}
         <Card className="p-5" variant="glass">
-          <h3 className="font-bold text-slate-200 text-sm border-b border-white/5 pb-3 mb-4">Attendance Performance</h3>
+          <h3 className="font-bold text-slate-800 text-sm border-b border-black/5 pb-3 mb-4">Attendance Performance</h3>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex-1 space-y-1">
-              <div className="flex justify-between text-xs font-semibold text-slate-400">
+              <div className="flex justify-between text-xs font-semibold text-slate-600">
                 <span>Term Attendance Rate</span>
                 <span>{attRate.toFixed(1)}%</span>
               </div>
-              <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden border border-white/5">
+              <div className="w-full bg-white rounded-full h-2 overflow-hidden border border-black/5">
                 <div className="bg-blue-500 h-2 rounded-full" style={{ width: `${attRate}%` }} />
               </div>
             </div>
 
-            <div className="flex items-center gap-3 bg-white/2 border border-white/5 px-4 py-3 rounded-xl">
+            <div className="flex items-center gap-3 bg-white/2 border border-black/5 px-4 py-3 rounded-xl">
               <div className="w-2 h-2 rounded-full bg-emerald-500" />
               <div>
-                <p className="text-xs font-bold text-slate-300">Daily Log Summary</p>
+                <p className="text-xs font-bold text-slate-700">Daily Log Summary</p>
                 <p className="text-3xs text-slate-500 mt-0.5">Total checked profiles: {totalAtt}</p>
               </div>
             </div>
@@ -134,3 +134,5 @@ export default function AdminReports() {
     </div>
   );
 }
+
+

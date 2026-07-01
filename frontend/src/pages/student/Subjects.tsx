@@ -12,7 +12,7 @@ export default function StudentSubjects() {
     fetchData();
   }, [fetchData]);
 
-  if (loading) return <div className="p-8 text-center text-slate-400 animate-pulse">Loading subjects...</div>;
+  if (loading) return <div className="p-8 text-center text-slate-600 animate-pulse">Loading subjects...</div>;
 
   const studentInfo = students.find(s => s.id === user?.id);
   const myClassId = studentInfo?.classId ?? 'c1'; // Default to c1 for demo
@@ -31,7 +31,7 @@ export default function StudentSubjects() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h2 className="text-xl font-bold text-slate-100 tracking-tight">My Curriculum Subjects</h2>
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">My Curriculum Subjects</h2>
         <p className="text-xs text-slate-500 mt-1">Review active subjects and assigned teaching staff for this term.</p>
       </div>
 
@@ -50,12 +50,12 @@ export default function StudentSubjects() {
                 <Badge color="indigo">{sub.code}</Badge>
                 <span className="text-slate-500 text-3xs font-semibold uppercase tracking-wider">Compulsory Core</span>
               </div>
-              <h3 className="font-extrabold text-slate-100 text-sm leading-snug">{sub.name}</h3>
+              <h3 className="font-extrabold text-slate-900 text-sm leading-snug">{sub.name}</h3>
             </div>
 
-            <div className="border-t border-white/5 pt-3.5 mt-5 flex items-center justify-between text-xs">
+            <div className="border-t border-black/5 pt-3.5 mt-5 flex items-center justify-between text-xs">
               <span className="text-slate-500 font-medium">Instructor</span>
-              <span className="font-bold text-slate-300">{getTeacherForSubject(sub.name)}</span>
+              <span className="font-bold text-slate-700">{getTeacherForSubject(sub.name)}</span>
             </div>
           </Card>
         ))}
@@ -66,3 +66,5 @@ export default function StudentSubjects() {
     </div>
   );
 }
+
+

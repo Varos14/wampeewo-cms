@@ -62,7 +62,7 @@ export default function AdminSubjects() {
   };
 
   if (loading) {
-    return <div className="text-slate-400 p-8 text-center animate-pulse">Loading subjects...</div>;
+    return <div className="text-slate-600 p-8 text-center animate-pulse">Loading subjects...</div>;
   }
 
   // Group subjects by class
@@ -72,7 +72,7 @@ export default function AdminSubjects() {
     <div className="space-y-6 animate-fade-in relative">
       <div className="flex justify-between items-start">
         <div>
-          <h2 className="text-xl font-bold text-slate-100 tracking-tight">Syllabus & Subjects</h2>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Syllabus & Subjects</h2>
           <p className="text-xs text-slate-500 mt-1">Configure subjects, codes, and map them to lower secondary competency rubrics.</p>
         </div>
         <Button variant="primary" onClick={() => setShowModal(true)}>+ Add Subject</Button>
@@ -92,15 +92,15 @@ export default function AdminSubjects() {
 
           return (
             <Card key={classId} className="p-5" variant="glass">
-              <div className="border-b border-white/5 pb-3 mb-4 flex justify-between items-center">
-                <h3 className="font-bold text-slate-200 text-sm">{className}</h3>
+              <div className="border-b border-black/5 pb-3 mb-4 flex justify-between items-center">
+                <h3 className="font-bold text-slate-800 text-sm">{className}</h3>
                 <Badge color="blue" variant="outline">{subjectsInClass.length} Subjects</Badge>
               </div>
 
               <div className="space-y-3">
                 {subjectsInClass.map(subject => (
-                  <div key={subject.id} className="flex items-center justify-between p-3 rounded-xl bg-white/3 hover:bg-white/5 border border-white/5 transition-all">
-                    <span className="text-slate-300 font-medium text-xs">{subject.name}</span>
+                  <div key={subject.id} className="flex items-center justify-between p-3 rounded-xl bg-white/3 hover:bg-white/5 border border-black/5 transition-all">
+                    <span className="text-slate-700 font-medium text-xs">{subject.name}</span>
                     <div className="flex items-center gap-3">
                       <Badge color="indigo">{subject.code}</Badge>
                       <button 
@@ -121,33 +121,33 @@ export default function AdminSubjects() {
 
       {showModal && (
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <Card className="w-full max-w-md p-6 bg-slate-900 border-white/10" variant="glass">
+          <Card className="w-full max-w-md p-6 bg-white border-black/10" variant="glass">
             <h3 className="text-lg font-bold text-white mb-4">Add New Subject</h3>
             <form onSubmit={handleCreate} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">Subject Name</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Subject Name</label>
                 <input 
                   type="text" required
                   value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
-                  className="w-full bg-slate-950 border border-white/10 rounded-lg p-2.5 text-sm text-white"
+                  className="w-full bg-slate-950 border border-black/10 rounded-lg p-2.5 text-sm text-white"
                   placeholder="e.g. English Literature"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">Subject Code</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Subject Code</label>
                 <input 
                   type="text" required
                   value={formData.code} onChange={e => setFormData({...formData, code: e.target.value.toUpperCase()})}
-                  className="w-full bg-slate-950 border border-white/10 rounded-lg p-2.5 text-sm text-white uppercase"
+                  className="w-full bg-slate-950 border border-black/10 rounded-lg p-2.5 text-sm text-white uppercase"
                   placeholder="e.g. ENG"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">Class</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Class</label>
                 <select 
                   required
                   value={formData.classId} onChange={e => setFormData({...formData, classId: e.target.value})}
-                  className="w-full bg-slate-950 border border-white/10 rounded-lg p-2.5 text-sm text-white"
+                  className="w-full bg-slate-950 border border-black/10 rounded-lg p-2.5 text-sm text-white"
                 >
                   <option value="">Select a class...</option>
                   {classes.map(c => (
@@ -168,3 +168,5 @@ export default function AdminSubjects() {
     </div>
   );
 }
+
+

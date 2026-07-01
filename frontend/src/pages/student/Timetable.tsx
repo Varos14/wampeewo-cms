@@ -42,7 +42,7 @@ export default function StudentTimetable() {
     }
   }, [students, user?.id]);
 
-  if (loading) return <div className="p-8 text-center text-slate-400 animate-pulse">Loading timetable...</div>;
+  if (loading) return <div className="p-8 text-center text-slate-600 animate-pulse">Loading timetable...</div>;
 
   const days = [
     { key: 1, name: 'Monday' },
@@ -69,7 +69,7 @@ export default function StudentTimetable() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-start">
         <div>
-          <h2 className="text-xl font-bold text-slate-100 tracking-tight">Class & Study Timetable</h2>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Class & Study Timetable</h2>
           <p className="text-xs text-slate-500 mt-1">Your weekly class lectures and personal study sessions.</p>
         </div>
         <Button variant="primary" onClick={() => setShowModal(true)}>
@@ -86,24 +86,24 @@ export default function StudentTimetable() {
 
           return (
             <div key={day.key} className="space-y-3">
-              <div className="border-b border-white/5 pb-2 text-center">
-                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">{day.name}</h3>
+              <div className="border-b border-black/5 pb-2 text-center">
+                <h3 className="text-xs font-bold text-slate-600 uppercase tracking-widest">{day.name}</h3>
               </div>
 
               <div className="space-y-3">
                 {entries.map(entry => (
                   <Card 
                     key={entry.id} 
-                    className={`p-3 border-y border-r border-white/5 flex flex-col justify-between min-h-[130px] transition-all duration-300 ${getStyleForSubject(entry.subjectName)}`} 
+                    className={`p-3 border-y border-r border-black/5 flex flex-col justify-between min-h-[130px] transition-all duration-300 ${getStyleForSubject(entry.subjectName)}`} 
                     variant="glass"
                   >
                     <div>
                       <span className="text-slate-500 text-3xs font-semibold block mb-0.5">{entry.room ?? 'Room —'}</span>
-                      <h4 className="font-bold text-slate-200 text-2xs leading-snug">{entry.subjectName}</h4>
+                      <h4 className="font-bold text-slate-800 text-2xs leading-snug">{entry.subjectName}</h4>
                       <p className="text-3xs text-slate-500 mt-1">Instructor: {entry.teacherName}</p>
                     </div>
 
-                    <div className="mt-3 text-3xs font-bold tracking-wider text-slate-400">
+                    <div className="mt-3 text-3xs font-bold tracking-wider text-slate-600">
                       {entry.startTime} - {entry.endTime}
                     </div>
                   </Card>
@@ -121,8 +121,8 @@ export default function StudentTimetable() {
 
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-md bg-slate-900 border border-white/10 rounded-2xl shadow-2xl p-6">
-            <h3 className="text-lg font-bold text-slate-100 mb-4">Add Personal Study Session</h3>
+          <div className="relative w-full max-w-md bg-white border border-black/10 rounded-2xl shadow-2xl p-6">
+            <h3 className="text-lg font-bold text-slate-900 mb-4">Add Personal Study Session</h3>
             <form onSubmit={async (e) => {
               e.preventDefault();
               try {
@@ -151,23 +151,23 @@ export default function StudentTimetable() {
               }
             }} className="space-y-4">
               <div>
-                <label className="block text-slate-400 font-medium mb-1 text-xs">Day of Week</label>
-                <select value={day} onChange={e=>setDay(Number(e.target.value))} className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3 py-2 text-slate-200 focus:border-blue-500 text-sm">
+                <label className="block text-slate-600 font-medium mb-1 text-xs">Day of Week</label>
+                <select value={day} onChange={e=>setDay(Number(e.target.value))} className="w-full bg-white/80 border border-black/10 rounded-xl px-3 py-2 text-slate-800 focus:border-blue-500 text-sm">
                   {days.map(d => <option key={d.key} value={d.key}>{d.name}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-slate-400 font-medium mb-1 text-xs">Topic / Subject</label>
-                <input required value={subjectName} onChange={e=>setSubjectName(e.target.value)} className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3 py-2 text-slate-200 focus:border-blue-500 text-sm" placeholder="e.g. Physics Revision" />
+                <label className="block text-slate-600 font-medium mb-1 text-xs">Topic / Subject</label>
+                <input required value={subjectName} onChange={e=>setSubjectName(e.target.value)} className="w-full bg-white/80 border border-black/10 rounded-xl px-3 py-2 text-slate-800 focus:border-blue-500 text-sm" placeholder="e.g. Physics Revision" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-slate-400 font-medium mb-1 text-xs">Start Time</label>
-                  <input type="time" required value={startTime} onChange={e=>setStartTime(e.target.value)} className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3 py-2 text-slate-200 focus:border-blue-500 text-sm" />
+                  <label className="block text-slate-600 font-medium mb-1 text-xs">Start Time</label>
+                  <input type="time" required value={startTime} onChange={e=>setStartTime(e.target.value)} className="w-full bg-white/80 border border-black/10 rounded-xl px-3 py-2 text-slate-800 focus:border-blue-500 text-sm" />
                 </div>
                 <div>
-                  <label className="block text-slate-400 font-medium mb-1 text-xs">End Time</label>
-                  <input type="time" required value={endTime} onChange={e=>setEndTime(e.target.value)} className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3 py-2 text-slate-200 focus:border-blue-500 text-sm" />
+                  <label className="block text-slate-600 font-medium mb-1 text-xs">End Time</label>
+                  <input type="time" required value={endTime} onChange={e=>setEndTime(e.target.value)} className="w-full bg-white/80 border border-black/10 rounded-xl px-3 py-2 text-slate-800 focus:border-blue-500 text-sm" />
                 </div>
               </div>
               <div className="flex justify-end gap-3 pt-4">
@@ -181,3 +181,5 @@ export default function StudentTimetable() {
     </div>
   );
 }
+
+

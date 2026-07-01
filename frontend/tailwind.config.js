@@ -8,16 +8,16 @@ export default {
       },
       colors: {
         school: {
-          bg: '#080d19',
-          surface: '#0d1527',
-          border: 'rgba(255, 255, 255, 0.06)',
+          bg: '#f8fafc',
+          surface: '#ffffff',
+          border: 'rgba(0, 0, 0, 0.08)',
           accent: '#3b82f6', // bright blue
           'accent-hover': '#2563eb',
         },
         glass: {
-          bg: 'rgba(15, 23, 42, 0.65)',
-          border: 'rgba(255, 255, 255, 0.08)',
-          highlight: 'rgba(255, 255, 255, 0.03)',
+          bg: 'rgba(255, 255, 255, 0.65)',
+          border: 'rgba(255, 255, 255, 0.8)',
+          highlight: 'rgba(255, 255, 255, 0.5)',
         }
       },
       animation: {

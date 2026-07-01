@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Card } from '../../components/ui/Card';
 import { StatCard } from '../../components/ui/StatCard';
 import { DonutChart } from '../../components/charts/DonutChart';
@@ -13,12 +13,24 @@ export default function TeacherDashboard() {
     loading, fetchData 
   } = useAppDataStore();
 
+  const [messages, setMessages] = useState([
+    { id: 1, sender: 'Admin', text: 'Please ensure all mid-term marks are submitted by Friday.', isMe: false },
+    { id: 2, sender: 'You', text: 'Noted, I will submit mine tomorrow.', isMe: true }
+  ]);
+  const [newMessage, setNewMessage] = useState('');
+
+  const handleSendMessage = () => {
+    if (!newMessage.trim()) return;
+    setMessages(prev => [...prev, { id: Date.now(), sender: 'You', text: newMessage.trim(), isMe: true }]);
+    setNewMessage('');
+  };
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
   if (!user) return null;
-  if (loading) return <div className="p-8 text-center text-slate-400 animate-pulse">Loading dashboard...</div>;
+  if (loading) return <div className="p-8 text-center text-slate-600 animate-pulse">Loading dashboard...</div>;
 
   const currentTeacher = teachers.find(t => t.id === user.id);
   const teacherSubjects = currentTeacher?.subjects || ['General'];
@@ -49,7 +61,7 @@ export default function TeacherDashboard() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-bold text-slate-100 tracking-tight">Teacher Console</h2>
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Teacher Console</h2>
         <p className="text-xs text-slate-500 mt-1">Manage continuous assessments, classes, and lesson schedules.</p>
       </div>
 
@@ -92,41 +104,41 @@ export default function TeacherDashboard() {
         {/* Classes List */}
         <Card className="p-6 lg:col-span-2 flex flex-col justify-between" variant="glass">
           <div>
-            <h3 className="text-base font-bold text-slate-200 mb-4">My Assigned Classes</h3>
+            <h3 className="text-base font-bold text-slate-800 mb-4">My Assigned Classes</h3>
             <div className="space-y-4">
               {teacherClasses.map((cls) => (
                 <div
                   key={cls.id}
-                  className="flex items-center justify-between p-4 bg-slate-800/30 border border-white/5 rounded-xl transition hover:border-blue-500/20"
+                  className="flex items-center justify-between p-4 bg-white/50 border border-black/5 rounded-xl transition hover:border-blue-500/20"
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-lg bg-blue-600/10 border border-blue-500/20 flex items-center justify-center font-bold text-blue-400">
                       C
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-slate-200">{cls.name}</h4>
+                      <h4 className="text-sm font-bold text-slate-800">{cls.name}</h4>
                       <p className="text-2xs text-slate-500 font-semibold uppercase tracking-widest mt-0.5">Stream: {cls.stream || 'N/A'}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-xs font-bold text-slate-300 block">{cls.studentCount} Students</span>
+                    <span className="text-xs font-bold text-slate-700 block">{cls.studentCount} Students</span>
                     <span className="text-3xs text-emerald-400 font-semibold uppercase tracking-widest mt-0.5 block">Attendance Marked Today</span>
                   </div>
                 </div>
               ))}
               {teacherClasses.length === 0 && (
-                <div className="flex items-center justify-between p-4 bg-slate-800/30 border border-white/5 rounded-xl transition">
+                <div className="flex items-center justify-between p-4 bg-white/50 border border-black/5 rounded-xl transition">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-lg bg-blue-600/10 border border-blue-500/20 flex items-center justify-center font-bold text-blue-400">
                       C
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-slate-200">Senior 1 Blue</h4>
+                      <h4 className="text-sm font-bold text-slate-800">Senior 1 Blue</h4>
                       <p className="text-2xs text-slate-500 font-semibold uppercase tracking-widest mt-0.5">Stream: Blue</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-xs font-bold text-slate-300 block">45 Students</span>
+                    <span className="text-xs font-bold text-slate-700 block">45 Students</span>
                     <span className="text-3xs text-emerald-400 font-semibold uppercase tracking-widest mt-0.5 block">Attendance Marked Today</span>
                   </div>
                 </div>
@@ -138,7 +150,7 @@ export default function TeacherDashboard() {
         {/* Continuous Assessment Performance ratios */}
         <Card className="p-6 flex flex-col justify-between" variant="glass">
           <div>
-            <h3 className="text-base font-bold text-slate-200">Continuous Assessment</h3>
+            <h3 className="text-base font-bold text-slate-800">Continuous Assessment</h3>
             <p className="text-2xs text-slate-500 font-semibold uppercase tracking-wider mt-0.5">Overall competency grades split</p>
           </div>
           <div className="my-auto py-4">
@@ -150,57 +162,67 @@ export default function TeacherDashboard() {
       {/* Timetable preview and announcements */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="p-6" variant="glass">
-          <h3 className="text-base font-bold text-slate-200 mb-4">Messaging Panel</h3>
+          <h3 className="text-base font-bold text-slate-800 mb-4">Messaging Panel</h3>
           <div className="space-y-3 max-h-64 overflow-y-auto pr-2">
-            <div className="bg-slate-800/50 p-3 rounded-lg border border-white/5">
-              <span className="text-xs font-bold text-slate-200">Admin</span>
-              <p className="text-xs text-slate-400 mt-1">Please ensure all mid-term marks are submitted by Friday.</p>
-            </div>
-            <div className="bg-slate-800/50 p-3 rounded-lg border border-white/5 text-right">
-              <span className="text-xs font-bold text-slate-200">You</span>
-              <p className="text-xs text-slate-400 mt-1">Noted, I will submit mine tomorrow.</p>
-            </div>
+            {messages.map(msg => (
+              <div key={msg.id} className={`bg-white/50 p-3 rounded-lg border border-black/5 ${msg.isMe ? 'text-right' : ''}`}>
+                <span className="text-xs font-bold text-slate-800">{msg.sender}</span>
+                <p className="text-xs text-slate-600 mt-1">{msg.text}</p>
+              </div>
+            ))}
           </div>
           <div className="mt-4 flex gap-2">
-            <input type="text" placeholder="Type a message..." className="w-full bg-slate-900 border border-white/10 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500" />
-            <button className="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded-lg text-xs font-bold">Send</button>
+            <input 
+              type="text" 
+              placeholder="Type a message..." 
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+              className="w-full bg-white border border-black/10 rounded-lg px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-blue-500" 
+            />
+            <button 
+              onClick={handleSendMessage}
+              className="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded-lg text-xs font-bold transition-all active:scale-95"
+            >
+              Send
+            </button>
           </div>
         </Card>
 
         <Card className="lg:col-span-2 p-6" variant="glass">
-          <h3 className="text-base font-bold text-slate-200 mb-4">Lesson Timetable</h3>
+          <h3 className="text-base font-bold text-slate-800 mb-4">Lesson Timetable</h3>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-white/5">
+                <tr className="border-b border-black/5 whitespace-nowrap">
                   <th className="pb-3 text-2xs font-bold text-slate-500 uppercase tracking-widest">Class</th>
                   <th className="pb-3 text-2xs font-bold text-slate-500 uppercase tracking-widest">Subject</th>
                   <th className="pb-3 text-2xs font-bold text-slate-500 uppercase tracking-widest">Time</th>
                   <th className="pb-3 text-2xs font-bold text-slate-500 uppercase tracking-widest">Room</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-black/5">
                 {todayClasses.map((item) => (
-                  <tr key={item.id} className="text-xs">
-                    <td className="py-3.5 font-bold text-slate-200">Senior 1 Blue</td>
-                    <td className="py-3.5 text-slate-300">{item.subjectName}</td>
+                  <tr key={item.id} className="text-xs whitespace-nowrap">
+                    <td className="py-3.5 font-bold text-slate-800">Senior 1 Blue</td>
+                    <td className="py-3.5 text-slate-700">{item.subjectName}</td>
                     <td className="py-3.5 text-blue-400 font-semibold">{item.startTime} - {item.endTime}</td>
-                    <td className="py-3.5 text-slate-400">{item.room || 'N/A'}</td>
+                    <td className="py-3.5 text-slate-600">{item.room || 'N/A'}</td>
                   </tr>
                 ))}
                 {todayClasses.length === 0 && (
                   <>
-                    <tr className="text-xs">
-                      <td className="py-3.5 font-bold text-slate-200">Senior 1 Blue</td>
-                      <td className="py-3.5 text-slate-300">Mathematics</td>
+                    <tr className="text-xs whitespace-nowrap">
+                      <td className="py-3.5 font-bold text-slate-800">Senior 1 Blue</td>
+                      <td className="py-3.5 text-slate-700">Mathematics</td>
                       <td className="py-3.5 text-blue-400 font-semibold">08:30 - 10:00</td>
-                      <td className="py-3.5 text-slate-400">Room 3</td>
+                      <td className="py-3.5 text-slate-600">Room 3</td>
                     </tr>
-                    <tr className="text-xs">
-                      <td className="py-3.5 font-bold text-slate-200">Senior 1 Blue</td>
-                      <td className="py-3.5 text-slate-300">Physics</td>
+                    <tr className="text-xs whitespace-nowrap">
+                      <td className="py-3.5 font-bold text-slate-800">Senior 1 Blue</td>
+                      <td className="py-3.5 text-slate-700">Physics</td>
                       <td className="py-3.5 text-blue-400 font-semibold">10:30 - 12:00</td>
-                      <td className="py-3.5 text-slate-400">Lab A</td>
+                      <td className="py-3.5 text-slate-600">Lab A</td>
                     </tr>
                   </>
                 )}
@@ -211,15 +233,15 @@ export default function TeacherDashboard() {
 
         {/* Quick reminder details */}
         <Card className="p-6" variant="glass">
-          <h3 className="text-base font-bold text-slate-200 mb-4">Class Reminders</h3>
+          <h3 className="text-base font-bold text-slate-800 mb-4">Class Reminders</h3>
           <ul className="space-y-4 text-xs">
             <li className="flex gap-2">
               <span className="text-amber-500">⚠️</span>
-              <p className="text-slate-300 font-medium">Renewable Energy solar heater project deadline ends in 2 weeks.</p>
+              <p className="text-slate-700 font-medium">Renewable Energy solar heater project deadline ends in 2 weeks.</p>
             </li>
             <li className="flex gap-2">
               <span className="text-emerald-400">✓</span>
-              <p className="text-slate-300 font-medium">Class attendance files saved for yesterday.</p>
+              <p className="text-slate-700 font-medium">Class attendance files saved for yesterday.</p>
             </li>
           </ul>
         </Card>
@@ -227,7 +249,7 @@ export default function TeacherDashboard() {
 
       {/* Students Results Section */}
       <Card className="p-6 mt-6" variant="glass">
-        <h3 className="text-base font-bold text-slate-200 mb-4">Students Results</h3>
+        <h3 className="text-base font-bold text-slate-800 mb-4">Students Results</h3>
         <p className="text-xs text-slate-500 mb-6">List of students by class for easy grading access.</p>
         
         <div className="space-y-6">
@@ -241,16 +263,16 @@ export default function TeacherDashboard() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="border-b border-white/5 text-slate-400">
+                      <tr className="border-b border-black/5 text-slate-600 whitespace-nowrap">
                         <th className="pb-3 text-xs font-semibold uppercase tracking-wider">Student Name</th>
                         <th className="pb-3 text-xs font-semibold uppercase tracking-wider">Reg No.</th>
                         <th className="pb-3 text-xs font-semibold uppercase tracking-wider text-right">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/5">
+                    <tbody className="divide-y divide-black/5">
                       {classStudents.map(student => (
-                        <tr key={student.id} className="text-xs hover:bg-white/2 transition-colors">
-                          <td className="py-3 font-semibold text-slate-200">
+                        <tr key={student.id} className="text-xs hover:bg-black/5 transition-colors whitespace-nowrap">
+                          <td className="py-3 font-semibold text-slate-800">
                             <div className="flex items-center gap-3">
                               <img
                                 src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(student.name)}`}
@@ -260,14 +282,14 @@ export default function TeacherDashboard() {
                               {student.name}
                             </div>
                           </td>
-                          <td className="py-3 text-slate-400 font-mono">{student.registrationNumber}</td>
+                          <td className="py-3 text-slate-600 font-mono">{student.registrationNumber}</td>
                           <td className="py-3 text-right">
                             <div className="flex justify-end gap-2">
                               {teacherSubjects.map(subject => (
                                 <div key={subject} className="flex flex-col items-end gap-1">
                                   <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{subject}</span>
                                   <select 
-                                    className="px-3 py-1.5 bg-slate-800 border border-white/10 text-slate-200 rounded-lg text-xs outline-none focus:border-blue-500 cursor-pointer"
+                                    className="px-3 py-1.5 bg-white border border-black/10 text-slate-800 rounded-lg text-xs outline-none focus:border-blue-500 cursor-pointer min-w-[100px]"
                                     defaultValue=""
                                     onChange={async (e) => {
                                       const grade = e.target.value;
@@ -329,3 +351,4 @@ export default function TeacherDashboard() {
     </div>
   );
 }
+

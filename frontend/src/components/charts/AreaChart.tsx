@@ -168,3 +168,4 @@ export const AreaChart: React.FC<AreaChartProps> = ({
     </div>
   );
 };
+

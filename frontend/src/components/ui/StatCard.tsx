@@ -55,8 +55,8 @@ export const StatCard: React.FC<StatCardProps> = ({
         {icon}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-slate-400 truncate">{title}</p>
-        <h4 className="text-2xl font-bold text-slate-100 tracking-tight mt-1 truncate">{value}</h4>
+        <p className="text-sm font-medium text-slate-600 truncate">{title}</p>
+        <h4 className="text-2xl font-bold text-slate-900 tracking-tight mt-1 truncate">{value}</h4>
         {trend && (
           <div className="flex items-center mt-2 text-xs font-semibold">
             <span
@@ -73,3 +73,4 @@ export const StatCard: React.FC<StatCardProps> = ({
     </Card>
   );
 };
+

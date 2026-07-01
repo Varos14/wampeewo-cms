@@ -29,7 +29,7 @@ export default function ForgotPassword() {
     return (
       <div className="text-center">
         <h2 className="text-xl font-semibold mb-4 text-emerald-400">Email Sent!</h2>
-        <p className="text-sm text-slate-300 mb-6">
+        <p className="text-sm text-slate-700 mb-6">
           If an account exists for <strong>{email}</strong>, we have sent instructions to reset your password.
         </p>
         <Button onClick={() => navigate('/login')} className="w-full">
@@ -41,22 +41,22 @@ export default function ForgotPassword() {
 
   return (
     <div className="w-full">
-      <h2 className="text-xl font-semibold mb-2 text-center text-slate-100 tracking-wide">
+      <h2 className="text-xl font-semibold mb-2 text-center text-slate-900 tracking-wide">
         Reset your password
       </h2>
-      <p className="text-xs text-slate-400 text-center mb-6 leading-relaxed">
+      <p className="text-xs text-slate-600 text-center mb-6 leading-relaxed">
         Enter your registered email address below and we will email you a password reset link.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Email Field */}
         <div>
-          <label className="block text-sm font-normal text-slate-300 mb-1.5">Email Address</label>
+          <label className="block text-sm font-normal text-slate-700 mb-1.5">Email Address</label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-xl border border-blue-500/20 bg-slate-950/70 px-3.5 py-2.5 text-sm font-normal text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all"
+            className="w-full rounded-xl border border-blue-500/20 bg-slate-950/70 px-3.5 py-2.5 text-sm font-normal text-slate-800 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all"
             placeholder="mail@example.com"
             required
             disabled={loading}
@@ -79,7 +79,7 @@ export default function ForgotPassword() {
         </Button>
 
         {/* Back link */}
-        <div className="text-center text-xs text-slate-400 mt-4">
+        <div className="text-center text-xs text-slate-600 mt-4">
           Remember your password?{' '}
           <button
             type="button"
@@ -93,3 +93,4 @@ export default function ForgotPassword() {
     </div>
   );
 }
+

@@ -39,7 +39,7 @@ export default function Signup() {
     return (
       <div className="text-center">
         <h2 className="text-xl font-semibold mb-4 text-emerald-400">Account Created!</h2>
-        <p className="text-sm text-slate-300 mb-6">
+        <p className="text-sm text-slate-700 mb-6">
           Your registration request has been submitted successfully. Please proceed to login.
         </p>
         <Button onClick={() => navigate('/login')} className="w-full">
@@ -51,19 +51,19 @@ export default function Signup() {
 
   return (
     <div className="w-full">
-      <h2 className="text-xl font-semibold mb-6 text-center text-slate-100 tracking-wide">
+      <h2 className="text-xl font-semibold mb-6 text-center text-slate-900 tracking-wide">
         Create your account
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Full Name */}
         <div>
-          <label className="block text-sm font-normal text-slate-300 mb-1.5">Full Name</label>
+          <label className="block text-sm font-normal text-slate-700 mb-1.5">Full Name</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-xl border border-blue-500/20 bg-slate-950/70 px-3.5 py-2.5 text-sm font-normal text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all"
+            className="w-full rounded-xl border border-blue-500/20 bg-slate-950/70 px-3.5 py-2.5 text-sm font-normal text-slate-800 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all"
             placeholder="e.g. John Doe"
             required
             disabled={loading}
@@ -72,12 +72,12 @@ export default function Signup() {
 
         {/* Email */}
         <div>
-          <label className="block text-sm font-normal text-slate-300 mb-1.5">Email Address</label>
+          <label className="block text-sm font-normal text-slate-700 mb-1.5">Email Address</label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-xl border border-blue-500/20 bg-slate-950/70 px-3.5 py-2.5 text-sm font-normal text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all"
+            className="w-full rounded-xl border border-blue-500/20 bg-slate-950/70 px-3.5 py-2.5 text-sm font-normal text-slate-800 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all"
             placeholder="mail@example.com"
             required
             disabled={loading}
@@ -86,17 +86,17 @@ export default function Signup() {
 
         {/* Role Selector */}
         <div>
-          <label className="block text-sm font-normal text-slate-300 mb-1.5">Register As</label>
+          <label className="block text-sm font-normal text-slate-700 mb-1.5">Register As</label>
           <div className="relative">
             <select
               value={role}
               onChange={(e) => setRole(e.target.value)}
-              className="w-full rounded-xl border border-blue-500/20 bg-slate-950/70 px-3 py-2.5 text-sm font-normal text-slate-200 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all appearance-none cursor-pointer"
+              className="w-full rounded-xl border border-blue-500/20 bg-slate-950/70 px-3 py-2.5 text-sm font-normal text-slate-800 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all appearance-none cursor-pointer"
             >
               <option value="student" className="bg-slate-950">Student</option>
               <option value="teacher" className="bg-slate-950">Teacher</option>
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-600">
               <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                 <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
               </svg>
@@ -106,12 +106,12 @@ export default function Signup() {
 
         {/* Password */}
         <div>
-          <label className="block text-sm font-normal text-slate-300 mb-1.5">Password</label>
+          <label className="block text-sm font-normal text-slate-700 mb-1.5">Password</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-xl border border-blue-500/20 bg-slate-950/70 px-3.5 py-2.5 text-sm font-normal text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all"
+            className="w-full rounded-xl border border-blue-500/20 bg-slate-950/70 px-3.5 py-2.5 text-sm font-normal text-slate-800 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all"
             placeholder="••••••••"
             required
             disabled={loading}
@@ -120,12 +120,12 @@ export default function Signup() {
 
         {/* Confirm Password */}
         <div>
-          <label className="block text-sm font-normal text-slate-300 mb-1.5">Confirm Password</label>
+          <label className="block text-sm font-normal text-slate-700 mb-1.5">Confirm Password</label>
           <input
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full rounded-xl border border-blue-500/20 bg-slate-950/70 px-3.5 py-2.5 text-sm font-normal text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all"
+            className="w-full rounded-xl border border-blue-500/20 bg-slate-950/70 px-3.5 py-2.5 text-sm font-normal text-slate-800 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all"
             placeholder="••••••••"
             required
             disabled={loading}
@@ -148,7 +148,7 @@ export default function Signup() {
         </Button>
 
         {/* Back link */}
-        <div className="text-center text-xs text-slate-400 mt-4">
+        <div className="text-center text-xs text-slate-600 mt-4">
           Already have an account?{' '}
           <button
             type="button"
@@ -162,3 +162,4 @@ export default function Signup() {
     </div>
   );
 }
+

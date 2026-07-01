@@ -124,7 +124,7 @@ export default function AdminStudents() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-start">
         <div>
-          <h2 className="text-xl font-bold text-slate-100 tracking-tight">Student Roster</h2>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Student Roster</h2>
           <p className="text-xs text-slate-500 mt-1">Manage and register enrolled students across streams.</p>
         </div>
         <Button variant="primary" size="md" onClick={() => setShowModal(true)}>
@@ -153,13 +153,13 @@ export default function AdminStudents() {
           placeholder="Search by name or registration number…"
           value={search}
           onChange={e => setSearch(e.target.value)}
-          className="flex-1 bg-slate-800/50 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500/50"
+          className="flex-1 bg-white/50 border border-black/10 rounded-xl px-4 py-2.5 text-sm text-slate-800 placeholder-slate-500 focus:outline-none focus:border-blue-500/50"
         />
       </div>
 
       {/* Roster Table */}
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-12 text-slate-400">
+        <div className="flex flex-col items-center justify-center py-12 text-slate-600">
           <svg className="animate-spin h-8 w-8 text-blue-500 mb-2" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
@@ -176,14 +176,14 @@ export default function AdminStudents() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-white/5 text-left">
-                  <th className="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Student</th>
-                  <th className="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Reg No.</th>
-                  <th className="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Class</th>
-                  <th className="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Gender</th>
+                <tr className="border-b border-black/5 text-left">
+                  <th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider">Student</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider">Reg No.</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider">Class</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider">Gender</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-black/5">
                 {filtered.map(student => (
                   <tr key={student.id} className="hover:bg-white/5 transition-colors cursor-pointer" onClick={() => setSelectedStudentId(student.id)}>
                     <td className="px-4 py-3">
@@ -194,12 +194,12 @@ export default function AdminStudents() {
                           className="w-8 h-8 rounded-lg bg-slate-700 object-cover"
                         />
                         <div>
-                          <p className="font-semibold text-slate-200">{student.name}</p>
+                          <p className="font-semibold text-slate-800">{student.name}</p>
                           <p className="text-xs text-slate-500">{student.email}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-slate-400 font-mono text-xs">{student.registrationNumber}</td>
+                    <td className="px-4 py-3 text-slate-600 font-mono text-xs">{student.registrationNumber}</td>
                     <td className="px-4 py-3">
                       <Badge color="blue">{getClassName(student.classId)}</Badge>
                     </td>
@@ -224,8 +224,8 @@ export default function AdminStudents() {
       {/* Modal Dialog */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-          <div className="relative w-full max-w-lg bg-slate-900 border border-white/10 rounded-2xl shadow-2xl p-6 my-8 max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg font-bold text-slate-100 mb-4">Register New Student</h3>
+          <div className="relative w-full max-w-lg bg-white border border-black/10 rounded-2xl shadow-2xl p-6 my-8 max-h-[90vh] overflow-y-auto">
+            <h3 className="text-lg font-bold text-slate-900 mb-4">Register New Student</h3>
 
             {formError && (
               <div className="mb-4 p-3 rounded-xl border border-rose-500/20 bg-rose-500/10 text-xs text-rose-400">
@@ -241,39 +241,39 @@ export default function AdminStudents() {
             <form onSubmit={handleRegister} className="space-y-4 text-xs">
               {/* Name */}
               <div>
-                <label className="block text-slate-400 font-medium mb-1">Full Name</label>
+                <label className="block text-slate-600 font-medium mb-1">Full Name</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Kato Paul"
                   value={name}
                   onChange={e => setName(e.target.value)}
-                  className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                  className="w-full bg-white/80 border border-black/10 rounded-xl px-3.5 py-2.5 text-slate-800 placeholder-slate-500 focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               {/* Email & Password Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-slate-400 font-medium mb-1">Email Address</label>
+                  <label className="block text-slate-600 font-medium mb-1">Email Address</label>
                   <input
                     type="email"
                     required
                     placeholder="student@wampeewo.com"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                    className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white/80 border border-black/10 rounded-xl px-3.5 py-2.5 text-slate-800 placeholder-slate-500 focus:outline-none focus:border-blue-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-400 font-medium mb-1">Custom Password</label>
+                  <label className="block text-slate-600 font-medium mb-1">Custom Password</label>
                   <input
                     type="password"
                     required
                     placeholder="••••••••"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
-                    className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white/80 border border-black/10 rounded-xl px-3.5 py-2.5 text-slate-800 placeholder-slate-500 focus:outline-none focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -281,33 +281,33 @@ export default function AdminStudents() {
               {/* Reg No, Gender, Class */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-slate-400 font-medium mb-1">Reg Number</label>
+                  <label className="block text-slate-600 font-medium mb-1">Reg Number</label>
                   <input
                     type="text"
                     required
                     placeholder="WNS/2026/089"
                     value={regNumber}
                     onChange={e => setRegNumber(e.target.value)}
-                    className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white/80 border border-black/10 rounded-xl px-3.5 py-2.5 text-slate-800 placeholder-slate-500 focus:outline-none focus:border-blue-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-400 font-medium mb-1">Gender</label>
+                  <label className="block text-slate-600 font-medium mb-1">Gender</label>
                   <select
                     value={gender}
                     onChange={e => setGender(e.target.value as 'Male' | 'Female')}
-                    className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-200 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white/80 border border-black/10 rounded-xl px-3.5 py-2.5 text-slate-800 focus:outline-none focus:border-blue-500"
                   >
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-slate-400 font-medium mb-1">Class Stream</label>
+                  <label className="block text-slate-600 font-medium mb-1">Class Stream</label>
                   <select
                     value={classId}
                     onChange={e => setClassId(e.target.value)}
-                    className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3.5 py-2.5 text-slate-200 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white/80 border border-black/10 rounded-xl px-3.5 py-2.5 text-slate-800 focus:outline-none focus:border-blue-500"
                   >
                     {classes.map(c => (
                       <option key={c.id} value={c.id}>{c.name}</option>
@@ -317,7 +317,7 @@ export default function AdminStudents() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex justify-end gap-3 pt-4 border-t border-white/5">
+              <div className="flex justify-end gap-3 pt-4 border-t border-black/5">
                 <Button
                   variant="ghost"
                   size="md"
@@ -338,3 +338,5 @@ export default function AdminStudents() {
     </div>
   );
 }
+
+

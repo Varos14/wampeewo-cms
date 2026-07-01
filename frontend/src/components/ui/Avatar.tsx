@@ -37,10 +37,11 @@ export const Avatar: React.FC<AvatarProps> = ({
           className="w-full h-full object-cover"
         />
       ) : (
-        <span className="font-bold text-slate-300 tracking-wider">
+        <span className="font-bold text-slate-700 tracking-wider">
           {getInitials(name)}
         </span>
       )}
     </div>
   );
 };
+

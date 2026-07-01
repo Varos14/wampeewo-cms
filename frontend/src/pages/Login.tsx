@@ -53,14 +53,14 @@ export default function Login() {
 
   return (
     <div className="w-full">
-      <h2 className="text-xl font-semibold mb-6 text-center text-slate-100 tracking-wide">
+      <h2 className="text-xl font-semibold mb-6 text-center text-slate-900 tracking-wide">
         Sign In to your account
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Email Field */}
         <div>
-          <label className="block text-sm font-normal text-slate-300 mb-1.5">Email Address</label>
+          <label className="block text-sm font-normal text-slate-700 mb-1.5">Email Address</label>
           <div className="relative">
             <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -69,7 +69,7 @@ export default function Login() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-xl border border-blue-500/20 bg-slate-950/70 pl-10 pr-3 py-2.5 text-sm font-normal text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all"
+              className="w-full rounded-xl border border-blue-500/20 bg-white/50 pl-10 pr-3 py-2.5 text-sm font-normal text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all"
               placeholder="mail@example.com"
               required
               disabled={loading}
@@ -79,7 +79,7 @@ export default function Login() {
 
         {/* Password Field */}
         <div>
-          <label className="block text-sm font-normal text-slate-300 mb-1.5">Password</label>
+          <label className="block text-sm font-normal text-slate-700 mb-1.5">Password</label>
           <div className="relative">
             <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -88,7 +88,7 @@ export default function Login() {
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-xl border border-blue-500/20 bg-slate-950/70 pl-10 pr-10 py-2.5 text-sm font-normal text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all"
+              className="w-full rounded-xl border border-blue-500/20 bg-white/50 pl-10 pr-10 py-2.5 text-sm font-normal text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all"
               placeholder="••••••••••"
               required
               disabled={loading}
@@ -96,7 +96,7 @@ export default function Login() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 focus:outline-none"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 focus:outline-none"
             >
               {showPassword ? (
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -114,19 +114,19 @@ export default function Login() {
 
         {/* Role Field */}
         <div>
-          <label className="block text-sm font-normal text-slate-300 mb-1.5">Role</label>
+          <label className="block text-sm font-normal text-slate-700 mb-1.5">Role</label>
           <div className="relative">
             <select
               value={role}
               onChange={(e) => setRole(e.target.value)}
-              className="w-full rounded-xl border border-blue-500/20 bg-slate-950/70 px-3 py-2.5 text-sm font-normal text-slate-200 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all appearance-none cursor-pointer"
+              className="w-full rounded-xl border border-blue-500/20 bg-white/50 px-3 py-2.5 text-sm font-normal text-slate-800 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all appearance-none cursor-pointer"
             >
-              <option value="" disabled className="bg-slate-950">Select Role</option>
-              <option value="admin" className="bg-slate-950">Admin</option>
-              <option value="teacher" className="bg-slate-950">Teacher</option>
-              <option value="student" className="bg-slate-950">Student</option>
+              <option value="" disabled className="bg-white">Select Role</option>
+              <option value="admin" className="bg-white">Admin</option>
+              <option value="teacher" className="bg-white">Teacher</option>
+              <option value="student" className="bg-white">Student</option>
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-600">
               <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                 <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
               </svg>
@@ -136,12 +136,12 @@ export default function Login() {
 
         {/* Remember me & Forgot Password */}
         <div className="flex items-center justify-between text-xs pt-1">
-          <label className="flex items-center text-slate-300 cursor-pointer select-none">
+          <label className="flex items-center text-slate-700 cursor-pointer select-none">
             <input
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              className="w-4 h-4 rounded border-blue-500/20 bg-slate-950 text-blue-600 focus:ring-0 focus:ring-offset-0 mr-2 accent-blue-600 cursor-pointer"
+              className="w-4 h-4 rounded border-blue-500/20 bg-white text-blue-600 focus:ring-0 focus:ring-offset-0 mr-2 accent-blue-600 cursor-pointer"
             />
             Remember me
           </label>
@@ -166,7 +166,7 @@ export default function Login() {
         </Button>
 
         {/* Sign up link */}
-        <div className="text-center text-xs text-slate-400 mt-4">
+        <div className="text-center text-xs text-slate-600 mt-4">
           Don't have an account?{' '}
           <Link to="/signup" className="text-blue-500 hover:text-blue-400 transition-colors font-medium">
             Sign Up
@@ -175,14 +175,14 @@ export default function Login() {
       </form>
 
       {/* Footer copyright */}
-      <div className="mt-8 pt-4 border-t border-white/5 text-center text-[10px] text-slate-500">
+      <div className="mt-8 pt-4 border-t border-black/5 text-center text-[10px] text-slate-500">
         &copy; 2024 Wampeewo. All rights reserved. <span className="hover:underline cursor-pointer">Terms</span> | <span className="hover:underline cursor-pointer">Privacy</span>
       </div>
 
       {/* Collapsible Quick Access panel for testing/demo */}
-      <div className="mt-4 pt-2 border-t border-dashed border-white/5">
+      <div className="mt-4 pt-2 border-t border-dashed border-black/5">
         <details className="cursor-pointer group">
-          <summary className="text-[10px] font-black text-slate-500 uppercase tracking-widest text-center list-none select-none group-open:mb-2 hover:text-slate-400 transition-colors">
+          <summary className="text-[10px] font-black text-slate-500 uppercase tracking-widest text-center list-none select-none group-open:mb-2 hover:text-slate-600 transition-colors">
             Quick Demo Logins (Click to view)
           </summary>
           <div className="grid grid-cols-3 gap-1.5 mt-2">
@@ -194,14 +194,14 @@ export default function Login() {
               Admin
             </button>
             <button
-              onClick={() => handleQuickLogin('mrlochaderrick@wampeewo.com', 'teacher123', 'teacher')}
+              onClick={() => handleQuickLogin('locha@wampeewo.com', 'teacher123', 'teacher')}
               disabled={loading}
               className="p-1.5 border border-emerald-500/10 hover:border-emerald-500/30 bg-emerald-500/5 hover:bg-emerald-500/10 rounded-lg text-[9px] font-bold text-emerald-400 transition-all text-center focus:outline-none"
             >
               Teacher
             </button>
             <button
-              onClick={() => handleQuickLogin('garethtuwesigye@wampeewo.com', 'student123', 'student')}
+              onClick={() => handleQuickLogin('gareth@wampeewo.com', 'student123', 'student')}
               disabled={loading}
               className="p-1.5 border border-sky-500/10 hover:border-sky-500/30 bg-sky-500/5 hover:bg-sky-500/10 rounded-lg text-[9px] font-bold text-sky-400 transition-all text-center focus:outline-none"
             >
@@ -213,3 +213,4 @@ export default function Login() {
     </div>
   );
 }
+

@@ -74,7 +74,7 @@ export default function TeacherPresentations() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-start">
         <div>
-          <h2 className="text-xl font-bold text-slate-100 tracking-tight">Presentations & Meetings</h2>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Presentations & Meetings</h2>
           <p className="text-xs text-slate-500 mt-1">Schedule and share Google Meet links for online classes.</p>
         </div>
         <Button variant="primary" onClick={() => setShowModal(true)}>
@@ -83,7 +83,7 @@ export default function TeacherPresentations() {
       </div>
 
       {loading ? (
-        <div className="text-slate-400">Loading...</div>
+        <div className="text-slate-600">Loading...</div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {presentations.length === 0 && (
@@ -93,11 +93,11 @@ export default function TeacherPresentations() {
             <Card key={pres.id} className="p-5" variant="glass">
               <div className="flex justify-between items-start mb-3">
                 <Badge color="blue">{getClassName(pres.classId)}</Badge>
-                <span className="text-xs font-semibold text-slate-400">
+                <span className="text-xs font-semibold text-slate-600">
                   {new Date(pres.scheduledAt).toLocaleString()}
                 </span>
               </div>
-              <h3 className="font-bold text-slate-100 text-lg mb-2">{pres.title}</h3>
+              <h3 className="font-bold text-slate-900 text-lg mb-2">{pres.title}</h3>
               <a 
                 href={pres.meetLink} 
                 target="_blank" 
@@ -113,25 +113,25 @@ export default function TeacherPresentations() {
 
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-md bg-slate-900 border border-white/10 rounded-2xl shadow-2xl p-6">
-            <h3 className="text-lg font-bold text-slate-100 mb-4">Schedule Presentation</h3>
+          <div className="relative w-full max-w-md bg-white border border-black/10 rounded-2xl shadow-2xl p-6">
+            <h3 className="text-lg font-bold text-slate-900 mb-4">Schedule Presentation</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-slate-400 font-medium mb-1 text-xs">Title</label>
+                <label className="block text-slate-600 font-medium mb-1 text-xs">Title</label>
                 <input
                   type="text"
                   required
                   value={title}
                   onChange={e => setTitle(e.target.value)}
-                  className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500 text-sm"
+                  className="w-full bg-white/80 border border-black/10 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:border-blue-500 text-sm"
                 />
               </div>
               <div>
-                <label className="block text-slate-400 font-medium mb-1 text-xs">Class</label>
+                <label className="block text-slate-600 font-medium mb-1 text-xs">Class</label>
                 <select
                   value={classId}
                   onChange={e => setClassId(e.target.value)}
-                  className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500 text-sm"
+                  className="w-full bg-white/80 border border-black/10 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:border-blue-500 text-sm"
                 >
                   {classes.map(c => (
                     <option key={c.id} value={c.id}>{c.name}</option>
@@ -139,24 +139,24 @@ export default function TeacherPresentations() {
                 </select>
               </div>
               <div>
-                <label className="block text-slate-400 font-medium mb-1 text-xs">Google Meet Link</label>
+                <label className="block text-slate-600 font-medium mb-1 text-xs">Google Meet Link</label>
                 <input
                   type="url"
                   required
                   value={meetLink}
                   onChange={e => setMeetLink(e.target.value)}
                   placeholder="https://meet.google.com/xyz-abcd-efg"
-                  className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500 text-sm"
+                  className="w-full bg-white/80 border border-black/10 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:border-blue-500 text-sm"
                 />
               </div>
               <div>
-                <label className="block text-slate-400 font-medium mb-1 text-xs">Scheduled Date & Time</label>
+                <label className="block text-slate-600 font-medium mb-1 text-xs">Scheduled Date & Time</label>
                 <input
                   type="datetime-local"
                   required
                   value={scheduledAt}
                   onChange={e => setScheduledAt(e.target.value)}
-                  className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-blue-500 text-sm"
+                  className="w-full bg-white/80 border border-black/10 rounded-xl px-3 py-2 text-slate-800 focus:outline-none focus:border-blue-500 text-sm"
                 />
               </div>
               <div className="flex justify-end gap-3 pt-4">
@@ -170,3 +170,5 @@ export default function TeacherPresentations() {
     </div>
   );
 }
+
+

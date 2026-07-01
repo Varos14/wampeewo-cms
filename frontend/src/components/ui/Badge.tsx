@@ -18,38 +18,38 @@ export const Badge: React.FC<BadgeProps> = ({
   const colors = {
     blue: {
       solid: 'bg-blue-600 text-white',
-      subtle: 'bg-blue-500/15 text-blue-400 border border-blue-500/10',
-      outline: 'bg-transparent text-blue-400 border border-blue-500/30',
+      subtle: 'bg-blue-500/15 text-blue-700 border border-blue-500/20',
+      outline: 'bg-transparent text-blue-600 border border-blue-500/30',
     },
     emerald: {
       solid: 'bg-emerald-600 text-white',
-      subtle: 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/10',
-      outline: 'bg-transparent text-emerald-400 border border-emerald-500/30',
+      subtle: 'bg-emerald-500/15 text-emerald-700 border border-emerald-500/20',
+      outline: 'bg-transparent text-emerald-600 border border-emerald-500/30',
     },
     amber: {
       solid: 'bg-amber-600 text-white',
-      subtle: 'bg-amber-500/15 text-amber-400 border border-amber-500/10',
-      outline: 'bg-transparent text-amber-400 border border-amber-500/30',
+      subtle: 'bg-amber-500/15 text-amber-700 border border-amber-500/20',
+      outline: 'bg-transparent text-amber-600 border border-amber-500/30',
     },
     rose: {
       solid: 'bg-rose-600 text-white',
-      subtle: 'bg-rose-500/15 text-rose-400 border border-rose-500/10',
-      outline: 'bg-transparent text-rose-400 border border-rose-500/30',
+      subtle: 'bg-rose-500/15 text-rose-700 border border-rose-500/20',
+      outline: 'bg-transparent text-rose-600 border border-rose-500/30',
     },
     slate: {
       solid: 'bg-slate-600 text-white',
-      subtle: 'bg-slate-500/15 text-slate-400 border border-slate-500/10',
-      outline: 'bg-transparent text-slate-400 border border-slate-500/30',
+      subtle: 'bg-slate-500/15 text-slate-700 border border-slate-500/20',
+      outline: 'bg-transparent text-slate-600 border border-slate-500/30',
     },
     indigo: {
       solid: 'bg-indigo-600 text-white',
-      subtle: 'bg-indigo-500/15 text-indigo-400 border border-indigo-500/10',
-      outline: 'bg-transparent text-indigo-400 border border-indigo-500/30',
+      subtle: 'bg-indigo-500/15 text-indigo-700 border border-indigo-500/20',
+      outline: 'bg-transparent text-indigo-600 border border-indigo-500/30',
     },
     purple: {
       solid: 'bg-purple-600 text-white',
-      subtle: 'bg-purple-500/15 text-purple-400 border border-purple-500/10',
-      outline: 'bg-transparent text-purple-400 border border-purple-500/30',
+      subtle: 'bg-purple-500/15 text-purple-700 border border-purple-500/20',
+      outline: 'bg-transparent text-purple-600 border border-purple-500/30',
     },
   };
 
@@ -73,3 +73,4 @@ export const RubricBadge: React.FC<{ grade?: 1 | 2 | 3 | number }> = ({ grade })
   }
   return <Badge color="slate">Not Graded</Badge>;
 };
+

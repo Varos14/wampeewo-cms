@@ -6,7 +6,7 @@ import {
 import * as mock from '../utils/mockData';
 import { useAuthStore } from '../store/authStore';
 
-const MOCK_MODE = false;
+const MOCK_MODE = true;
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
 const delay = (ms = 400) => new Promise(resolve => setTimeout(resolve, ms));

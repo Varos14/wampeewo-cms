@@ -22,7 +22,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
       <div
         className={`animate-spin rounded-full border-t-blue-500 border-r-transparent border-b-transparent border-l-transparent border-solid ${sizes[size]} border-slate-700/60 mb-4`}
       />
-      {message && <p className="text-sm font-semibold text-slate-400 animate-pulse-subtle">{message}</p>}
+      {message && <p className="text-sm font-semibold text-slate-600 animate-pulse-subtle">{message}</p>}
     </div>
   );
 
@@ -36,3 +36,4 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
 
   return spinner;
 };
+

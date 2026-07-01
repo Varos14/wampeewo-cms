@@ -65,14 +65,14 @@ export default function AdminClasses() {
   };
 
   if (loading) {
-    return <div className="text-slate-400 p-8 text-center animate-pulse">Loading classes...</div>;
+    return <div className="text-slate-600 p-8 text-center animate-pulse">Loading classes...</div>;
   }
 
   return (
     <div className="space-y-6 animate-fade-in relative">
       <div className="flex justify-between items-start">
         <div>
-          <h2 className="text-xl font-bold text-slate-100 tracking-tight">Classes</h2>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Classes</h2>
           <p className="text-xs text-slate-500 mt-1">All active classes and their class teachers.</p>
         </div>
         <Button variant="primary" onClick={() => setShowModal(true)}>+ Create Class</Button>
@@ -99,15 +99,15 @@ export default function AdminClasses() {
               <Badge color={streamColors[cls.stream ?? ''] ?? 'blue'}>{cls.stream || 'N/A'}</Badge>
               <span className="text-xs font-mono text-slate-500">{cls.id.toUpperCase()}</span>
             </div>
-            <h3 className="font-bold text-slate-100 text-base">{cls.name}</h3>
-            <div className="mt-4 pt-4 border-t border-white/5 space-y-1.5">
+            <h3 className="font-bold text-slate-900 text-base">{cls.name}</h3>
+            <div className="mt-4 pt-4 border-t border-black/5 space-y-1.5">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-slate-500">Students</span>
-                <span className="font-bold text-slate-200">{cls.studentCount ?? 0}</span>
+                <span className="font-bold text-slate-800">{cls.studentCount ?? 0}</span>
               </div>
               <div className="flex items-center justify-between text-xs">
                 <span className="text-slate-500">Class Teacher</span>
-                <span className="font-semibold text-slate-300 truncate max-w-[120px] text-right">{getTeacherName(cls.classTeacherId)}</span>
+                <span className="font-semibold text-slate-700 truncate max-w-[120px] text-right">{getTeacherName(cls.classTeacherId)}</span>
               </div>
             </div>
           </Card>
@@ -116,33 +116,33 @@ export default function AdminClasses() {
 
       {showModal && (
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <Card className="w-full max-w-md p-6 bg-slate-900 border-white/10" variant="glass">
+          <Card className="w-full max-w-md p-6 bg-white border-black/10" variant="glass">
             <h3 className="text-lg font-bold text-white mb-4">Create New Class</h3>
             <form onSubmit={handleCreate} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">Class Name</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Class Name</label>
                 <input 
                   type="text" required
                   value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
-                  className="w-full bg-slate-950 border border-white/10 rounded-lg p-2.5 text-sm text-white"
+                  className="w-full bg-slate-950 border border-black/10 rounded-lg p-2.5 text-sm text-white"
                   placeholder="e.g. Senior 1"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">Stream</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Stream</label>
                 <input 
                   type="text" 
                   value={formData.stream} onChange={e => setFormData({...formData, stream: e.target.value})}
-                  className="w-full bg-slate-950 border border-white/10 rounded-lg p-2.5 text-sm text-white"
+                  className="w-full bg-slate-950 border border-black/10 rounded-lg p-2.5 text-sm text-white"
                   placeholder="e.g. Blue"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">Class Teacher</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">Class Teacher</label>
                 <select 
                   required
                   value={formData.classTeacherId} onChange={e => setFormData({...formData, classTeacherId: e.target.value})}
-                  className="w-full bg-slate-950 border border-white/10 rounded-lg p-2.5 text-sm text-white"
+                  className="w-full bg-slate-950 border border-black/10 rounded-lg p-2.5 text-sm text-white"
                 >
                   <option value="">Select a teacher...</option>
                   {teachers.map(t => (
@@ -163,3 +163,5 @@ export default function AdminClasses() {
     </div>
   );
 }
+
+

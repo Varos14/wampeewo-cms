@@ -33,12 +33,12 @@ export default function StudentPresentations() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h2 className="text-xl font-bold text-slate-100 tracking-tight">Online Classes</h2>
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Online Classes</h2>
         <p className="text-xs text-slate-500 mt-1">Join scheduled Google Meet presentations from your teachers.</p>
       </div>
 
       {loading ? (
-        <div className="text-slate-400 text-sm">Loading presentations...</div>
+        <div className="text-slate-600 text-sm">Loading presentations...</div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {presentations.length === 0 && (
@@ -48,11 +48,11 @@ export default function StudentPresentations() {
             <Card key={pres.id} className="p-5" variant="glass">
               <div className="flex justify-between items-start mb-3">
                 <Badge color="blue">Upcoming</Badge>
-                <span className="text-xs font-semibold text-slate-400">
+                <span className="text-xs font-semibold text-slate-600">
                   {new Date(pres.scheduledAt).toLocaleString()}
                 </span>
               </div>
-              <h3 className="font-bold text-slate-100 text-lg mb-2">{pres.title}</h3>
+              <h3 className="font-bold text-slate-900 text-lg mb-2">{pres.title}</h3>
               <a 
                 href={pres.meetLink} 
                 target="_blank" 
@@ -68,3 +68,5 @@ export default function StudentPresentations() {
     </div>
   );
 }
+
+

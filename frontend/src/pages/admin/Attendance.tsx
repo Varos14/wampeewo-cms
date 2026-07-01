@@ -90,19 +90,19 @@ export default function AdminAttendance() {
     }
   };
 
-  if (loading) return <div className="text-slate-400 p-8 text-center animate-pulse">Loading attendance logs...</div>;
+  if (loading) return <div className="text-slate-600 p-8 text-center animate-pulse">Loading attendance logs...</div>;
 
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-xl font-bold text-slate-100 tracking-tight">Attendance Logs</h2>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Attendance Logs</h2>
           <p className="text-xs text-slate-500 mt-1">Review school-wide student attendance sheets.</p>
         </div>
         <select
           value={selectedClassId}
           onChange={(e) => setSelectedClassId(e.target.value)}
-          className="bg-slate-800 border border-white/10 rounded-xl px-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+          className="bg-white border border-black/10 rounded-xl px-4 py-2 text-sm text-slate-800 focus:outline-none focus:border-blue-500"
         >
           <option value="all">All Classes / Streams</option>
           {classes.map(c => (
@@ -139,24 +139,24 @@ export default function AdminAttendance() {
 
           return (
             <div key={date} className="space-y-3">
-              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider pl-1">
+              <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wider pl-1">
                 {formatDate(date, 'PPPP')}
               </h3>
 
               <Card variant="glass" className="overflow-hidden">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-white/5 text-left bg-white/1">
-                      <th className="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Student Name</th>
-                      <th className="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Reg No.</th>
-                      <th className="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Status</th>
+                    <tr className="border-b border-black/5 text-left bg-white/50">
+                      <th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider">Student Name</th>
+                      <th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider">Reg No.</th>
+                      <th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-white/5">
+                  <tbody className="divide-y divide-black/5">
                     {records.map(record => {
                       const student = getStudentInfo(record.studentId);
                       return (
-                        <tr key={record.id} className="hover:bg-white/2 transition-colors">
+                        <tr key={record.id} className="hover:bg-black/5 transition-colors">
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-3">
                               <img
@@ -164,10 +164,10 @@ export default function AdminAttendance() {
                                 alt={student.name}
                                 className="w-7 h-7 rounded bg-slate-700 shrink-0"
                               />
-                              <span className="font-semibold text-slate-200">{student.name}</span>
+                              <span className="font-semibold text-slate-800">{student.name}</span>
                             </div>
                           </td>
-                          <td className="px-4 py-3 font-mono text-xs text-slate-400">{student.regNo}</td>
+                          <td className="px-4 py-3 font-mono text-xs text-slate-600">{student.regNo}</td>
                           <td className="px-4 py-3">{getStatusBadge(record.status)}</td>
                         </tr>
                       );
@@ -182,3 +182,5 @@ export default function AdminAttendance() {
     </div>
   );
 }
+
+
