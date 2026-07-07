@@ -29,6 +29,7 @@ import TeacherMyClasses from './pages/teacher/MyClasses';
 import TeacherTimetable from './pages/teacher/Timetable';
 import TeacherPresentations from './pages/teacher/Presentations';
 import TeacherMaterials from './pages/teacher/Materials';
+import TeacherSkillsAssessment from './pages/teacher/SkillsAssessment';
 
 // Student Pages
 import StudentDashboard from './pages/student/Dashboard';
@@ -95,6 +96,7 @@ export const routes: RouteObject[] = [
           { path: 'timetable', element: <TeacherTimetable /> },
           { path: 'presentations', element: <TeacherPresentations /> },
           { path: 'materials', element: <TeacherMaterials /> },
+          { path: 'skills', element: <TeacherSkillsAssessment /> },
         ],
       },
     ],

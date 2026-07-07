@@ -679,6 +679,36 @@ export const gradeService = {
   }
 };
 
+export const skillService = {
+  list: async (studentId: string): Promise<any[]> => {
+    if (MOCK_MODE) {
+      await delay();
+      return [];
+    }
+    return request<any>(`/skills?studentId=${studentId}`).then(res => res.items || []);
+  },
+  create: async (data: { studentId: string, name: string, value: number }): Promise<any> => {
+    return handleMutation<any>(
+      'skillService',
+      'create',
+      [data],
+      `Update Skill: ${data.name} to ${data.value} for student ${data.studentId}`,
+      null,
+      () => data,
+      async () => {
+        if (MOCK_MODE) {
+          await delay();
+          return data;
+        }
+        return request<any>('/skills', {
+          method: 'POST',
+          body: JSON.stringify(data)
+        });
+      }
+    );
+  }
+};
+
 export const materialService = {
   list: async (filters?: { teacherId?: string }): Promise<any[]> => {
     if (MOCK_MODE) {

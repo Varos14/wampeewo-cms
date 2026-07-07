@@ -19,6 +19,10 @@ export default function TeacherAssignments() {
   const [type, setType] = useState<'assignment'|'exam'>('assignment');
   const [submitting, setSubmitting] = useState(false);
 
+  const [gradingSubmission, setGradingSubmission] = useState<{id: string, aoiId: string} | null>(null);
+  const [grade, setGrade] = useState<1|2|3>(1);
+  const [feedback, setFeedback] = useState('');
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
@@ -145,12 +149,28 @@ export default function TeacherAssignments() {
                         </p>
 
                         {sub.feedback ? (
-                          <div className="bg-blue-500/5 border border-blue-500/10 rounded-lg p-2.5 text-2xs">
-                            <span className="font-bold text-blue-400 block mb-0.5">Teacher Feedback</span>
+                          <div className="bg-blue-500/5 border border-blue-500/10 rounded-lg p-2.5 text-2xs cursor-pointer hover:bg-blue-500/10 transition-colors"
+                               onClick={() => {
+                                 setGradingSubmission({ id: sub.id, aoiId: sub.aoiId });
+                                 setGrade((sub.grade as any) || 1);
+                                 setFeedback(sub.feedback || '');
+                               }}>
+                            <div className="flex justify-between items-center mb-0.5">
+                              <span className="font-bold text-blue-400 block">Teacher Feedback</span>
+                              <span className="text-blue-500 underline text-[10px]">Edit Grade</span>
+                            </div>
                             <p className="text-slate-600 italic font-medium">"{sub.feedback}"</p>
                           </div>
                         ) : (
-                          <div className="text-2xs text-slate-500 italic">No feedback provided yet. Click to grade.</div>
+                          <div 
+                            className="text-2xs text-blue-500 font-bold cursor-pointer hover:underline inline-block"
+                            onClick={() => {
+                              setGradingSubmission({ id: sub.id, aoiId: sub.aoiId });
+                              setGrade(1);
+                              setFeedback('');
+                            }}>
+                            No feedback provided yet. Click to grade.
+                          </div>
                         )}
                       </Card>
                     );
@@ -218,6 +238,45 @@ export default function TeacherAssignments() {
               <div className="flex justify-end gap-3 pt-4">
                 <Button variant="ghost" onClick={() => setShowModal(false)}>Cancel</Button>
                 <Button variant="primary" type="submit" loading={submitting}>Submit for Approval</Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {gradingSubmission && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
+          <div className="relative w-full max-w-md bg-white border border-black/10 rounded-2xl shadow-2xl p-6">
+            <h3 className="text-lg font-bold text-slate-900 mb-4">Grade Submission</h3>
+            <form onSubmit={async (e) => {
+              e.preventDefault();
+              setSubmitting(true);
+              try {
+                await aoiService.gradeSubmission(gradingSubmission.id, grade, feedback);
+                setGradingSubmission(null);
+                fetchData(); // Trigger a re-fetch of submissions
+              } catch(err) {
+                console.error(err);
+                alert('Failed to submit grade.');
+              } finally {
+                setSubmitting(false);
+              }
+            }} className="space-y-4">
+              <div>
+                <label className="block text-slate-600 font-medium mb-1 text-xs">Competency Score (1 to 3)</label>
+                <select value={grade} onChange={e=>setGrade(Number(e.target.value) as 1|2|3)} className="w-full bg-white/80 border border-black/10 rounded-xl px-3 py-2 text-slate-800 focus:border-blue-500 text-sm">
+                  <option value={1}>1 - Basic (Developing)</option>
+                  <option value={2}>2 - Moderate (Proficient)</option>
+                  <option value={3}>3 - Advanced (Exemplary)</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-slate-600 font-medium mb-1 text-xs">Feedback</label>
+                <textarea required value={feedback} onChange={e=>setFeedback(e.target.value)} className="w-full h-24 bg-white/80 border border-black/10 rounded-xl px-3 py-2 text-slate-800 focus:border-blue-500 text-sm" placeholder="Provide constructive feedback..." />
+              </div>
+              <div className="flex justify-end gap-3 pt-4">
+                <Button variant="ghost" type="button" onClick={() => setGradingSubmission(null)}>Cancel</Button>
+                <Button variant="primary" type="submit" loading={submitting}>Submit Grade</Button>
               </div>
             </form>
           </div>
