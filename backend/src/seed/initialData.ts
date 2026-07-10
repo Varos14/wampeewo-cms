@@ -247,22 +247,22 @@ export async function seedInitialData() {
     console.log('[seed] Seeding initial mock data into database...');
 
     // Hash passwords
-    const adminPass = await hashPassword('admin123');
+    const adminPass = await hashPassword('@AmGerald14');
     const teacherPass = await hashPassword('teacher123');
     const studentPass = await hashPassword('student123');
 
     // Users base
     let userIdCount = 1;
     const users: any[] = [];
-    const pushUser = (name: string, role: string, pass: string, emailPrefix: string) => {
+    const pushUser = (name: string, role: string, pass: string, emailStr: string) => {
         const id = 'u' + userIdCount++;
-        const email = emailPrefix + '@wampeewo.com';
+        const email = emailStr.includes('@') ? emailStr : emailStr + '@wampeewo.com';
         users.push({ id, name, email, password_hash: pass, role, avatar_url: 'https://api.dicebear.com/7.x/initials/svg?seed=' + encodeURIComponent(name) });
         return id;
     };
 
     // Seed Admin
-    pushUser('Nalule Margaret', 'admin', adminPass, 'admin');
+    pushUser('Nalule Margaret', 'admin', adminPass, 'geraldvaros@gmail.com');
 
     // Seed Teachers
     const teacherNames = [
