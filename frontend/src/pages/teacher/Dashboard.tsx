@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Card } from '../../components/ui/Card';
 import { StatCard } from '../../components/ui/StatCard';
 import { DonutChart } from '../../components/charts/DonutChart';
@@ -13,17 +13,6 @@ export default function TeacherDashboard() {
     loading, fetchData 
   } = useAppDataStore();
 
-  const [messages, setMessages] = useState([
-    { id: 1, sender: 'Admin', text: 'Please ensure all mid-term marks are submitted by Friday.', isMe: false },
-    { id: 2, sender: 'You', text: 'Noted, I will submit mine tomorrow.', isMe: true }
-  ]);
-  const [newMessage, setNewMessage] = useState('');
-
-  const handleSendMessage = () => {
-    if (!newMessage.trim()) return;
-    setMessages(prev => [...prev, { id: Date.now(), sender: 'You', text: newMessage.trim(), isMe: true }]);
-    setNewMessage('');
-  };
 
   useEffect(() => {
     fetchData();
@@ -161,32 +150,19 @@ export default function TeacherDashboard() {
 
       {/* Timetable preview and announcements */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="p-6" variant="glass">
-          <h3 className="text-base font-bold text-slate-800 mb-4">Messaging Panel</h3>
-          <div className="space-y-3 max-h-64 overflow-y-auto pr-2">
-            {messages.map(msg => (
-              <div key={msg.id} className={`bg-white/50 p-3 rounded-lg border border-black/5 ${msg.isMe ? 'text-right' : ''}`}>
-                <span className="text-xs font-bold text-slate-800">{msg.sender}</span>
-                <p className="text-xs text-slate-600 mt-1">{msg.text}</p>
-              </div>
-            ))}
+        <Card className="p-6 flex flex-col justify-center items-center text-center space-y-4 bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-100" variant="glass">
+          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+            <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
           </div>
-          <div className="mt-4 flex gap-2">
-            <input 
-              type="text" 
-              placeholder="Type a message..." 
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-              className="w-full bg-white border border-black/10 rounded-lg px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-blue-500" 
-            />
-            <button 
-              onClick={handleSendMessage}
-              className="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded-lg text-xs font-bold transition-all active:scale-95"
-            >
-              Send
-            </button>
+          <div>
+            <h3 className="text-base font-bold text-slate-800">Messages</h3>
+            <p className="text-xs text-slate-500 mt-1">Chat privately with Admins and other Teachers.</p>
           </div>
+          <a href="/teacher/messages" className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-xl text-sm font-bold transition-all shadow-md shadow-blue-500/20 active:scale-95">
+            Open Messages
+          </a>
         </Card>
 
         <Card className="lg:col-span-2 p-6" variant="glass">

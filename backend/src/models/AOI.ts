@@ -11,4 +11,5 @@ export type AOI = {
   rubric: any;
   status: AOIStatus;
   type: AOIType;
+  feedback?: string;
 };

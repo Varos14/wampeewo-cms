@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
-import { studentService, classService } from '../../services/api';
+import { studentService, classService, adminService } from '../../services/api';
 import { Student, Class } from '../../types';
 import { useSearchParams } from 'react-router-dom';
 import { StudentProfileModal } from './StudentProfileModal';
@@ -28,7 +28,6 @@ export default function AdminStudents() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [regNumber, setRegNumber] = useState('');
   const [gender, setGender] = useState<'Male' | 'Female'>('Male');
   const [classId, setClassId] = useState('');
 
@@ -77,7 +76,6 @@ export default function AdminStudents() {
       name,
       email,
       password,
-      registrationNumber: regNumber,
       gender,
       classId
     };
@@ -90,7 +88,6 @@ export default function AdminStudents() {
       setName('');
       setEmail('');
       setPassword('');
-      setRegNumber('');
       setGender('Male');
 
       // Reload lists
@@ -106,6 +103,17 @@ export default function AdminStudents() {
       setFormError(err.message || 'Registration failed. Check details and try again.');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleDeleteUser = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!window.confirm('Are you sure you want to delete this student? This action cannot be fully undone.')) return;
+    try {
+      await adminService.deleteUser(id);
+      await loadData();
+    } catch (err: any) {
+      alert(err.message || 'Failed to delete user.');
     }
   };
 
@@ -181,6 +189,7 @@ export default function AdminStudents() {
                   <th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider">Reg No.</th>
                   <th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider">Class</th>
                   <th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider">Gender</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-black/5">
@@ -205,6 +214,14 @@ export default function AdminStudents() {
                     </td>
                     <td className="px-4 py-3">
                       <Badge color={student.gender === 'Male' ? 'indigo' : 'rose'}>{student.gender}</Badge>
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <button 
+                        onClick={(e) => handleDeleteUser(student.id, e)}
+                        className="text-xs font-bold text-rose-500 hover:text-rose-600 bg-rose-500/10 hover:bg-rose-500/20 px-3 py-1.5 rounded-lg transition-colors"
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -278,19 +295,8 @@ export default function AdminStudents() {
                 </div>
               </div>
 
-              {/* Reg No, Gender, Class */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-slate-600 font-medium mb-1">Reg Number</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="WNS/2026/089"
-                    value={regNumber}
-                    onChange={e => setRegNumber(e.target.value)}
-                    className="w-full bg-white/80 border border-black/10 rounded-xl px-3.5 py-2.5 text-slate-800 placeholder-slate-500 focus:outline-none focus:border-blue-500"
-                  />
-                </div>
+              {/* Gender, Class */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-slate-600 font-medium mb-1">Gender</label>
                   <select

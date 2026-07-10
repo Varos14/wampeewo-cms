@@ -11,6 +11,11 @@ const Icons = {
       <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
     </svg>
   ),
+  Messages: () => (
+    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+    </svg>
+  ),
   Students: () => (
     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
       <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -106,6 +111,7 @@ export const Sidebar: React.FC = () => {
   const links: Record<string, LinkItem[]> = {
     admin: [
       { to: '/admin', label: 'Dashboard', icon: <Icons.Dashboard /> },
+      { to: '/admin/messages', label: 'Messages', icon: <Icons.Messages /> },
       { to: '/admin/students', label: 'Students', icon: <Icons.Students /> },
       { to: '/admin/teachers', label: 'Teachers', icon: <Icons.Teachers /> },
       { to: '/admin/classes', label: 'Classes', icon: <Icons.Classes /> },
@@ -120,6 +126,7 @@ export const Sidebar: React.FC = () => {
     ],
     teacher: [
       { to: '/teacher', label: 'Dashboard', icon: <Icons.Dashboard /> },
+      { to: '/teacher/messages', label: 'Messages', icon: <Icons.Messages /> },
       { to: '/teacher/attendance', label: 'Attendance', icon: <Icons.Attendance /> },
       { to: '/teacher/assignments', label: 'Assignments', icon: <Icons.Assignments /> },
       { to: '/teacher/gradebook', label: 'Grade Book', icon: <Icons.GradeBook /> },

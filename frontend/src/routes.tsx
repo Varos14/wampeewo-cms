@@ -7,6 +7,9 @@ import AuthLayout from './layouts/AuthLayout';
 import DashboardLayout from './layouts/DashboardLayout';
 import { RoleGuard } from './components/guards/RoleGuard';
 
+// Shared Pages
+import Messages from './pages/shared/Messages';
+
 // Admin Pages
 import AdminDashboard from './pages/admin/Dashboard';
 import AdminStudents from './pages/admin/Students';
@@ -65,6 +68,7 @@ export const routes: RouteObject[] = [
         element: <DashboardLayout />,
         children: [
           { path: '', element: <AdminDashboard /> },
+          { path: 'messages', element: <Messages /> },
           { path: 'students', element: <AdminStudents /> },
           { path: 'teachers', element: <AdminTeachers /> },
           { path: 'classes', element: <AdminClasses /> },
@@ -89,6 +93,7 @@ export const routes: RouteObject[] = [
         element: <DashboardLayout />,
         children: [
           { path: '', element: <TeacherDashboard /> },
+          { path: 'messages', element: <Messages /> },
           { path: 'attendance', element: <TeacherAttendance /> },
           { path: 'assignments', element: <TeacherAssignments /> },
           { path: 'gradebook', element: <TeacherGradeBook /> },

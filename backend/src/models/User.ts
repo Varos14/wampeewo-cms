@@ -5,5 +5,7 @@ export type User = {
   email: string;
   passwordHash: string;
   role: UserRole;
+  isActive: boolean;
+  registrationNumber?: string;
   createdAt: Date;
 };

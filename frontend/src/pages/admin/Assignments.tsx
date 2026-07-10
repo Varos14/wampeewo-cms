@@ -12,6 +12,11 @@ export default function AdminAssignments() {
   const [assignments, setAssignments] = useState<AOI[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Rejection Modal State
+  const [rejectId, setRejectId] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
   const loadData = async () => {
     setLoading(true);
     try {
@@ -30,12 +35,20 @@ export default function AdminAssignments() {
     loadData();
   }, []);
 
-  const handleApprove = async (id: string, status: 'approved' | 'rejected') => {
+  const handleApprove = async (id: string, status: 'approved' | 'rejected', feedbackText?: string) => {
     try {
-      await aoiService.approve(id, status);
+      setSubmitting(true);
+      await aoiService.approve(id, status, feedbackText);
       await loadData();
+      if (status === 'rejected') {
+        setRejectId(null);
+        setFeedback('');
+      }
     } catch (err) {
       console.error(err);
+      alert('Failed to update assignment status.');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -83,10 +96,10 @@ export default function AdminAssignments() {
                   
                   {(aoi.status === 'pending' || !aoi.status) && (
                     <div className="flex gap-2 mt-2">
-                      <Button variant="ghost" size="sm" onClick={() => handleApprove(aoi.id, 'rejected')}>
+                      <Button variant="ghost" size="sm" onClick={() => setRejectId(aoi.id)}>
                         Reject
                       </Button>
-                      <Button variant="primary" size="sm" onClick={() => handleApprove(aoi.id, 'approved')} className="bg-emerald-600 hover:bg-emerald-500 text-white">
+                      <Button variant="primary" size="sm" onClick={() => handleApprove(aoi.id, 'approved')} className="bg-emerald-600 hover:bg-emerald-500 text-white" disabled={submitting}>
                         Approve
                       </Button>
                     </div>
@@ -95,6 +108,38 @@ export default function AdminAssignments() {
               </Card>
             )
           })}
+        </div>
+      )}
+
+      {/* Rejection Modal */}
+      {rejectId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+          <div className="bg-white border border-black/10 rounded-2xl shadow-2xl p-6 w-full max-w-md animate-fade-in">
+            <h3 className="text-lg font-bold text-slate-900 mb-2">Reject Assignment</h3>
+            <p className="text-sm text-slate-500 mb-4">Please provide feedback to the teacher explaining why this assignment is being rejected.</p>
+            
+            <textarea
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 min-h-[120px] mb-4"
+              placeholder="e.g., The rubric is missing grading criteria for grammar."
+              value={feedback}
+              onChange={e => setFeedback(e.target.value)}
+            />
+
+            <div className="flex justify-end gap-3">
+              <Button variant="ghost" onClick={() => { setRejectId(null); setFeedback(''); }} disabled={submitting}>
+                Cancel
+              </Button>
+              <Button 
+                variant="primary" 
+                className="bg-rose-600 hover:bg-rose-500 text-white" 
+                onClick={() => handleApprove(rejectId, 'rejected', feedback)}
+                disabled={!feedback.trim() || submitting}
+                loading={submitting}
+              >
+                Confirm Rejection
+              </Button>
+            </div>
+          </div>
         </div>
       )}
     </div>

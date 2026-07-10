@@ -15,6 +15,8 @@ import { timetableRoutes } from './routes/timetableRoutes';
 import { gradeRoutes } from './routes/gradeRoutes';
 import { materialRoutes } from './routes/materialRoutes';
 import { presentationRoutes } from './routes/presentationRoutes';
+import { adminRoutes } from './routes/adminRoutes';
+import { messageRoutes } from './routes/messageRoutes';
 import { requireAuth } from './middleware/auth';
 
 export function registerRoutes(app: Express) {
@@ -38,4 +40,6 @@ export function registerRoutes(app: Express) {
   app.use('/api/grades', gradeRoutes);
   app.use('/api/materials', materialRoutes);
   app.use('/api/presentations', presentationRoutes);
+  app.use('/api/admin', adminRoutes);
+  app.use('/api/messages', messageRoutes);
 }

@@ -15,12 +15,16 @@ export async function seedInitialData() {
         email VARCHAR(100) UNIQUE NOT NULL,
         password_hash VARCHAR(255) NOT NULL,
         role VARCHAR(50) NOT NULL,
-        avatar_url VARCHAR(255)
+        avatar_url VARCHAR(255),
+        is_active BOOLEAN DEFAULT TRUE
       )
     `);
 
     try {
       await db.query('ALTER TABLE users ADD COLUMN avatar_url VARCHAR(255)');
+    } catch (err: any) {}
+    try {
+      await db.query('ALTER TABLE users ADD COLUMN is_active BOOLEAN DEFAULT TRUE');
     } catch (err: any) {}
 
     await db.query(`
@@ -86,7 +90,8 @@ export async function seedInitialData() {
         teacher_id VARCHAR(50) NOT NULL,
         rubric JSON NOT NULL,
         status VARCHAR(50) DEFAULT 'pending',
-        type VARCHAR(50) DEFAULT 'assignment'
+        type VARCHAR(50) DEFAULT 'assignment',
+        feedback TEXT
       )
     `);
 
@@ -195,6 +200,17 @@ export async function seedInitialData() {
       )
     `);
 
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS messages (
+        id VARCHAR(50) PRIMARY KEY,
+        sender_id VARCHAR(50) NOT NULL,
+        receiver_id VARCHAR(50) NOT NULL,
+        content TEXT NOT NULL,
+        is_read BOOLEAN DEFAULT FALSE,
+        created_at VARCHAR(50) NOT NULL
+      )
+    `);
+
     // Optionally drop the parent and fee tables if they exist from a previous run
     await db.query('DROP TABLE IF EXISTS fee_payments');
     await db.query('DROP TABLE IF EXISTS fee_statements');
@@ -210,6 +226,19 @@ export async function seedInitialData() {
       try {
         await db.query("ALTER TABLE aois ADD COLUMN status VARCHAR(50) DEFAULT 'pending'");
         await db.query("ALTER TABLE aois ADD COLUMN type VARCHAR(50) DEFAULT 'assignment'");
+        await db.query("ALTER TABLE aois ADD COLUMN feedback TEXT");
+        await db.query('ALTER TABLE users ADD COLUMN is_active BOOLEAN DEFAULT TRUE');
+        
+        await db.query(`
+          CREATE TABLE IF NOT EXISTS messages (
+            id VARCHAR(50) PRIMARY KEY,
+            sender_id VARCHAR(50) NOT NULL,
+            receiver_id VARCHAR(50) NOT NULL,
+            content TEXT NOT NULL,
+            is_read BOOLEAN DEFAULT FALSE,
+            created_at VARCHAR(50) NOT NULL
+          )
+        `);
       } catch(e) {}
       
       return;
@@ -288,8 +317,8 @@ export async function seedInitialData() {
     // Insert all users
     for (const u of users) {
       await db.query(
-        'INSERT INTO users (id, name, email, password_hash, role, avatar_url) VALUES (?, ?, ?, ?, ?, ?)',
-        [u.id, u.name, u.email, u.password_hash, u.role, u.avatar_url]
+        'INSERT INTO users (id, name, email, password_hash, role, avatar_url, is_active) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [u.id, u.name, u.email, u.password_hash, u.role, u.avatar_url, true]
       );
     }
 

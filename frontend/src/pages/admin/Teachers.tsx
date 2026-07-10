@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
-import { teacherService, classService } from '../../services/api';
+import { teacherService, classService, adminService } from '../../services/api';
 import { Teacher, Class } from '../../types';
 import { useSearchParams } from 'react-router-dom';
 import { TeacherProfileModal } from './TeacherProfileModal';
@@ -140,6 +140,17 @@ export default function AdminTeachers() {
     }
   };
 
+  const handleDeleteUser = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!window.confirm('Are you sure you want to delete this teacher? This action cannot be fully undone.')) return;
+    try {
+      await adminService.deleteUser(id);
+      await loadData();
+    } catch (err: any) {
+      alert(err.message || 'Failed to delete user.');
+    }
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-start">
@@ -217,6 +228,15 @@ export default function AdminTeachers() {
                         <span className="text-slate-500 italic text-2xs">None assigned</span>
                       )}
                     </div>
+                  </div>
+                  
+                  <div className="mt-4 flex justify-end">
+                    <button 
+                      onClick={(e) => handleDeleteUser(teacher.id, e)}
+                      className="text-xs font-bold text-rose-500 hover:text-rose-600 bg-rose-500/10 hover:bg-rose-500/20 px-3 py-1.5 rounded-lg transition-colors"
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
               </div>

@@ -6,7 +6,7 @@ import {
 import * as mock from '../utils/mockData';
 import { useAuthStore } from '../store/authStore';
 
-const MOCK_MODE = true;
+const MOCK_MODE = false;
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
 const delay = (ms = 400) => new Promise(resolve => setTimeout(resolve, ms));
@@ -169,7 +169,7 @@ export const studentService = {
           mock.mockStudents.push(newStudent);
           return newStudent;
         }
-        return request<any>('/students', {
+        return request<any>('/admin/students', {
           method: 'POST',
           body: JSON.stringify(data)
         });
@@ -201,7 +201,7 @@ export const teacherService = {
           mock.mockTeachers.push(newTeacher);
           return newTeacher;
         }
-        return request<any>('/teachers', {
+        return request<any>('/admin/teachers', {
           method: 'POST',
           body: JSON.stringify(data)
         });
@@ -279,7 +279,7 @@ export const subjectService = {
           await delay();
           return { id: 's' + Date.now(), ...data };
         }
-        return request<Subject>('/subjects', {
+        return request<Subject>('/admin/subjects', {
           method: 'POST',
           body: JSON.stringify(data)
         });
@@ -417,16 +417,17 @@ export const aoiService = {
       }
     );
   },
-  approve: async (id: string, status: string = 'approved'): Promise<AOI> => {
+  approve: async (id: string, status: string = 'approved', feedback?: string): Promise<AOI> => {
     return handleMutation<AOI>(
       'aoiService',
       'approve',
-      [id, status],
+      [id, status, feedback],
       `Approve AOI ${id} as ${status}`,
       null,
       () => ({
         id,
         status: status as any,
+        feedback,
         title: '',
         description: '',
         classId: '',
@@ -440,13 +441,36 @@ export const aoiService = {
         if (MOCK_MODE) {
           await delay();
           const aoi = mock.mockAOIs.find(a => a.id === id);
-          if (aoi) aoi.status = status as any;
+          if (aoi) {
+            aoi.status = status as any;
+            (aoi as any).feedback = feedback;
+          }
           return aoi as any;
         }
-        return request<AOI>(`/aoi/${id}/approve`, {
+        return request<AOI>(`/admin/assignments/${id}/status`, {
           method: 'PUT',
-          body: JSON.stringify({ status })
+          body: JSON.stringify({ status, feedback })
         });
+      }
+    );
+  }
+};
+
+export const adminService = {
+  deleteUser: async (userId: string): Promise<void> => {
+    return handleMutation<void>(
+      'adminService',
+      'deleteUser',
+      [userId],
+      `Delete user: ${userId}`,
+      null,
+      () => {},
+      async () => {
+        if (MOCK_MODE) {
+          await delay();
+          return;
+        }
+        await request<void>(`/admin/users/${userId}`, { method: 'DELETE' });
       }
     );
   }
@@ -771,5 +795,72 @@ export const presentationService = {
         });
       }
     );
+  }
+};
+
+export interface Message {
+  id: string;
+  senderId: string;
+  receiverId: string;
+  content: string;
+  isRead: boolean;
+  createdAt: string;
+}
+
+export interface Conversation {
+  otherUserId: string;
+  otherUserName: string;
+  otherUserAvatar: string;
+  lastMessage: Message;
+}
+
+export const messageService = {
+  sendMessage: async (receiverId: string, content: string): Promise<Message> => {
+    return handleMutation<Message>(
+      'messageService',
+      'sendMessage',
+      [receiverId, content],
+      `Send message to ${receiverId}`,
+      null,
+      () => ({
+        id: 'msg_' + Date.now(),
+        senderId: 'mock_sender',
+        receiverId,
+        content,
+        isRead: false,
+        createdAt: new Date().toISOString()
+      }),
+      async () => {
+        if (MOCK_MODE) {
+          await delay();
+          return {
+            id: 'msg_' + Date.now(),
+            senderId: 'mock_sender',
+            receiverId,
+            content,
+            isRead: false,
+            createdAt: new Date().toISOString()
+          };
+        }
+        return request<Message>('/messages', {
+          method: 'POST',
+          body: JSON.stringify({ receiverId, content })
+        });
+      }
+    );
+  },
+  getConversations: async (): Promise<Conversation[]> => {
+    if (MOCK_MODE) {
+      await delay();
+      return [];
+    }
+    return request<Conversation[]>('/messages/conversations');
+  },
+  getMessages: async (userId: string): Promise<Message[]> => {
+    if (MOCK_MODE) {
+      await delay();
+      return [];
+    }
+    return request<Message[]>(`/messages/${userId}`);
   }
 };
