@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Card } from '../../components/ui/Card';
+
 import { messageService, Conversation, Message } from '../../services/api';
 import { useAuthStore } from '../../store/authStore';
 import { useAppDataStore } from '../../store/appDataStore';
