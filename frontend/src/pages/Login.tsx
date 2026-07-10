@@ -176,7 +176,7 @@ export default function Login() {
 
       {/* Footer copyright */}
       <div className="mt-8 pt-4 border-t border-black/5 text-center text-[10px] text-slate-500">
-        &copy; 2024 Wampeewo. All rights reserved. <span className="hover:underline cursor-pointer">Terms</span> | <span className="hover:underline cursor-pointer">Privacy</span>
+        &copy; 2026 Wampeewo. All rights reserved. <span className="hover:underline cursor-pointer">Terms</span> | <span className="hover:underline cursor-pointer">Privacy</span>
       </div>
 
       {/* Collapsible Quick Access panel for testing/demo */}

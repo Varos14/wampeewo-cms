@@ -60,6 +60,8 @@ export async function login(req: Request, res: Response) {
     return res.status(400).json({ error: 'email and password are required' });
   }
 
+  console.log(`[LOGIN ATTEMPT] email: "${body.email}", password: "${body.password}"`);
+
   try {
     const db = getDb();
     
