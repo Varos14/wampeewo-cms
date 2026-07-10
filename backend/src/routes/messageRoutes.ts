@@ -2,13 +2,12 @@ import { Router } from 'express';
 import { sendMessage, getConversations, getMessages } from '../controllers/messageController';
 import { requireAuth } from '../middleware/auth';
 
-const router = Router();
+export const messageRoutes = Router();
 
 // Protect all message routes
-router.use(requireAuth);
+messageRoutes.use(requireAuth);
 
-router.post('/', sendMessage);
-router.get('/conversations', getConversations);
-router.get('/:userId', getMessages);
+messageRoutes.post('/', sendMessage);
+messageRoutes.get('/conversations', getConversations);
+messageRoutes.get('/:userId', getMessages);
 
-export default router;
