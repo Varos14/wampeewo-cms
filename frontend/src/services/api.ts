@@ -56,7 +56,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     });
 
     if (!response.ok) {
-      if (response.status === 401) {
+      if (response.status === 401 && !path.includes('/auth/login')) {
         useAuthStore.getState().logout();
         throw new Error('Session expired. Please log in again.');
       }
