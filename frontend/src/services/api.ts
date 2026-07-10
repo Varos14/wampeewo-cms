@@ -417,6 +417,62 @@ export const aoiService = {
       }
     );
   },
+  gradeDirect: async (studentId: string, aoiId: string, grade: number, feedback?: string): Promise<any> => {
+    return handleMutation<any>(
+      'aoiService',
+      'gradeDirect',
+      [studentId, aoiId, grade, feedback],
+      `Direct Grade for Student ${studentId} on AOI ${aoiId}`,
+      null,
+      () => {
+        const existing = mock.mockSubmissions.find(s => s.studentId === studentId && s.aoiId === aoiId);
+        if (existing) {
+          existing.grade = grade as any;
+          if (feedback !== undefined) existing.feedback = feedback;
+          return existing;
+        } else {
+          const newSub = {
+            id: `sub_${Date.now()}`,
+            studentId,
+            aoiId,
+            grade: grade as any,
+            feedback: feedback || '',
+            content: 'Direct evaluation',
+            submittedAt: new Date().toISOString()
+          };
+          mock.mockSubmissions.push(newSub);
+          return newSub;
+        }
+      },
+      async () => {
+        if (MOCK_MODE) {
+          await delay();
+          const existing = mock.mockSubmissions.find(s => s.studentId === studentId && s.aoiId === aoiId);
+          if (existing) {
+            existing.grade = grade as any;
+            if (feedback !== undefined) existing.feedback = feedback;
+            return existing;
+          } else {
+            const newSub = {
+              id: `sub_${Date.now()}`,
+              studentId,
+              aoiId,
+              grade: grade as any,
+              feedback: feedback || '',
+              content: 'Direct evaluation',
+              submittedAt: new Date().toISOString()
+            };
+            mock.mockSubmissions.push(newSub);
+            return newSub;
+          }
+        }
+        return request<any>('/submissions/grade-direct', {
+          method: 'POST',
+          body: JSON.stringify({ studentId, aoiId, grade, feedback })
+        });
+      }
+    );
+  },
   approve: async (id: string, status: string = 'approved', feedback?: string): Promise<AOI> => {
     return handleMutation<AOI>(
       'aoiService',
@@ -477,6 +533,16 @@ export const adminService = {
 };
 
 export const attendanceService = {
+  getStats: async (): Promise<{ attendancePercentage: number; attendanceTrends: { date: string; value: number }[] }> => {
+    if (MOCK_MODE) {
+      await delay();
+      return {
+        attendancePercentage: mock.getAdminStats().attendancePercentage,
+        attendanceTrends: mock.getAdminStats().attendanceTrends
+      };
+    }
+    return request<{ attendancePercentage: number; attendanceTrends: { date: string; value: number }[] }>('/attendance/stats');
+  },
   list: async (classId: string, date: string): Promise<Attendance[]> => {
     if (MOCK_MODE) {
       await delay();
@@ -534,6 +600,35 @@ export const examService = {
       return mock.mockExamResults.filter(r => r.studentId === studentId);
     }
     return request<ExamResult[]>(`/results?studentId=${studentId}`);
+  },
+  listScheduled: async (): Promise<any[]> => {
+    if (MOCK_MODE) {
+      await delay();
+      return mock.mockExams;
+    }
+    return request<any[]>('/results/schedule');
+  },
+  schedule: async (data: any): Promise<any> => {
+    return handleMutation<any>(
+      'examService',
+      'schedule',
+      [data],
+      `Schedule Exam: ${data.name} - ${data.subjectName}`,
+      'temp_ex',
+      (tempId) => ({ ...data, id: tempId }),
+      async () => {
+        if (MOCK_MODE) {
+          await delay();
+          const newExam = { ...data, id: `exam_${Date.now()}` };
+          mock.mockExams.push(newExam);
+          return newExam;
+        }
+        return request<any>('/results/schedule', {
+          method: 'POST',
+          body: JSON.stringify(data)
+        });
+      }
+    );
   }
 };
 

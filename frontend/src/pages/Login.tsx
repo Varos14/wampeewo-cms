@@ -187,21 +187,21 @@ export default function Login() {
           </summary>
           <div className="grid grid-cols-3 gap-1.5 mt-2">
             <button
-              onClick={() => handleQuickLogin('admin@wampeewo.com', 'admin123', 'admin')}
+              onClick={() => handleQuickLogin('geraldvaros@gmail.com', '@AmGerald14', 'admin')}
               disabled={loading}
               className="p-1.5 border border-indigo-500/10 hover:border-indigo-500/30 bg-indigo-500/5 hover:bg-indigo-500/10 rounded-lg text-[9px] font-bold text-indigo-400 transition-all text-center focus:outline-none"
             >
               Admin
             </button>
             <button
-              onClick={() => handleQuickLogin('locha@wampeewo.com', 'teacher123', 'teacher')}
+              onClick={() => handleQuickLogin('dimilirea@gmail.com', 'teacher123', 'teacher')}
               disabled={loading}
               className="p-1.5 border border-emerald-500/10 hover:border-emerald-500/30 bg-emerald-500/5 hover:bg-emerald-500/10 rounded-lg text-[9px] font-bold text-emerald-400 transition-all text-center focus:outline-none"
             >
               Teacher
             </button>
             <button
-              onClick={() => handleQuickLogin('gareth@wampeewo.com', 'student123', 'student')}
+              onClick={() => handleQuickLogin('garethtuwesigye@wampeewo.com', 'student123', 'student')}
               disabled={loading}
               className="p-1.5 border border-sky-500/10 hover:border-sky-500/30 bg-sky-500/5 hover:bg-sky-500/10 rounded-lg text-[9px] font-bold text-sky-400 transition-all text-center focus:outline-none"
             >

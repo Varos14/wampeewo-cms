@@ -5,16 +5,21 @@ import { Card } from '../../components/ui/Card';
 import { AreaChart } from '../../components/charts/AreaChart';
 import { DonutChart } from '../../components/charts/DonutChart';
 import { getAdminStats } from '../../utils/mockData';
-import { studentService, teacherService, classService, subjectService } from '../../services/api';
+import { studentService, teacherService, classService, subjectService, attendanceService } from '../../services/api';
+import { TermSelector } from '../../components/ui/TermSelector';
+import { useUiStore } from '../../store/uiStore';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const stats = getAdminStats();
+  const { activeTerm } = useUiStore();
 
   const [studentCount, setStudentCount] = useState<number | null>(null);
   const [teacherCount, setTeacherCount] = useState<number | null>(null);
   const [classCount, setClassCount] = useState<number | null>(null);
   const [subjectCount, setSubjectCount] = useState<number | null>(null);
+  const [attendancePercentage, setAttendancePercentage] = useState<number | null>(null);
+  const [attendanceTrends, setAttendanceTrends] = useState<{ date: string; value: number }[] | null>(null);
   const [genderData, setGenderData] = useState<{ label: string; value: number; color: string }[]>([
     { label: 'Male', value: 610, color: '#3b82f6' },
     { label: 'Female', value: 640, color: '#f43f5e' },
@@ -23,16 +28,24 @@ export default function AdminDashboard() {
   useEffect(() => {
     async function loadCounts() {
       try {
-        const [studs, tchs, clss, subjs] = await Promise.all([
+        const [studs, tchs, clss, subjs, attStats] = await Promise.all([
           studentService.list(),
           teacherService.list(),
           classService.list(),
-          subjectService.list()
+          subjectService.list(),
+          attendanceService.getStats().catch(() => ({ attendancePercentage: null, attendanceTrends: null }))
         ]);
         setStudentCount(studs.length);
         setTeacherCount(tchs.length);
         setClassCount(clss.length);
         setSubjectCount(subjs.length);
+        
+        if (attStats.attendancePercentage !== null) {
+          setAttendancePercentage(attStats.attendancePercentage);
+        }
+        if (attStats.attendanceTrends !== null) {
+          setAttendanceTrends(attStats.attendanceTrends);
+        }
 
         if (studs.length > 0) {
           const maleCount = studs.filter((s: any) => s.gender === 'Male').length;
@@ -62,9 +75,12 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-6">
       {/* Header and Title */}
-      <div>
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">System Overview</h2>
-        <p className="text-xs text-slate-500 mt-1">Real-time statistics & administration hub for Wampeewo Ntake SS.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">System Overview</h2>
+          <p className="text-xs text-slate-500 mt-1">Real-time statistics & administration hub for Wampeewo Ntake SS — Term {activeTerm}</p>
+        </div>
+        <TermSelector />
       </div>
 
       {/* Stats Cards Grid */}
@@ -127,10 +143,12 @@ export default function AdminDashboard() {
         <Card className="lg:col-span-2 p-6 flex flex-col justify-between" variant="glass">
           <div>
             <h3 className="text-base font-bold text-slate-800">Daily Attendance Trends</h3>
-            <p className="text-2xs text-slate-500 font-semibold uppercase tracking-wider mt-0.5">Average weekly attendance: {stats.attendancePercentage}%</p>
+            <p className="text-2xs text-slate-500 font-semibold uppercase tracking-wider mt-0.5">
+              Average weekly attendance: {attendancePercentage !== null ? attendancePercentage : stats.attendancePercentage}%
+            </p>
           </div>
           <div className="mt-6">
-            <AreaChart data={stats.attendanceTrends} strokeColor="#3b82f6" />
+            <AreaChart data={attendanceTrends !== null ? attendanceTrends : stats.attendanceTrends} strokeColor="#3b82f6" />
           </div>
         </Card>
 

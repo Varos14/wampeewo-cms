@@ -7,10 +7,30 @@ import { useAppDataStore } from '../../store/appDataStore';
 import { formatDate } from '../../utils/helpers';
 import { RubricBadge } from '../../components/ui/Badge';
 import { mockExamResults } from '../../utils/mockData';
+import { TermSelector } from '../../components/ui/TermSelector';
+import { useUiStore } from '../../store/uiStore';
+
+// Helper to determine term for an assignment
+const getTermForAOI = (aoi: any): number => {
+  const titleLower = aoi.title.toLowerCase();
+  const descLower = aoi.description.toLowerCase();
+  if (titleLower.includes('term i') || titleLower.includes('term 1') || descLower.includes('term i') || descLower.includes('term 1')) return 1;
+  if (titleLower.includes('term ii') || titleLower.includes('term 2') || descLower.includes('term ii') || descLower.includes('term 2')) return 2;
+  if (titleLower.includes('term iii') || titleLower.includes('term 3') || descLower.includes('term iii') || descLower.includes('term 3')) return 3;
+  
+  if (aoi.deadline) {
+    const month = new Date(aoi.deadline).getMonth();
+    if (month >= 0 && month <= 4) return 1;
+    if (month >= 5 && month <= 7) return 2;
+    return 3;
+  }
+  return 1;
+};
 
 export default function StudentDashboard() {
   const { user } = useAuthStore();
   const { aois, submissions, announcements, loading, fetchData } = useAppDataStore();
+  const { activeTerm } = useUiStore();
 
   useEffect(() => {
     fetchData();
@@ -22,9 +42,10 @@ export default function StudentDashboard() {
   // Assuming user object contains the classId (e.g. s1 -> c1)
   const studentClassId = 'c1'; // Defaulting for demo if missing in user payload
 
-  // Assignments statistics
-  const totalAssignments = aois.filter(a => a.classId === studentClassId).length;
-  const studentSubmissions = submissions.filter(s => s.studentId === user.id);
+  // Assignments statistics filtered by activeTerm
+  const classAOIs = aois.filter(a => a.classId === studentClassId && getTermForAOI(a) === activeTerm);
+  const totalAssignments = classAOIs.length;
+  const studentSubmissions = submissions.filter(s => s.studentId === user.id && classAOIs.some(a => a.id === s.aoiId));
   const gradedAssignments = studentSubmissions.filter(s => s.grade !== undefined).length;
   
   // Latest exam results (mocked for now)
@@ -36,9 +57,12 @@ export default function StudentDashboard() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Student Desktop</h2>
-        <p className="text-xs text-slate-500 mt-1">Review assignments, course syllabuses, grades, and timetables.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Student Desktop</h2>
+          <p className="text-xs text-slate-500 mt-1">Review assignments, course syllabuses, grades, and timetables — Term {activeTerm}</p>
+        </div>
+        <TermSelector />
       </div>
 
       {/* Quick Shortcuts */}
@@ -160,22 +184,24 @@ export default function StudentDashboard() {
           <Card className="p-6 flex flex-col justify-between" variant="glass">
             <div>
               <h3 className="text-base font-bold text-slate-800">Term Attendance</h3>
-              <p className="text-2xs text-slate-500 font-semibold uppercase tracking-wider mt-0.5">Academic Term I</p>
+              <p className="text-2xs text-slate-500 font-semibold uppercase tracking-wider mt-0.5">
+                Academic Term {activeTerm === 1 ? 'I' : activeTerm === 2 ? 'II' : 'III'}
+              </p>
             </div>
             <div className="my-6">
-              <DonutChart value={95} size={120} centerLabel="Attendance" />
+              <DonutChart value={activeTerm === 1 ? 95 : activeTerm === 2 ? 92 : 97} size={120} centerLabel="Attendance" />
             </div>
             <div className="flex justify-around text-center mt-2">
               <div>
-                <span className="text-sm font-bold text-slate-800">8</span>
+                <span className="text-sm font-bold text-slate-800">{activeTerm === 1 ? 8 : activeTerm === 2 ? 11 : 14}</span>
                 <p className="text-3xs text-slate-500 font-semibold uppercase tracking-widest mt-0.5">Present</p>
               </div>
               <div>
-                <span className="text-sm font-bold text-slate-800">1</span>
+                <span className="text-sm font-bold text-slate-800">{activeTerm === 1 ? 1 : activeTerm === 2 ? 0 : 1}</span>
                 <p className="text-3xs text-slate-500 font-semibold uppercase tracking-widest mt-0.5">Excused</p>
               </div>
               <div>
-                <span className="text-sm font-bold text-slate-800">0</span>
+                <span className="text-sm font-bold text-slate-800">{activeTerm === 1 ? 0 : activeTerm === 2 ? 1 : 0}</span>
                 <p className="text-3xs text-slate-500 font-semibold uppercase tracking-widest mt-0.5">Absent</p>
               </div>
             </div>

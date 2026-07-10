@@ -5,6 +5,25 @@ import { DonutChart } from '../../components/charts/DonutChart';
 import { useAuthStore } from '../../store/authStore';
 import { useAppDataStore } from '../../store/appDataStore';
 import { gradeService } from '../../services/api';
+import { TermSelector } from '../../components/ui/TermSelector';
+import { useUiStore } from '../../store/uiStore';
+
+// Helper to determine term for an assignment
+const getTermForAOI = (aoi: any): number => {
+  const titleLower = aoi.title.toLowerCase();
+  const descLower = aoi.description.toLowerCase();
+  if (titleLower.includes('term i') || titleLower.includes('term 1') || descLower.includes('term i') || descLower.includes('term 1')) return 1;
+  if (titleLower.includes('term ii') || titleLower.includes('term 2') || descLower.includes('term ii') || descLower.includes('term 2')) return 2;
+  if (titleLower.includes('term iii') || titleLower.includes('term 3') || descLower.includes('term iii') || descLower.includes('term 3')) return 3;
+  
+  if (aoi.deadline) {
+    const month = new Date(aoi.deadline).getMonth();
+    if (month >= 0 && month <= 4) return 1;
+    if (month >= 5 && month <= 7) return 2;
+    return 3;
+  }
+  return 1;
+};
 
 export default function TeacherDashboard() {
   const { user } = useAuthStore();
@@ -12,7 +31,7 @@ export default function TeacherDashboard() {
     classes, aois, students, teachers, submissions, 
     loading, fetchData 
   } = useAppDataStore();
-
+  const { activeTerm } = useUiStore();
 
   useEffect(() => {
     fetchData();
@@ -26,8 +45,8 @@ export default function TeacherDashboard() {
 
   // Filter classes taught by this teacher
   const teacherClasses = classes.filter(c => c.classTeacherId === user.id);
-  // Total assignments/AOIs created by this teacher
-  const teacherAOIs = aois.filter(a => a.teacherId === user.id);
+  // Total assignments/AOIs created by this teacher filtered by activeTerm
+  const teacherAOIs = aois.filter(a => a.teacherId === user.id && getTermForAOI(a) === activeTerm);
   // Count total submissions waiting for grades
   const ungradedCount = submissions.filter(sub => 
     teacherAOIs.some(aoi => aoi.id === sub.aoiId) && sub.grade === undefined
@@ -39,19 +58,34 @@ export default function TeacherDashboard() {
   // Filter students who belong to the classes taught by this teacher
   const teacherStudents = students.filter(s => teacherClasses.some(c => c.id === s.classId));
 
-  // Performance stats mock
-  const performanceData = [
-    { label: 'Achieved', value: 8, color: '#10b981' },
-    { label: 'Progressing', value: 12, color: '#f59e0b' },
-    { label: 'Not Achieved', value: 2, color: '#f43f5e' },
-  ];
+  // Performance stats mock dynamically adjusted by term
+  const performanceData = activeTerm === 1 
+    ? [
+        { label: 'Achieved', value: 8, color: '#10b981' },
+        { label: 'Progressing', value: 12, color: '#f59e0b' },
+        { label: 'Not Achieved', value: 2, color: '#f43f5e' },
+      ]
+    : activeTerm === 2 
+    ? [
+        { label: 'Achieved', value: 11, color: '#10b981' },
+        { label: 'Progressing', value: 9, color: '#f59e0b' },
+        { label: 'Not Achieved', value: 1, color: '#f43f5e' },
+      ]
+    : [
+        { label: 'Achieved', value: 14, color: '#10b981' },
+        { label: 'Progressing', value: 6, color: '#f59e0b' },
+        { label: 'Not Achieved', value: 0, color: '#f43f5e' },
+      ];
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">Teacher Console</h2>
-        <p className="text-xs text-slate-500 mt-1">Manage continuous assessments, classes, and lesson schedules.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Teacher Console</h2>
+          <p className="text-xs text-slate-500 mt-1">Manage continuous assessments, classes, and lesson schedules — Term {activeTerm}</p>
+        </div>
+        <TermSelector />
       </div>
 
       {/* Metrics Row */}

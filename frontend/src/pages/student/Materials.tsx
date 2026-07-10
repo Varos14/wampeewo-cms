@@ -3,6 +3,13 @@ import { Card } from '../../components/ui/Card';
 import { materialService } from '../../services/api';
 import { useAuthStore } from '../../store/authStore';
 
+const getFileUrl = (url: string) => {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  const apiHost = (import.meta.env.VITE_API_URL || 'http://localhost:4000/api').replace('/api', '');
+  return `${apiHost}${url}`;
+};
+
 export default function StudentMaterials() {
   const { user } = useAuthStore();
   const [materials, setMaterials] = useState<any[]>([]);
@@ -47,7 +54,7 @@ export default function StudentMaterials() {
               <div className="flex justify-between items-center mt-2 pt-3 border-t border-black/5">
                 <span className="text-2xs text-slate-500">{new Date(mat.uploadedAt).toLocaleDateString()}</span>
                 <a 
-                  href={mat.fileUrl} 
+                  href={getFileUrl(mat.fileUrl)} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-blue-400 text-xs hover:text-blue-300 font-bold flex items-center gap-1"

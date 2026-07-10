@@ -92,3 +92,44 @@ export async function gradeSubmission(req: Request, res: Response) {
     return res.status(500).json({ error: 'Internal server error grading submission' });
   }
 }
+
+export async function gradeDirect(req: Request, res: Response) {
+  const { studentId, aoiId, grade, feedback } = req.body;
+
+  if (!studentId || !aoiId || grade === undefined) {
+    return res.status(400).json({ error: 'studentId, aoiId, and grade are required' });
+  }
+
+  try {
+    const db = getDb();
+    
+    // Check if existing submission exists
+    const [existing] = await db.query(
+      'SELECT id FROM submissions WHERE student_id = ? AND aoi_id = ?',
+      [studentId, aoiId]
+    );
+    const list = existing as any[];
+
+    if (list.length > 0) {
+      // Update
+      const id = list[0].id;
+      await db.query(
+        'UPDATE submissions SET grade = ?, feedback = ? WHERE id = ?',
+        [grade, feedback ?? null, id]
+      );
+      return res.json({ id, studentId, aoiId, grade, feedback });
+    } else {
+      // Insert new
+      const id = `sub_${Date.now()}`;
+      const submittedAt = new Date().toISOString();
+      await db.query(
+        'INSERT INTO submissions (id, aoi_id, student_id, content, grade, feedback, submitted_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [id, aoiId, studentId, 'Direct gradebook evaluation', grade, feedback ?? null, submittedAt]
+      );
+      return res.status(201).json({ id, studentId, aoiId, grade, feedback, submittedAt });
+    }
+  } catch (err) {
+    console.error('[gradeDirect] DB error:', err);
+    return res.status(500).json({ error: 'Internal server error saving grade' });
+  }
+}

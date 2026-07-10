@@ -27,7 +27,13 @@ export async function listSkills(req: Request, res: Response) {
       [studentId]
     );
 
-    return res.json({ items: rows });
+    let items = rows as any[];
+    if (items.length === 0) {
+      const defaults = ['Critical Thinking', 'Creativity', 'Collaboration', 'Communication', 'Self-direction'];
+      items = defaults.map(name => ({ name, value: 2 }));
+    }
+
+    return res.json({ items });
   } catch (err) {
     console.error('[listSkills] DB error:', err);
     return res.status(500).json({ error: 'Internal server error listing skills' });

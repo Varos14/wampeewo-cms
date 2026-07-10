@@ -222,7 +222,7 @@ export async function seedInitialData() {
     const userCount = (userRows as any)[0].count;
 
     if (userCount > 0) {
-      console.log('[seed] Database tables exist and are already seeded. Skipping seed process.');
+      console.log('[seed] Database tables exist and are already seeded. Checking if AOIs need seeding...');
       try {
         await db.query("ALTER TABLE aois ADD COLUMN status VARCHAR(50) DEFAULT 'pending'");
         await db.query("ALTER TABLE aois ADD COLUMN type VARCHAR(50) DEFAULT 'assignment'");
@@ -240,6 +240,77 @@ export async function seedInitialData() {
           )
         `);
       } catch(e) {}
+
+      try {
+        const [aoiRows] = await db.query('SELECT COUNT(*) as count FROM aois');
+        const aoiCount = (aoiRows as any)[0].count;
+
+        if (aoiCount === 0) {
+          console.log('[seed] Seeding initial assignments (AOIs) and submissions into existing database...');
+          const seededAOIs = [
+            {
+              id: 'aoi_math_integration',
+              title: 'Mathematics Activity of Integration - Senior 1',
+              description: 'Using algebraic expressions to model real-life problems in trade and construction.',
+              deadline: '2026-08-15',
+              class_id: 'c1',
+              teacher_id: 'u5',
+              rubric: JSON.stringify([
+                { criterion: 'Understanding algebraic concepts', maxPoints: 5 },
+                { criterion: 'Application to real-life scenarios', maxPoints: 5 },
+                { criterion: 'Accuracy of solutions', maxPoints: 5 }
+              ]),
+              type: 'assignment',
+              status: 'pending',
+              feedback: null
+            },
+            {
+              id: 'aoi_english_essay',
+              title: 'English Creative Writing - Senior 1',
+              description: 'Write a narrative essay of 300 words reflecting on the theme "Our Environment".',
+              deadline: '2026-08-20',
+              class_id: 'c1',
+              teacher_id: 'u7',
+              rubric: JSON.stringify([
+                { criterion: 'Grammar and sentence structure', maxPoints: 5 },
+                { criterion: 'Creativity and relevance to theme', maxPoints: 5 }
+              ]),
+              type: 'assignment',
+              status: 'approved',
+              feedback: 'Excellent assignment setup.'
+            }
+          ];
+
+          for (const aoi of seededAOIs) {
+            await db.query(
+              'INSERT INTO aois (id, title, description, deadline, class_id, teacher_id, rubric, type, status, feedback) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+              [aoi.id, aoi.title, aoi.description, aoi.deadline, aoi.class_id, aoi.teacher_id, aoi.rubric, aoi.type, aoi.status, aoi.feedback]
+            );
+          }
+
+          const seededSubmissions = [
+            {
+              id: 'sub_gareth_math',
+              aoi_id: 'aoi_math_integration',
+              student_id: 'u13',
+              content: 'Algebraic equations: Let x be the cost of bricks. y = 3x + 500...',
+              grade: null,
+              feedback: null,
+              submitted_at: '2026-07-10'
+            }
+          ];
+
+          for (const sub of seededSubmissions) {
+            await db.query(
+              'INSERT INTO submissions (id, aoi_id, student_id, content, grade, feedback, submitted_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
+              [sub.id, sub.aoi_id, sub.student_id, sub.content, sub.grade, sub.feedback, sub.submitted_at]
+            );
+          }
+          console.log('[seed] Assignments and submissions seeded successfully.');
+        }
+      } catch (err) {
+        console.error('[seed] Error seeding AOIs into existing database:', err);
+      }
       
       return;
     }
@@ -281,7 +352,10 @@ export async function seedInitialData() {
     
     const teachersMap: Record<string, {id: string, subj: string}> = {};
     for (const t of teacherNames) {
-        const emailP = t.name.replace(/[^a-zA-Z]/g, '').toLowerCase();
+        let emailP = t.name.replace(/[^a-zA-Z]/g, '').toLowerCase();
+        if (t.name === 'Mr. Locha Derrick') {
+            emailP = 'dimilirea@gmail.com';
+        }
         const id = pushUser(t.name, 'teacher', teacherPass, emailP);
         teachersMap[t.name] = { id, subj: t.subj };
     }
@@ -375,6 +449,68 @@ export async function seedInitialData() {
       await db.query(
         'INSERT INTO subjects (id, name, code, class_id) VALUES (?, ?, ?, ?)',
         [s.id, s.name, s.code, s.class_id]
+      );
+    }
+
+    // Seed AOIs (Assignments/Activities of Integration)
+    const seededAOIs = [
+      {
+        id: 'aoi_math_integration',
+        title: 'Mathematics Activity of Integration - Senior 1',
+        description: 'Using algebraic expressions to model real-life problems in trade and construction.',
+        deadline: '2026-08-15',
+        class_id: 'c1',
+        teacher_id: 'teacher_deo',
+        rubric: JSON.stringify([
+          { criterion: 'Understanding algebraic concepts', maxPoints: 5 },
+          { criterion: 'Application to real-life scenarios', maxPoints: 5 },
+          { criterion: 'Accuracy of solutions', maxPoints: 5 }
+        ]),
+        type: 'assignment',
+        status: 'pending',
+        feedback: null
+      },
+      {
+        id: 'aoi_english_essay',
+        title: 'English Creative Writing - Senior 1',
+        description: 'Write a narrative essay of 300 words reflecting on the theme "Our Environment".',
+        deadline: '2026-08-20',
+        class_id: 'c1',
+        teacher_id: 'teacher_doreen',
+        rubric: JSON.stringify([
+          { criterion: 'Grammar and sentence structure', maxPoints: 5 },
+          { criterion: 'Creativity and relevance to theme', maxPoints: 5 }
+        ]),
+        type: 'assignment',
+        status: 'approved',
+        feedback: 'Excellent assignment setup.'
+      }
+    ];
+
+    for (const aoi of seededAOIs) {
+      await db.query(
+        'INSERT INTO aois (id, title, description, deadline, class_id, teacher_id, rubric, type, status, feedback) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [aoi.id, aoi.title, aoi.description, aoi.deadline, aoi.class_id, aoi.teacher_id, aoi.rubric, aoi.type, aoi.status, aoi.feedback]
+      );
+    }
+
+    // Seed Submissions
+    const seededSubmissions = [
+      {
+        id: 'sub_mubiru_math',
+        aoi_id: 'aoi_math_integration',
+        student_id: 'mubirudavis',
+        content: 'Algebraic equations: Let x be the cost of bricks. y = 3x + 500...',
+        grade: null,
+        feedback: null,
+        submitted_at: '2026-07-10'
+      }
+    ];
+
+    for (const sub of seededSubmissions) {
+      await db.query(
+        'INSERT INTO submissions (id, aoi_id, student_id, content, grade, feedback, submitted_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [sub.id, sub.aoi_id, sub.student_id, sub.content, sub.grade, sub.feedback, sub.submitted_at]
       );
     }
 
