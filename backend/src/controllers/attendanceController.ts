@@ -124,13 +124,13 @@ export async function getAttendanceStats(req: Request, res: Response) {
     // Fallback if not enough data
     if (attendanceTrends.length === 0) {
       attendanceTrends = [
-        { date: 'Mon', value: 92 },
-        { date: 'Tue', value: 95 },
-        { date: 'Wed', value: 94 },
-        { date: 'Thu', value: 96 },
-        { date: 'Fri', value: 93 },
-        { date: 'Sat', value: 0 },
-        { date: 'Sun', value: 0 }
+        { date: 'Mon', value: 92, rawDate: '2026-07-06' },
+        { date: 'Tue', value: 95, rawDate: '2026-07-07' },
+        { date: 'Wed', value: 94, rawDate: '2026-07-08' },
+        { date: 'Thu', value: 96, rawDate: '2026-07-09' },
+        { date: 'Fri', value: 93, rawDate: '2026-07-10' },
+        { date: 'Sat', value: 0, rawDate: '2026-07-11' },
+        { date: 'Sun', value: 0, rawDate: '2026-07-12' }
       ];
     }
 
