@@ -76,7 +76,7 @@ export async function login(req: Request, res: Response) {
     const pass = body.password;
 
     const isDemoAdmin = emailStr === 'geraldvaros@gmail.com' && pass === '@AmGerald14';
-    const isDemoTeacher = emailStr === 'dimilirea@gmail.com' && pass === 'teacher123';
+    const isDemoTeacher = emailStr === 'mrlochaderrick@wampeewo.com' && pass === 'teacher123';
     const isDemoStudent = emailStr === 'garethtuwesigye@wampeewo.com' && pass === 'student123';
 
     if (!user) {

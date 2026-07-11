@@ -194,7 +194,7 @@ export default function Login() {
               Admin
             </button>
             <button
-              onClick={() => handleQuickLogin('dimilirea@gmail.com', 'teacher123', 'teacher')}
+              onClick={() => handleQuickLogin('mrlochaderrick@wampeewo.com', 'teacher123', 'teacher')}
               disabled={loading}
               className="p-1.5 border border-emerald-500/10 hover:border-emerald-500/30 bg-emerald-500/5 hover:bg-emerald-500/10 rounded-lg text-[9px] font-bold text-emerald-400 transition-all text-center focus:outline-none"
             >
