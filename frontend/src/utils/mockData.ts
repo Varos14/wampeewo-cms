@@ -6,7 +6,7 @@ import {
 
 // Mock Users
 export const mockUsers: User[] = [
-  { id: '1', name: 'Nalule Margaret', email: 'admin@wampeewo.com', role: 'admin' },
+  { id: '1', name: 'Mutwezi Gelard', email: 'admin@wampeewo.com', role: 'admin' },
   { id: '2', name: 'Okello John', email: 'teacher@wampeewo.com', role: 'teacher' },
   { id: '3', name: 'Kato Paul', email: 'student@wampeewo.com', role: 'student' },
   { id: '5', name: 'Nsubuga David', email: 'david@wampeewo.com', role: 'teacher' },
@@ -220,7 +220,7 @@ export const mockAnnouncements: Announcement[] = [
     title: 'Visitation Day Details',
     content: 'We welcome guardians for our Term I Visitation Day on Sunday, June 21, 2026. Gate opens at 9:00 AM. Please clear pending fees.',
     authorId: '1',
-    authorName: 'Nalule Margaret (Admin)',
+    authorName: 'Mutwezi Gelard (Admin)',
     targetRoles: ['student'],
     createdAt: '2026-06-12T08:00:00.000Z'
   },
@@ -229,7 +229,7 @@ export const mockAnnouncements: Announcement[] = [
     title: 'Mid-Term Examinations Rescheduled',
     content: 'Please note that mid-term tests will begin on Monday, June 29 instead of June 22. Timetables will be uploaded by the end of this week.',
     authorId: '1',
-    authorName: 'Nalule Margaret (Admin)',
+    authorName: 'Mutwezi Gelard (Admin)',
     targetRoles: ['student', 'teacher'],
     createdAt: '2026-06-14T11:30:00.000Z'
   },
@@ -238,7 +238,7 @@ export const mockAnnouncements: Announcement[] = [
     title: 'Staff Meeting on Curriculum Guidelines',
     content: 'A mandatory staff assembly to align on the lower secondary competence-based grading rubric will be held in the library tomorrow at 4:30 PM.',
     authorId: '1',
-    authorName: 'Nalule Margaret (Admin)',
+    authorName: 'Mutwezi Gelard (Admin)',
     targetRoles: ['teacher'],
     createdAt: '2026-06-15T09:00:00.000Z'
   }

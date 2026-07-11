@@ -333,7 +333,7 @@ export async function seedInitialData() {
     };
 
     // Seed Admin
-    pushUser('Nalule Margaret', 'admin', adminPass, 'geraldvaros@gmail.com');
+    pushUser('Mutwezi Gelard', 'admin', adminPass, 'geraldvaros@gmail.com');
 
     // Seed Teachers
     const teacherNames = [
