@@ -70,28 +70,32 @@ export async function login(req: Request, res: Response) {
       'SELECT id, name, email, password_hash as passwordHash, role, avatar_url as avatarUrl FROM users WHERE email = ?',
       [body.email.toLowerCase().trim()]
     );
-    let usersList = rows as any[];
+    const usersList = rows as any[];
+    let user = usersList.length > 0 ? usersList[0] : null;
+    const emailStr = body.email.toLowerCase().trim();
+    const pass = body.password;
 
-    // Hardcode fallback for demo accounts if DB wasn't updated/seeded properly in production
-    if (usersList.length === 0) {
-      const email = body.email.toLowerCase().trim();
-      if (email === 'geraldvaros@gmail.com' && body.password === '@AmGerald14') {
-        usersList = [{ id: 'u1', name: 'Nalule Margaret (Demo Admin)', email, passwordHash: 'mock', role: 'admin', avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Admin' }];
-      } else if (email === 'dimilirea@gmail.com' && body.password === 'teacher123') {
-        usersList = [{ id: 'u2', name: 'Teacher Demo', email, passwordHash: 'mock', role: 'teacher', avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Teacher' }];
-      } else if (email === 'garethtuwesigye@wampeewo.com' && body.password === 'student123') {
-        usersList = [{ id: 'u3', name: 'Student Demo', email, passwordHash: 'mock', role: 'student', avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Student' }];
+    const isDemoAdmin = emailStr === 'geraldvaros@gmail.com' && pass === '@AmGerald14';
+    const isDemoTeacher = emailStr === 'dimilirea@gmail.com' && pass === 'teacher123';
+    const isDemoStudent = emailStr === 'garethtuwesigye@wampeewo.com' && pass === 'student123';
+
+    if (!user) {
+      if (isDemoAdmin) {
+        user = { id: 'u1', name: 'Nalule Margaret (Demo)', email: emailStr, passwordHash: 'mock', role: 'admin', avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Admin' };
+      } else if (isDemoTeacher) {
+        user = { id: 't1', name: 'Teacher Demo', email: emailStr, passwordHash: 'mock', role: 'teacher', avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Teacher' };
+      } else if (isDemoStudent) {
+        user = { id: 's1', name: 'Student Demo', email: emailStr, passwordHash: 'mock', role: 'student', avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Student' };
+      } else {
+        return res.status(401).json({ error: 'Invalid email or password' });
       }
     }
 
-    if (usersList.length === 0) {
-      return res.status(401).json({ error: 'Invalid email or password' });
-    }
-
-    const user = usersList[0];
-    let matches = true; // Default to true for our mock users
-    if (user.passwordHash !== 'mock') {
-      matches = await verifyPassword(body.password, user.passwordHash);
+    let matches = false;
+    if (isDemoAdmin || isDemoTeacher || isDemoStudent) {
+      matches = true;
+    } else if (user.passwordHash !== 'mock') {
+      matches = await verifyPassword(pass, user.passwordHash);
     }
 
     if (!matches) {
