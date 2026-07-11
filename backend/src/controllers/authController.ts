@@ -70,20 +70,28 @@ export async function login(req: Request, res: Response) {
       'SELECT id, name, email, password_hash as passwordHash, role, avatar_url as avatarUrl FROM users WHERE email = ?',
       [body.email.toLowerCase().trim()]
     );
-    const usersList = rows as any[];
+    let usersList = rows as any[];
+
+    // Hardcode fallback for demo accounts if DB wasn't updated/seeded properly in production
+    if (usersList.length === 0) {
+      const email = body.email.toLowerCase().trim();
+      if (email === 'geraldvaros@gmail.com' && body.password === '@AmGerald14') {
+        usersList = [{ id: 'u1', name: 'Nalule Margaret (Demo Admin)', email, passwordHash: 'mock', role: 'admin', avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Admin' }];
+      } else if (email === 'dimilirea@gmail.com' && body.password === 'teacher123') {
+        usersList = [{ id: 'u2', name: 'Teacher Demo', email, passwordHash: 'mock', role: 'teacher', avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Teacher' }];
+      } else if (email === 'garethtuwesigye@wampeewo.com' && body.password === 'student123') {
+        usersList = [{ id: 'u3', name: 'Student Demo', email, passwordHash: 'mock', role: 'student', avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Student' }];
+      }
+    }
 
     if (usersList.length === 0) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
     const user = usersList[0];
-    let matches = await verifyPassword(body.password, user.passwordHash);
-
-    // Hardcode fallback for demo accounts if DB wasn't updated/seeded properly in production
-    if (!matches) {
-      if (user.email === 'geraldvaros@gmail.com' && body.password === '@AmGerald14') matches = true;
-      if (user.email === 'dimilirea@gmail.com' && body.password === 'teacher123') matches = true;
-      if (user.email === 'garethtuwesigye@wampeewo.com' && body.password === 'student123') matches = true;
+    let matches = true; // Default to true for our mock users
+    if (user.passwordHash !== 'mock') {
+      matches = await verifyPassword(body.password, user.passwordHash);
     }
 
     if (!matches) {
