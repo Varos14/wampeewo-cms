@@ -31,7 +31,7 @@ export async function register(req: Request, res: Response) {
 
   try {
     const db = getDb();
-    
+
     // Check if email already exists
     const [existing] = await db.query('SELECT id FROM users WHERE email = ?', [body.email]);
     if ((existing as any[]).length > 0) {
@@ -64,7 +64,7 @@ export async function login(req: Request, res: Response) {
 
   try {
     const db = getDb();
-    
+
     // Load user from DB
     const [rows] = await db.query(
       'SELECT id, name, email, password_hash as passwordHash, role, avatar_url as avatarUrl FROM users WHERE email = ?',
@@ -81,9 +81,9 @@ export async function login(req: Request, res: Response) {
 
     if (!user) {
       if (isDemoAdmin) {
-        user = { id: 'u1', name: 'Nalule Margaret (Demo)', email: emailStr, passwordHash: 'mock', role: 'admin', avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Admin' };
+        user = { id: 'u1', name: 'Mutwei Gelard (Demo)', email: emailStr, passwordHash: 'mock', role: 'admin', avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Admin' };
       } else if (isDemoTeacher) {
-        user = { id: 't1', name: 'Teacher Demo', email: emailStr, passwordHash: 'mock', role: 'teacher', avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Teacher' };
+        user = { id: 't1', name: 'Mr. Locha Derrick', email: emailStr, passwordHash: 'mock', role: 'teacher', avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Mr.%20Locha%20Derrick' };
       } else if (isDemoStudent) {
         user = { id: 's1', name: 'Student Demo', email: emailStr, passwordHash: 'mock', role: 'student', avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Student' };
       } else {
