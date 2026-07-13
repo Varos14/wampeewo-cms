@@ -178,6 +178,19 @@ export async function deleteUser(req: Request, res: Response) {
   }
 }
 
+export async function fixDeletedEmails(req: Request, res: Response) {
+  try {
+    const db = getDb();
+    const [result] = await db.query(
+      "UPDATE users SET email = CONCAT(email, '_deleted_', id) WHERE is_active = FALSE AND email NOT LIKE '%_deleted_%'"
+    );
+    return res.json({ message: `Successfully fixed emails for ${(result as any).affectedRows} previously deleted users.` });
+  } catch (err) {
+    console.error('[fixDeletedEmails] DB error:', err);
+    return res.status(500).json({ error: 'Failed to fix emails' });
+  }
+}
+
 export async function updateAssignmentStatus(req: Request, res: Response) {
   const { aoiId } = req.params;
   const { status, feedback } = req.body;

@@ -4,7 +4,8 @@ import {
   registerTeacher, 
   deleteUser, 
   updateAssignmentStatus,
-  createSubject
+  createSubject,
+  fixDeletedEmails
 } from '../controllers/adminController';
 import { requireRole } from '../middleware/auth';
 
@@ -17,6 +18,7 @@ adminRoutes.use(requireRole(['admin']));
 adminRoutes.post('/students', registerStudent);
 adminRoutes.post('/teachers', registerTeacher);
 adminRoutes.delete('/users/:userId', deleteUser);
+adminRoutes.post('/fix-deleted-emails', fixDeletedEmails);
 
 // Subjects
 adminRoutes.post('/subjects', createSubject);
