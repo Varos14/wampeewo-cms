@@ -162,7 +162,10 @@ export async function deleteUser(req: Request, res: Response) {
 
   try {
     const db = getDb();
-    const [result] = await db.query('UPDATE users SET is_active = FALSE WHERE id = ?', [userId]);
+    const [result] = await db.query(
+      "UPDATE users SET is_active = FALSE, email = CONCAT(email, '_deleted_', id) WHERE id = ?", 
+      [userId]
+    );
 
     if ((result as any).affectedRows === 0) {
       return res.status(404).json({ error: 'User not found' });
