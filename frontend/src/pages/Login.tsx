@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useAuthStore } from '../store/authStore';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { authService } from '../services/api';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('');
+  const [role] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState('');
@@ -34,22 +34,22 @@ export default function Login() {
     }
   };
 
-  const handleQuickLogin = async (roleEmail: string, rolePass: string, selectedRole: string) => {
-    setLoading(true);
-    setError('');
-    setEmail(roleEmail);
-    setPassword(rolePass);
-    setRole(selectedRole);
-    try {
-      const { user, token } = await authService.login(roleEmail, rolePass);
-      setAuth(user, token);
-      navigate(`/${user.role}`);
-    } catch (err: any) {
-      setError(err.message || 'Quick login failed');
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const handleQuickLogin = async (roleEmail: string, rolePass: string, selectedRole: string) => {
+  //   setLoading(true);
+  //   setError('');
+  //   setEmail(roleEmail);
+  //   setPassword(rolePass);
+  //   setRole(selectedRole);
+  //   try {
+  //     const { user, token } = await authService.login(roleEmail, rolePass);
+  //     setAuth(user, token);
+  //     navigate(`/${user.role}`);
+  //   } catch (err: any) {
+  //     setError(err.message || 'Quick login failed');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <div className="w-full">
@@ -113,7 +113,7 @@ export default function Login() {
         </div>
 
         {/* Role Field */}
-        <div>
+        {/* <div>
           <label className="block text-sm font-normal text-slate-700 mb-1.5">Role</label>
           <div className="relative">
             <select
@@ -132,7 +132,7 @@ export default function Login() {
               </svg>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Remember me & Forgot Password */}
         <div className="flex items-center justify-between text-xs pt-1">
@@ -145,9 +145,9 @@ export default function Login() {
             />
             Remember me
           </label>
-          <Link to="/forgot-password" className="text-blue-500 hover:text-blue-400 font-normal transition-colors">
+          {/* <Link to="/forgot-password" className="text-blue-500 hover:text-blue-400 font-normal transition-colors">
             Forgot Password?
-          </Link>
+          </Link> */}
         </div>
 
         {error && (
@@ -166,12 +166,12 @@ export default function Login() {
         </Button>
 
         {/* Sign up link */}
-        <div className="text-center text-xs text-slate-600 mt-4">
+        {/* <div className="text-center text-xs text-slate-600 mt-4">
           Don't have an account?{' '}
           <Link to="/signup" className="text-blue-500 hover:text-blue-400 transition-colors font-medium">
             Sign Up
           </Link>
-        </div>
+        </div> */}
       </form>
 
       {/* Footer copyright */}
@@ -180,7 +180,7 @@ export default function Login() {
       </div>
 
       {/* Collapsible Quick Access panel for testing/demo */}
-      <div className="mt-4 pt-2 border-t border-dashed border-black/5">
+      {/* <div className="mt-4 pt-2 border-t border-dashed border-black/5">
         <details className="cursor-pointer group">
           <summary className="text-[10px] font-black text-slate-500 uppercase tracking-widest text-center list-none select-none group-open:mb-2 hover:text-slate-600 transition-colors">
             Quick Demo Logins (Click to view)
@@ -209,7 +209,7 @@ export default function Login() {
             </button>
           </div>
         </details>
-      </div>
+      </div> */}
     </div>
   );
 }
