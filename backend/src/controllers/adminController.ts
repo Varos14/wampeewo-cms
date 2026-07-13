@@ -16,10 +16,19 @@ export async function registerStudent(req: Request, res: Response) {
     await conn.beginTransaction();
 
     // Check if email already registered
-    const [existingStudentEmail] = await conn.query('SELECT id FROM users WHERE email = ?', [email.toLowerCase().trim()]);
-    if ((existingStudentEmail as any[]).length > 0) {
-      await conn.rollback();
-      return res.status(400).json({ error: 'Email already registered' });
+    const [existingStudentEmailRows] = await conn.query('SELECT id, is_active FROM users WHERE email = ?', [email.toLowerCase().trim()]);
+    const existingStudentEmail = existingStudentEmailRows as any[];
+    if (existingStudentEmail.length > 0) {
+      if (existingStudentEmail[0].is_active) {
+        await conn.rollback();
+        return res.status(400).json({ error: 'Email already registered' });
+      } else {
+        // Automatically clean up the deleted user's email so we can reuse it
+        await conn.query(
+          "UPDATE users SET email = CONCAT(email, '_deleted_', id) WHERE id = ?",
+          [existingStudentEmail[0].id]
+        );
+      }
     }
 
     // Auto-generate Registration Number
@@ -96,10 +105,19 @@ export async function registerTeacher(req: Request, res: Response) {
     await conn.beginTransaction();
 
     // Check if email already registered
-    const [existingEmail] = await conn.query('SELECT id FROM users WHERE email = ?', [email.toLowerCase().trim()]);
-    if ((existingEmail as any[]).length > 0) {
-      await conn.rollback();
-      return res.status(400).json({ error: 'Email already registered' });
+    const [existingEmailRows] = await conn.query('SELECT id, is_active FROM users WHERE email = ?', [email.toLowerCase().trim()]);
+    const existingEmail = existingEmailRows as any[];
+    if (existingEmail.length > 0) {
+      if (existingEmail[0].is_active) {
+        await conn.rollback();
+        return res.status(400).json({ error: 'Email already registered' });
+      } else {
+        // Automatically clean up the deleted user's email so we can reuse it
+        await conn.query(
+          "UPDATE users SET email = CONCAT(email, '_deleted_', id) WHERE id = ?",
+          [existingEmail[0].id]
+        );
+      }
     }
 
     const teacherId = 'teacher_' + Math.random().toString(36).substring(2, 11);
