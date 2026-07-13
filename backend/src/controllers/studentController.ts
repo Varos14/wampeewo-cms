@@ -15,15 +15,13 @@ export async function listStudents(req: Request, res: Response) {
       JOIN students s ON u.id = s.id
     `;
     const params: any[] = [];
-    const conditions: string[] = [];
+    const conditions: string[] = ['u.is_active = TRUE'];
 
     if (classId) {
       conditions.push('s.class_id = ?');
       params.push(classId);
     }
     
-
-
     if (conditions.length > 0) {
       query += ' WHERE ' + conditions.join(' AND ');
     }
@@ -47,7 +45,7 @@ export async function getStudentById(req: Request, res: Response) {
              s.class_id as classId, s.registration_number as registrationNumber, s.gender
       FROM users u
       JOIN students s ON u.id = s.id
-      WHERE u.id = ?
+      WHERE u.id = ? AND u.is_active = TRUE
     `, [id]);
 
     const list = rows as any[];

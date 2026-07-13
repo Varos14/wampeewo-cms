@@ -65,6 +65,8 @@ export async function registerStudent(req: Request, res: Response) {
         id: studentId,
         name,
         email,
+        role: 'student',
+        avatarUrl: studentAvatarUrl,
         registrationNumber,
         gender,
         classId,
@@ -81,18 +83,22 @@ export async function registerStudent(req: Request, res: Response) {
 }
 
 export async function registerTeacher(req: Request, res: Response) {
-  const { name, email, password } = req.body;
+  const { name, email, password, subjects, classIds } = req.body;
 
   if (!name || !email || !password) {
     return res.status(400).json({ error: 'name, email, and password are required' });
   }
 
+  const db = getDb();
+  const conn = await db.getConnection();
+
   try {
-    const db = getDb();
-    
+    await conn.beginTransaction();
+
     // Check if email already registered
-    const [existingEmail] = await db.query('SELECT id FROM users WHERE email = ?', [email.toLowerCase().trim()]);
+    const [existingEmail] = await conn.query('SELECT id FROM users WHERE email = ?', [email.toLowerCase().trim()]);
     if ((existingEmail as any[]).length > 0) {
+      await conn.rollback();
       return res.status(400).json({ error: 'Email already registered' });
     }
 
@@ -100,10 +106,36 @@ export async function registerTeacher(req: Request, res: Response) {
     const teacherHashedPass = await hashPassword(password);
     const teacherAvatarUrl = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}`;
 
-    await db.query(
+    await conn.query(
       'INSERT INTO users (id, name, email, password_hash, role, avatar_url, is_active) VALUES (?, ?, ?, ?, ?, ?, ?)',
       [teacherId, name, email.toLowerCase().trim(), teacherHashedPass, 'teacher', teacherAvatarUrl, true]
     );
+
+    // Link subjects if provided
+    if (Array.isArray(subjects)) {
+      for (const subj of subjects) {
+        if (subj && typeof subj === 'string') {
+          await conn.query(
+            'INSERT INTO teacher_subjects (teacher_id, subject_name) VALUES (?, ?)',
+            [teacherId, subj.trim()]
+          );
+        }
+      }
+    }
+
+    // Link classes if provided
+    if (Array.isArray(classIds)) {
+      for (const cid of classIds) {
+        if (cid && typeof cid === 'string') {
+          await conn.query(
+            'INSERT INTO teacher_classes (teacher_id, class_id) VALUES (?, ?)',
+            [teacherId, cid.trim()]
+          );
+        }
+      }
+    }
+
+    await conn.commit();
 
     return res.status(201).json({
       message: 'Teacher registered successfully',
@@ -111,12 +143,17 @@ export async function registerTeacher(req: Request, res: Response) {
         id: teacherId,
         name,
         email,
-        role: 'teacher'
+        role: 'teacher',
+        subjects: subjects ?? [],
+        classIds: classIds ?? []
       }
     });
   } catch (err) {
+    await conn.rollback();
     console.error('[registerTeacher] DB error:', err);
     return res.status(500).json({ error: 'Internal server error during teacher registration' });
+  } finally {
+    conn.release();
   }
 }
 
