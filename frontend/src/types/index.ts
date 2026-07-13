@@ -50,6 +50,7 @@ export interface AOI {
   dueDate?: string;
   type?: 'assignment' | 'exam';
   status?: 'draft' | 'pending' | 'approved' | 'rejected';
+  feedback?: string;
   classId: string;
   teacherId: string;
   rubric: { skill: string; maxScore: number }[];

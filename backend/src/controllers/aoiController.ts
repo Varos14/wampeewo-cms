@@ -8,7 +8,7 @@ export async function listAOIs(req: Request, res: Response) {
   try {
     const db = getDb();
     
-    let query = 'SELECT id, title, description, deadline, class_id as classId, teacher_id as teacherId, rubric, status, type FROM aois WHERE 1=1';
+    let query = 'SELECT id, title, description, deadline, class_id as classId, teacher_id as teacherId, rubric, status, type, feedback FROM aois WHERE 1=1';
     const params: any[] = [];
 
     if (classId) {

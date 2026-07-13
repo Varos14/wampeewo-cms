@@ -15,7 +15,7 @@ export default function AdminAssignments() {
   // Rejection Modal State
   const [rejectId, setRejectId] = useState<string | null>(null);
   const [feedback, setFeedback] = useState('');
-  const [submitting, setSubmitting] = useState(false);
+  const [submittingIds, setSubmittingIds] = useState<Set<string>>(new Set());
 
   const loadData = async () => {
     setLoading(true);
@@ -37,7 +37,7 @@ export default function AdminAssignments() {
 
   const handleApprove = async (id: string, status: 'approved' | 'rejected', feedbackText?: string) => {
     try {
-      setSubmitting(true);
+      setSubmittingIds(prev => new Set(prev).add(id));
       await aoiService.approve(id, status, feedbackText);
       await loadData();
       if (status === 'rejected') {
@@ -48,7 +48,11 @@ export default function AdminAssignments() {
       console.error(err);
       alert('Failed to update assignment status.');
     } finally {
-      setSubmitting(false);
+      setSubmittingIds(prev => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
     }
   };
 
@@ -84,6 +88,11 @@ export default function AdminAssignments() {
                     <span>Teacher: {teacherName}</span>
                     <span>Class: {className}</span>
                   </div>
+                  {aoi.status === 'rejected' && aoi.feedback && (
+                    <div className="mt-3 bg-rose-50 border border-rose-100 rounded-lg p-3 text-sm text-rose-800">
+                      <strong>Rejection Reason:</strong> {aoi.feedback}
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex flex-col items-end gap-2 shrink-0">
@@ -96,10 +105,10 @@ export default function AdminAssignments() {
                   
                   {(aoi.status === 'pending' || !aoi.status) && (
                     <div className="flex gap-2 mt-2">
-                      <Button variant="ghost" size="sm" onClick={() => setRejectId(aoi.id)}>
+                      <Button variant="ghost" size="sm" onClick={() => setRejectId(aoi.id)} disabled={submittingIds.has(aoi.id)}>
                         Reject
                       </Button>
-                      <Button variant="primary" size="sm" onClick={() => handleApprove(aoi.id, 'approved')} className="bg-emerald-600 hover:bg-emerald-500 text-white" disabled={submitting}>
+                      <Button variant="primary" size="sm" onClick={() => handleApprove(aoi.id, 'approved')} className="bg-emerald-600 hover:bg-emerald-500 text-white" disabled={submittingIds.has(aoi.id)} loading={submittingIds.has(aoi.id)}>
                         Approve
                       </Button>
                     </div>
@@ -126,15 +135,15 @@ export default function AdminAssignments() {
             />
 
             <div className="flex justify-end gap-3">
-              <Button variant="ghost" onClick={() => { setRejectId(null); setFeedback(''); }} disabled={submitting}>
+              <Button variant="ghost" onClick={() => { setRejectId(null); setFeedback(''); }} disabled={rejectId ? submittingIds.has(rejectId) : false}>
                 Cancel
               </Button>
               <Button 
                 variant="primary" 
                 className="bg-rose-600 hover:bg-rose-500 text-white" 
-                onClick={() => handleApprove(rejectId, 'rejected', feedback)}
-                disabled={!feedback.trim() || submitting}
-                loading={submitting}
+                onClick={() => rejectId && handleApprove(rejectId, 'rejected', feedback)}
+                disabled={!feedback.trim() || (rejectId ? submittingIds.has(rejectId) : false)}
+                loading={rejectId ? submittingIds.has(rejectId) : false}
               >
                 Confirm Rejection
               </Button>
