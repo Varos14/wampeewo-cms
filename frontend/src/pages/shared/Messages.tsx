@@ -67,7 +67,7 @@ export default function Messages() {
   // Since we don't fetch admins in the store yet, we'll hardcode the known admin ID for simplicity,
   // or just let teachers talk to teachers. We'll add a mock "Admin" if we're a teacher.
   const possibleRecipients = [
-    ...(user?.role !== 'admin' ? [{ id: 'u1', name: 'System Admin', role: 'admin' }] : []),
+    ...(user?.role !== 'admin' ? [{ id: 'u1', name: 'Mutwezi Gelard', role: 'admin' }] : []),
     ...teachers.filter(t => t.id !== user?.id).map(t => ({ id: t.id, name: t.name, role: 'teacher' }))
   ];
 
