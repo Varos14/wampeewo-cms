@@ -6,7 +6,7 @@ import {
 
 // Mock Users
 export const mockUsers: User[] = [
-  { id: '1', name: 'Mutwezi Gelard', email: 'admin@wampeewo.com', role: 'admin' },
+  { id: '1', name: 'Mutwezi Gelard(Admin)', email: 'admin@wampeewo.com', role: 'admin' },
   { id: '2', name: 'Okello John', email: 'teacher@wampeewo.com', role: 'teacher' },
   { id: '3', name: 'Kato Paul', email: 'student@wampeewo.com', role: 'student' },
   { id: '5', name: 'Nsubuga David', email: 'david@wampeewo.com', role: 'teacher' },

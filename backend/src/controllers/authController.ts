@@ -81,7 +81,7 @@ export async function login(req: Request, res: Response) {
 
     if (!user) {
       if (isDemoAdmin) {
-        user = { id: 'u1', name: 'Mutwezi Gelard (Demo)', email: emailStr, passwordHash: 'mock', role: 'admin', avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Admin' };
+        user = { id: 'u1', name: 'Mutwezi Gelard(Admin)', email: emailStr, passwordHash: 'mock', role: 'admin', avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Admin' };
       } else if (isDemoTeacher) {
         user = { id: 't1', name: 'Mr. Locha Derrick', email: emailStr, passwordHash: 'mock', role: 'teacher', avatarUrl: 'https://api.dicebear.com/7.x/initials/svg?seed=Mr.%20Locha%20Derrick' };
       } else if (isDemoStudent) {
