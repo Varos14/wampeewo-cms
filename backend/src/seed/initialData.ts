@@ -225,6 +225,8 @@ export async function seedInitialData() {
       console.log('[seed] Database tables exist and are already seeded. Checking if AOIs need seeding...');
       try {
         await db.query("UPDATE users SET name = 'Mutwezi Gelard' WHERE id = 'u1'");
+        const andrewPass = await hashPassword('andrew123');
+        await db.query("UPDATE users SET name = 'Mr. Andrew', password_hash = ? WHERE id = 'u3'", [andrewPass]);
         await db.query("ALTER TABLE aois ADD COLUMN status VARCHAR(50) DEFAULT 'pending'");
         await db.query("ALTER TABLE aois ADD COLUMN type VARCHAR(50) DEFAULT 'assignment'");
         await db.query("ALTER TABLE aois ADD COLUMN feedback TEXT");
@@ -322,6 +324,7 @@ export async function seedInitialData() {
     const adminPass = await hashPassword('@AmGerald14');
     const teacherPass = await hashPassword('teacher123');
     const studentPass = await hashPassword('student123');
+    const andrewPass = await hashPassword('andrew123');
 
     // Users base
     let userIdCount = 1;
@@ -339,7 +342,7 @@ export async function seedInitialData() {
     // Seed Teachers
     const teacherNames = [
         {name: 'DOS Saaz Jonathan', subj: 'DOS'},
-        {name: 'Mr. Locha Derrick', subj: 'English'},
+        {name: 'Mr. Andrew', subj: 'English'},
         {name: 'Mrs. Aringo Diana', subj: 'English'},
         {name: 'Mr. Musisi Deo', subj: 'Mathematics'},
         {name: 'Mr. Sembatya Dancan', subj: 'Mathematics'},
@@ -354,10 +357,11 @@ export async function seedInitialData() {
     const teachersMap: Record<string, {id: string, subj: string}> = {};
     for (const t of teacherNames) {
         let emailP = t.name.replace(/[^a-zA-Z]/g, '').toLowerCase();
-        if (t.name === 'Mr. Locha Derrick') {
+        if (t.name === 'Mr. Andrew') {
             emailP = 'dimilirea@gmail.com';
         }
-        const id = pushUser(t.name, 'teacher', teacherPass, emailP);
+        const pass = t.name === 'Mr. Andrew' ? andrewPass : teacherPass;
+        const id = pushUser(t.name, 'teacher', pass, emailP);
         teachersMap[t.name] = { id, subj: t.subj };
     }
 
