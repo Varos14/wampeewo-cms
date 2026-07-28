@@ -20,7 +20,7 @@ export default function AdminAssignments() {
   const loadData = async () => {
     setLoading(true);
     try {
-      await fetchData();
+      await fetchData(true);
       // Get all assignments across all teachers/classes
       const data = await aoiService.list(undefined, undefined);
       setAssignments(data);

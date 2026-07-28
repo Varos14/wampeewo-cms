@@ -9,7 +9,7 @@ import { aoiService } from '../../services/api';
 
 export default function TeacherAssignments() {
   const { user } = useAuthStore();
-  const { classes, students, aois, submissions, loading, fetchData } = useAppDataStore();
+  const { classes, students, aois, submissions, loading, fetchData, teachers } = useAppDataStore();
   
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
@@ -26,6 +26,16 @@ export default function TeacherAssignments() {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  const currentTeacher = user ? teachers.find(t => t.id === user.id) : undefined;
+  const teacherClasses = user ? classes.filter(c => currentTeacher?.classIds?.includes(c.id) || c.classTeacherId === user.id) : [];
+  const availableClasses = teacherClasses.length > 0 ? teacherClasses : classes;
+
+  useEffect(() => {
+    if (availableClasses.length > 0 && !classId) {
+      setClassId(availableClasses[0].id);
+    }
+  }, [availableClasses, classId]);
 
   if (!user) return null;
   if (loading) return <div className="p-8 text-center text-slate-600 animate-pulse">Loading assignments...</div>;
@@ -56,7 +66,12 @@ export default function TeacherAssignments() {
           <h2 className="text-xl font-bold text-slate-900 tracking-tight">Competence Assignments (AOIs)</h2>
           <p className="text-xs text-slate-500 mt-1">Review Activities of Integration (AOIs) and grade student submissions.</p>
         </div>
-        <Button variant="primary" className="bg-red-600 hover:bg-red-500 text-white" onClick={() => setShowModal(true)}>
+        <Button variant="primary" className="bg-red-600 hover:bg-red-500 text-white" onClick={() => {
+          setShowModal(true);
+          if (availableClasses.length > 0) {
+            setClassId(availableClasses[0].id);
+          }
+        }}>
           <span className="mr-2">📝</span> Create Assignment
         </Button>
       </div>
@@ -204,7 +219,7 @@ export default function TeacherAssignments() {
                   rubric: []
                 });
                 setShowModal(false);
-                fetchData(); // Trigger a re-fetch of AOIs
+                await fetchData(true); // Trigger a forced re-fetch of AOIs
                 alert('Assignment sent to Admin for approval.');
               } catch(err) {
                 console.error(err);
@@ -228,8 +243,19 @@ export default function TeacherAssignments() {
                 </select>
               </div>
               <div>
-                <label className="block text-slate-600 font-medium mb-1 text-xs">Class ID</label>
-                <input required value={classId} onChange={e=>setClassId(e.target.value)} className="w-full bg-white/80 border border-black/10 rounded-xl px-3 py-2 text-slate-800 focus:border-blue-500 text-sm" placeholder="e.g. c1" />
+                <label className="block text-slate-600 font-medium mb-1 text-xs">Class</label>
+                <select 
+                  required 
+                  value={classId} 
+                  onChange={e=>setClassId(e.target.value)} 
+                  className="w-full bg-white/80 border border-black/10 rounded-xl px-3 py-2 text-slate-800 focus:border-blue-500 text-sm"
+                >
+                  {availableClasses.map(c => (
+                    <option key={c.id} value={c.id}>
+                      {c.name} {c.stream ? `(${c.stream})` : ''}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div>
                 <label className="block text-slate-600 font-medium mb-1 text-xs">Due Date</label>
@@ -254,7 +280,7 @@ export default function TeacherAssignments() {
               try {
                 await aoiService.gradeSubmission(gradingSubmission.id, grade, feedback);
                 setGradingSubmission(null);
-                fetchData(); // Trigger a re-fetch of submissions
+                await fetchData(true); // Trigger a forced re-fetch of submissions
               } catch(err) {
                 console.error(err);
                 alert('Failed to submit grade.');

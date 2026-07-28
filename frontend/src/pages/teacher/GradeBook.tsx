@@ -4,12 +4,25 @@ import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { useAuthStore } from '../../store/authStore';
 import { useAppDataStore } from '../../store/appDataStore';
-import { aoiService } from '../../services/api';
+import { aoiService, gradeService } from '../../services/api';
 import { useUiStore } from '../../store/uiStore';
+import { getGradeColor } from '../../utils/helpers';
+
+function calculateUgandaGrade(score: number): 'D1' | 'D2' | 'C3' | 'C4' | 'C5' | 'C6' | 'P7' | 'P8' | 'F9' {
+  if (score >= 90) return 'D1';
+  if (score >= 80) return 'D2';
+  if (score >= 70) return 'C3';
+  if (score >= 60) return 'C4';
+  if (score >= 55) return 'C5';
+  if (score >= 50) return 'C6';
+  if (score >= 45) return 'P7';
+  if (score >= 40) return 'P8';
+  return 'F9';
+}
 
 export default function TeacherGradeBook() {
   const { user } = useAuthStore();
-  const { students, aois, submissions, classes, subjects, loading, fetchData, refreshSubmissions } = useAppDataStore();
+  const { students, aois, submissions, classes, subjects, loading, fetchData, refreshSubmissions, teachers } = useAppDataStore();
   const { activeTerm } = useUiStore();
 
   // Filters State
@@ -17,6 +30,56 @@ export default function TeacherGradeBook() {
   const [selectedSubjectId, setSelectedSubjectId] = useState<string>('all');
   const [termFilter, setTermFilter] = useState<number>(activeTerm);
   const [submittingGrade, setSubmittingGrade] = useState<string | null>(null); // studentId_aoiId
+
+  // Marks Mode State
+  const [mode, setMode] = useState<'aoi' | 'marks'>('aoi');
+  const [allQuickGrades, setAllQuickGrades] = useState<{ studentId: string, subject: string, grade: string }[]>([]);
+  const [fetchingGrades, setFetchingGrades] = useState<boolean>(false);
+  const [submittingMark, setSubmittingMark] = useState<string | null>(null); // studentId_subjectName
+
+  const loadAllQuickGrades = async () => {
+    setFetchingGrades(true);
+    try {
+      const res = await gradeService.listAllQuickGrades();
+      setAllQuickGrades(res);
+    } catch (e) {
+      console.error('Failed to load subject marks:', e);
+    } finally {
+      setFetchingGrades(false);
+    }
+  };
+
+  useEffect(() => {
+    if (mode === 'marks') {
+      loadAllQuickGrades();
+    }
+  }, [mode]);
+
+  const handleSubjectMarkChange = async (studentId: string, subjectName: string, val: string) => {
+    if (val !== '') {
+      const num = Number(val);
+      if (isNaN(num) || num < 0 || num > 100) return;
+    }
+
+    const key = `${studentId}_${subjectName}`;
+    setSubmittingMark(key);
+
+    setAllQuickGrades(prev => {
+      const filtered = prev.filter(g => !(g.studentId === studentId && g.subject.toLowerCase() === subjectName.toLowerCase()));
+      if (val === '') return filtered;
+      return [...filtered, { studentId, subject: subjectName, grade: val }];
+    });
+
+    try {
+      await gradeService.saveQuickGrade(studentId, subjectName, val);
+    } catch (e) {
+      console.error(e);
+      alert('Failed to save subject mark');
+      loadAllQuickGrades();
+    } finally {
+      setSubmittingMark(null);
+    }
+  };
 
   useEffect(() => {
     fetchData();
@@ -97,16 +160,36 @@ export default function TeacherGradeBook() {
     }
   };
 
+  const currentTeacher = teachers.find(t => t.id === user?.id);
+  const teacherSubjects = currentTeacher 
+    ? subjects.filter(s => currentTeacher.subjects.includes(s.name) && (selectedClassId === 'all' || s.classId === selectedClassId))
+    : [];
+  const uniqueSubjectNames = Array.from(new Set(teacherSubjects.map(s => s.name)));
+
   const handleExport = () => {
-    const headers = ['Student Name', 'Reg No', 'Class Stream', ...filteredAOIs.map(a => a.title)];
+    const isAOI = mode === 'aoi';
+    const headers = isAOI 
+      ? ['Student Name', 'Reg No', 'Class Stream', ...filteredAOIs.map(a => a.title)]
+      : ['Student Name', 'Reg No', 'Class Stream', ...uniqueSubjectNames];
+
     const rows = filteredStudents.map(student => {
       const studentName = student.name;
       const regNo = student.registrationNumber;
       const className = getClassName(student.classId);
-      const grades = filteredAOIs.map(aoi => {
-        const g = getGradeFor(student.id, aoi.id);
-        return g === 3 ? 'Achieved (3)' : g === 2 ? 'Progressing (2)' : g === 1 ? 'Not Achieved (1)' : 'Pending';
-      });
+      
+      const grades = isAOI 
+        ? filteredAOIs.map(aoi => {
+            const g = getGradeFor(student.id, aoi.id);
+            return g === 3 ? 'Achieved (3)' : g === 2 ? 'Progressing (2)' : g === 1 ? 'Not Achieved (1)' : 'Pending';
+          })
+        : uniqueSubjectNames.map(subjName => {
+            const gradeObj = allQuickGrades.find(g => g.studentId === student.id && g.subject.toLowerCase() === subjName.toLowerCase());
+            if (!gradeObj || gradeObj.grade === '') return 'Pending';
+            const scoreNum = Number(gradeObj.grade);
+            const computedGrade = !isNaN(scoreNum) ? calculateUgandaGrade(scoreNum) : '';
+            return `${scoreNum}% (${computedGrade})`;
+          });
+
       return [studentName, regNo, className, ...grades];
     });
     
@@ -115,7 +198,7 @@ export default function TeacherGradeBook() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', `Gradebook_Term_${termFilter}_${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute('download', `${isAOI ? 'Gradebook' : 'Subject_Marks'}_Term_${termFilter}_${new Date().toISOString().split('T')[0]}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -177,82 +260,152 @@ export default function TeacherGradeBook() {
         </div>
       </Card>
 
+      {/* View Mode Tabs */}
+      <div className="flex border-b border-black/5 pb-px">
+        <button
+          onClick={() => setMode('aoi')}
+          className={`pb-3 px-4 font-bold text-sm border-b-2 transition-all ${
+            mode === 'aoi' 
+              ? 'border-indigo-500 text-indigo-600 font-bold' 
+              : 'border-transparent text-slate-500 hover:text-slate-700'
+          }`}
+        >
+          Activity of Integration (AOI) Competencies
+        </button>
+        <button
+          onClick={() => setMode('marks')}
+          className={`pb-3 px-4 font-bold text-sm border-b-2 transition-all ${
+            mode === 'marks' 
+              ? 'border-indigo-500 text-indigo-600 font-bold' 
+              : 'border-transparent text-slate-500 hover:text-slate-700'
+          }`}
+        >
+          Subject Marks (UNEB Grades)
+        </button>
+      </div>
+
       {/* Roster Table */}
       <Card variant="glass" className="overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-black/5 bg-white/50 text-3xs font-semibold uppercase tracking-wider text-slate-500">
-                <th className="px-4 py-3 min-w-[200px]">Student Name</th>
-                <th className="px-4 py-3">Class Stream</th>
-                {filteredAOIs.map(aoi => (
-                  <th key={aoi.id} className="px-4 py-3 min-w-[160px]">
-                    <div className="truncate w-36 font-bold text-slate-700" title={aoi.title}>
-                      {aoi.title}
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-black/5 text-slate-700">
-              {filteredStudents.map(student => (
-                <tr key={student.id} className="hover:bg-black/5 transition-colors">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(student.name)}`}
-                        alt={student.name}
-                        className="w-8 h-8 rounded bg-slate-700 shrink-0"
-                      />
-                      <div>
-                        <p className="font-bold text-slate-800">{student.name}</p>
-                        <p className="text-[10px] text-slate-500 font-mono">{student.registrationNumber}</p>
+        {mode === 'marks' && fetchingGrades ? (
+          <div className="p-8 text-center text-slate-600 animate-pulse">Loading subject marks...</div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-black/5 bg-white/50 text-3xs font-semibold uppercase tracking-wider text-slate-500">
+                  <th className="px-4 py-3 min-w-[200px]">Student Name</th>
+                  <th className="px-4 py-3">Class Stream</th>
+                  {mode === 'aoi' ? (
+                    filteredAOIs.map(aoi => (
+                      <th key={aoi.id} className="px-4 py-3 min-w-[160px]">
+                        <div className="truncate w-36 font-bold text-slate-700" title={aoi.title}>
+                          {aoi.title}
+                        </div>
+                      </th>
+                    ))
+                  ) : (
+                    uniqueSubjectNames.map(subjName => (
+                      <th key={subjName} className="px-4 py-3 min-w-[140px]">
+                        <div className="truncate w-32 font-bold text-slate-700" title={subjName}>
+                          {subjName}
+                        </div>
+                      </th>
+                    ))
+                  )}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-black/5 text-slate-700">
+                {filteredStudents.map(student => (
+                  <tr key={student.id} className="hover:bg-black/5 transition-colors">
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(student.name)}`}
+                          alt={student.name}
+                          className="w-8 h-8 rounded bg-slate-700 shrink-0"
+                        />
+                        <div>
+                          <p className="font-bold text-slate-800">{student.name}</p>
+                          <p className="text-[10px] text-slate-500 font-mono">{student.registrationNumber}</p>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3">
-                    <Badge color="blue" variant="subtle">{getClassName(student.classId)}</Badge>
-                  </td>
-                  {filteredAOIs.map(aoi => {
-                    const grade = getGradeFor(student.id, aoi.id);
-                    const isMutating = submittingGrade === `${student.id}_${aoi.id}`;
-                    
-                    const selectBg = grade === 3 
-                      ? 'bg-emerald-500/10 text-emerald-700 border-emerald-300' 
-                      : grade === 2 
-                      ? 'bg-amber-500/10 text-amber-700 border-amber-300' 
-                      : grade === 1 
-                      ? 'bg-rose-500/10 text-rose-700 border-rose-300' 
-                      : 'bg-slate-50 text-slate-500 border-slate-300';
+                    </td>
+                    <td className="px-4 py-3">
+                      <Badge color="blue" variant="subtle">{getClassName(student.classId)}</Badge>
+                    </td>
+                    {mode === 'aoi' ? (
+                      filteredAOIs.map(aoi => {
+                        const grade = getGradeFor(student.id, aoi.id);
+                        const isMutating = submittingGrade === `${student.id}_${aoi.id}`;
+                        
+                        const selectBg = grade === 3 
+                          ? 'bg-emerald-500/10 text-emerald-700 border-emerald-300' 
+                          : grade === 2 
+                          ? 'bg-amber-500/10 text-amber-700 border-amber-300' 
+                          : grade === 1 
+                          ? 'bg-rose-500/10 text-rose-700 border-rose-300' 
+                          : 'bg-slate-50 text-slate-500 border-slate-300';
 
-                    return (
-                      <td key={aoi.id} className="px-4 py-3">
-                        <select
-                          value={grade !== undefined ? grade : ''}
-                          onChange={(e) => handleGradeChange(student.id, aoi.id, e.target.value)}
-                          disabled={isMutating}
-                          className={`w-full max-w-[140px] px-2 py-1 rounded-lg border text-2xs font-bold focus:outline-none transition-all cursor-pointer ${selectBg} ${isMutating ? 'animate-pulse' : ''}`}
-                        >
-                          <option value="">Pending evaluation</option>
-                          <option value={1}>Not Achieved (1)</option>
-                          <option value={2}>Progressing (2)</option>
-                          <option value={3}>Achieved (3)</option>
-                        </select>
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-              {filteredStudents.length === 0 && (
-                <tr>
-                  <td colSpan={2 + filteredAOIs.length} className="px-4 py-8 text-center text-slate-500 italic">
-                    No students found matching the selected class stream.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+                        return (
+                          <td key={aoi.id} className="px-4 py-3">
+                            <select
+                              value={grade !== undefined ? grade : ''}
+                              onChange={(e) => handleGradeChange(student.id, aoi.id, e.target.value)}
+                              disabled={isMutating}
+                              className={`w-full max-w-[140px] px-2 py-1 rounded-lg border text-2xs font-bold focus:outline-none transition-all cursor-pointer ${selectBg} ${isMutating ? 'animate-pulse' : ''}`}
+                            >
+                              <option value="">Pending evaluation</option>
+                              <option value={1}>Not Achieved (1)</option>
+                              <option value={2}>Progressing (2)</option>
+                              <option value={3}>Achieved (3)</option>
+                            </select>
+                          </td>
+                        );
+                      })
+                    ) : (
+                      uniqueSubjectNames.map(subjName => {
+                        const gradeObj = allQuickGrades.find(g => g.studentId === student.id && g.subject.toLowerCase() === subjName.toLowerCase());
+                        const scoreVal = gradeObj ? gradeObj.grade : '';
+                        const scoreNum = scoreVal !== '' ? Number(scoreVal) : NaN;
+                        const computedGrade = !isNaN(scoreNum) ? calculateUgandaGrade(scoreNum) : '';
+                        const isMutating = submittingMark === `${student.id}_${subjName}`;
+
+                        return (
+                          <td key={subjName} className="px-4 py-3">
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="number"
+                                min="0"
+                                max="100"
+                                value={scoreVal}
+                                onChange={(e) => handleSubjectMarkChange(student.id, subjName, e.target.value)}
+                                disabled={isMutating}
+                                placeholder="Score"
+                                className="w-16 px-2 py-1 bg-white border border-black/10 rounded-lg text-slate-800 focus:border-blue-500 focus:outline-none text-2xs font-bold"
+                              />
+                              {computedGrade && (
+                                <span className={`inline-flex px-1.5 py-0.5 rounded-md text-[10px] font-extrabold border ${getGradeColor(computedGrade)}`}>
+                                  {computedGrade}
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                        );
+                      })
+                    )}
+                  </tr>
+                ))}
+                {filteredStudents.length === 0 && (
+                  <tr>
+                    <td colSpan={2 + (mode === 'aoi' ? filteredAOIs.length : uniqueSubjectNames.length)} className="px-4 py-8 text-center text-slate-500 italic">
+                      No students found matching the selected class stream.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
       </Card>
     </div>
   );

@@ -26,3 +26,37 @@ export async function getClassTimetable(req: Request, res: Response) {
     return res.status(500).json({ error: 'Internal server error fetching timetable' });
   }
 }
+
+export async function createTimetableEntry(req: Request, res: Response) {
+  const { classId, subjectId, subjectName, teacherName, dayOfWeek, startTime, endTime, room } = req.body;
+
+  if (!classId || !subjectId || !subjectName || !teacherName || !dayOfWeek || !startTime || !endTime) {
+    return res.status(400).json({ error: 'classId, subjectId, subjectName, teacherName, dayOfWeek, startTime, and endTime are required' });
+  }
+
+  const id = 'tt_' + Math.random().toString(36).substring(2, 11);
+
+  try {
+    const db = getDb();
+    await db.query(
+      `INSERT INTO timetables (id, class_id, subject_id, subject_name, teacher_name, day_of_week, start_time, end_time, room) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [id, classId, subjectId, subjectName, teacherName, dayOfWeek, startTime, endTime, room || null]
+    );
+
+    return res.status(201).json({
+      id,
+      classId,
+      subjectId,
+      subjectName,
+      teacherName,
+      dayOfWeek,
+      startTime,
+      endTime,
+      room
+    });
+  } catch (err) {
+    console.error('[createTimetableEntry] DB error:', err);
+    return res.status(500).json({ error: 'Internal server error creating timetable entry' });
+  }
+}

@@ -794,7 +794,14 @@ export const gradeService = {
       await delay();
       return { grades: [] };
     }
-    return request<{ grades: { subject: string, grade: string }[] }>(`/grades/quick?studentId=${studentId}`);
+    return request<{ grades: { subject: string, grade: string }[] }>(`/grades/quick/${studentId}`);
+  },
+  listAllQuickGrades: async (): Promise<{ studentId: string, subject: string, grade: string }[]> => {
+    if (MOCK_MODE) {
+      await delay();
+      return [];
+    }
+    return request<any[]>('/grades/quick');
   }
 };
 

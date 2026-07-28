@@ -224,6 +224,7 @@ export async function seedInitialData() {
     if (userCount > 0) {
       console.log('[seed] Database tables exist and are already seeded. Checking if AOIs need seeding...');
       try {
+        await db.query("UPDATE users SET name = 'Mutwezi Gelard' WHERE id = 'u1'");
         await db.query("ALTER TABLE aois ADD COLUMN status VARCHAR(50) DEFAULT 'pending'");
         await db.query("ALTER TABLE aois ADD COLUMN type VARCHAR(50) DEFAULT 'assignment'");
         await db.query("ALTER TABLE aois ADD COLUMN feedback TEXT");
