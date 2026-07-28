@@ -46,7 +46,16 @@ const QUEUE_STORAGE_KEY = 'wampeewo_sync_queue';
 const loadSavedQueue = (): SyncItem[] => {
   try {
     const saved = localStorage.getItem(QUEUE_STORAGE_KEY);
-    return saved ? JSON.parse(saved) : [];
+    if (!saved) return [];
+    const parsed: SyncItem[] = JSON.parse(saved);
+    // Auto-clear failed items older than 1 hour to prevent permanent blockage
+    const oneHourAgo = Date.now() - 60 * 60 * 1000;
+    const cleaned = parsed.filter(item => !(item.status === 'failed' && item.timestamp < oneHourAgo));
+    if (cleaned.length !== parsed.length) {
+      localStorage.setItem(QUEUE_STORAGE_KEY, JSON.stringify(cleaned));
+      console.log(`[SyncQueue] Auto-cleared ${parsed.length - cleaned.length} stale failed item(s).`);
+    }
+    return cleaned;
   } catch (e) {
     console.error("Failed to load sync queue", e);
     return [];
@@ -158,8 +167,8 @@ export const useSyncStore = create<SyncState>((set, get) => ({
         };
         set({ syncQueue: [...currentQueue] });
         saveQueue(currentQueue);
-        // Pause sync execution if an error occurs to preserve order (FIFO constraint)
-        break;
+        // Skip failed item and continue processing remaining items (no longer blocks queue)
+        continue;
       }
     }
 
