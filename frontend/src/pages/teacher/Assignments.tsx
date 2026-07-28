@@ -40,8 +40,8 @@ export default function TeacherAssignments() {
   if (!user) return null;
   if (loading) return <div className="p-8 text-center text-slate-600 animate-pulse">Loading assignments...</div>;
 
-  // Filter AOIs by teacher ID (fallback to all if no teacher user ID found, but default is Okello John ID '2')
-  const teacherAOIs = aois.filter(aoi => aoi.teacherId === user.id || aoi.teacherId === '2');
+  // Filter AOIs by the currently logged-in teacher's ID
+  const teacherAOIs = aois.filter(aoi => aoi.teacherId === user.id);
 
   const getClassName = (cid: string) => {
     return classes.find(c => c.id === cid)?.name ?? 'Unknown Class';
