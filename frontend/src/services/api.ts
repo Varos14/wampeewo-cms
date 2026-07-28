@@ -320,29 +320,17 @@ export const aoiService = {
     return request<AOI[]>(`/aoi?${params.toString()}`);
   },
   create: async (data: Omit<AOI, 'id'>): Promise<AOI> => {
-    return handleMutation<AOI>(
-      'aoiService',
-      'create',
-      [data],
-      `Create AOI: ${data.title || 'New AOI'}`,
-      'temp_aoi',
-      (tempId) => ({ ...data, id: tempId! }),
-      async () => {
-        if (MOCK_MODE) {
-          await delay();
-          const newAoi: AOI = {
-            ...data,
-            id: `aoi${mock.mockAOIs.length + 1}`
-          };
-          mock.mockAOIs.push(newAoi);
-          return newAoi;
-        }
-        return request<AOI>('/aoi', {
-          method: 'POST',
-          body: JSON.stringify(data)
-        });
-      }
-    );
+    if (MOCK_MODE) {
+      await delay();
+      const newAoi: AOI = { ...data, id: `aoi${mock.mockAOIs.length + 1}` };
+      mock.mockAOIs.push(newAoi);
+      return newAoi;
+    }
+    // Always call API directly — no sync queue for assignment creation
+    return request<AOI>('/aoi', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
   },
   listSubmissions: async (aoiId: string): Promise<Submission[]> => {
     if (MOCK_MODE) {

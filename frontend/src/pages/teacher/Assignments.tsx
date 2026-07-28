@@ -220,9 +220,10 @@ export default function TeacherAssignments() {
                 });
                 setShowModal(false);
                 await fetchData(true); // Trigger a forced re-fetch of AOIs
-                alert('Assignment sent to Admin for approval.');
-              } catch(err) {
+                alert('Assignment submitted for Admin approval! It will appear in your list below.');
+              } catch(err: any) {
                 console.error(err);
+                alert('Failed to create assignment: ' + (err?.message || 'Network error. Please check your connection and try again.'));
               } finally {
                 setSubmitting(false);
               }
