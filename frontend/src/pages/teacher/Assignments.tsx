@@ -6,11 +6,38 @@ import { useAuthStore } from '../../store/authStore';
 import { useAppDataStore } from '../../store/appDataStore';
 import { formatDate } from '../../utils/helpers';
 import { aoiService } from '../../services/api';
+import { AOI } from '../../types';
 
 export default function TeacherAssignments() {
   const { user } = useAuthStore();
-  const { classes, students, aois, submissions, loading, fetchData, teachers } = useAppDataStore();
+  const { classes, students, submissions, loading, fetchData, teachers } = useAppDataStore();
   
+  // Fetch this teacher's AOIs directly using their actual user ID
+  const [myAois, setMyAois] = useState<AOI[]>([]);
+  const [aoisLoading, setAoisLoading] = useState(true);
+
+  const loadMyAois = async () => {
+    if (!user?.id) return;
+    try {
+      setAoisLoading(true);
+      // Clear stale cache and fetch only this teacher's assignments
+      const cacheKey = `wampeewo_cache__aoi_teacherId_${user.id}`;
+      localStorage.removeItem(cacheKey);
+      localStorage.removeItem('wampeewo_cache__aoi_');
+      const data = await aoiService.list(undefined, user.id);
+      setMyAois(data);
+    } catch (err) {
+      console.error('Failed to load assignments:', err);
+    } finally {
+      setAoisLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    loadMyAois();
+  }, [fetchData, user?.id]);
+
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -18,14 +45,9 @@ export default function TeacherAssignments() {
   const [dueDate, setDueDate] = useState('');
   const [type, setType] = useState<'assignment'|'exam'>('assignment');
   const [submitting, setSubmitting] = useState(false);
-
   const [gradingSubmission, setGradingSubmission] = useState<{id: string, aoiId: string} | null>(null);
   const [grade, setGrade] = useState<1|2|3>(1);
   const [feedback, setFeedback] = useState('');
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
 
   const currentTeacher = user ? teachers.find(t => t.id === user.id) : undefined;
   const teacherClasses = user ? classes.filter(c => currentTeacher?.classIds?.includes(c.id) || c.classTeacherId === user.id) : [];
@@ -38,10 +60,9 @@ export default function TeacherAssignments() {
   }, [availableClasses, classId]);
 
   if (!user) return null;
-  if (loading) return <div className="p-8 text-center text-slate-600 animate-pulse">Loading assignments...</div>;
+  if (loading || aoisLoading) return <div className="p-8 text-center text-slate-600 animate-pulse">Loading assignments...</div>;
 
-  // Filter AOIs by the currently logged-in teacher's ID
-  const teacherAOIs = aois.filter(aoi => aoi.teacherId === user.id);
+  const teacherAOIs = myAois;
 
   const getClassName = (cid: string) => {
     return classes.find(c => c.id === cid)?.name ?? 'Unknown Class';
@@ -218,10 +239,10 @@ export default function TeacherAssignments() {
                   deadline: new Date(dueDate).toISOString(),
                   rubric: []
                 });
-                // Clear stale AOI cache so fresh data is fetched
+                // Clear stale AOI cache and reload this teacher's assignments
                 localStorage.removeItem('wampeewo_cache__aoi_');
                 setShowModal(false);
-                await fetchData(true); // Trigger a forced re-fetch of AOIs
+                await loadMyAois(); // Directly reload this teacher's assignments
                 alert('Assignment submitted for Admin approval! It will appear in your list below.');
               } catch(err: any) {
                 console.error(err);
