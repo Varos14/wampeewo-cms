@@ -27,8 +27,10 @@ export default function TeacherMyClasses() {
   const handleGenerateReports = async (classId: string, className: string) => {
     setGeneratingFor(classId);
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:4000/api/classes/${classId}/reports/download`, {
+      const authDataStr = localStorage.getItem('auth');
+      const token = authDataStr ? JSON.parse(authDataStr).token : '';
+      const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+      const response = await fetch(`${baseUrl}/classes/${classId}/reports/download`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`
