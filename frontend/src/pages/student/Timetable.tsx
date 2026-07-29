@@ -30,7 +30,13 @@ export default function StudentTimetable() {
     const fetchSchedule = async () => {
       try {
         const data = await timetableService.getByClass(myClassId);
-        setMySchedule(data);
+        let personalData: TimetableEntry[] = [];
+        if (user?.id) {
+          try {
+            personalData = await timetableService.getByClass(user.id);
+          } catch(e) {}
+        }
+        setMySchedule([...data, ...personalData]);
       } catch (err) {
         console.error(err);
       } finally {
@@ -130,7 +136,7 @@ export default function StudentTimetable() {
                 const myClassId = studentInfo?.classId ?? 'c1';
                 
                 await timetableService.create({
-                  classId: myClassId,
+                  classId: user?.id ?? myClassId,
                   subjectId: 'self-study',
                   subjectName: subjectName,
                   teacherName: 'Self Study', // Indicates a self-study session
@@ -144,7 +150,13 @@ export default function StudentTimetable() {
                 
                 // Refresh
                 const data = await timetableService.getByClass(myClassId);
-                setMySchedule(data);
+                let personalData: TimetableEntry[] = [];
+                if (user?.id) {
+                  try {
+                    personalData = await timetableService.getByClass(user.id);
+                  } catch(e) {}
+                }
+                setMySchedule([...data, ...personalData]);
               } catch (e) {
                 console.error(e);
                 alert('Failed to add study session');

@@ -34,6 +34,13 @@ export async function createTimetableEntry(req: Request, res: Response) {
     return res.status(400).json({ error: 'classId, subjectId, subjectName, teacherName, dayOfWeek, startTime, and endTime are required' });
   }
 
+  const userRole = (req as any).auth?.role;
+  const userId = (req as any).auth?.userId;
+
+  if (userRole === 'student' && classId !== userId) {
+    return res.status(403).json({ error: 'Students can only add study sessions to their own personal timetable' });
+  }
+
   const id = 'tt_' + Math.random().toString(36).substring(2, 11);
 
   try {
