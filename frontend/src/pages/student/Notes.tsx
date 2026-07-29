@@ -5,6 +5,8 @@ import { noteService } from '../../services/api';
 import { Note } from '../../types';
 import { useAuthStore } from '../../store/authStore';
 import { formatDate } from '../../utils/helpers';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 export const Notes: React.FC = () => {
   const { user } = useAuthStore();
@@ -111,14 +113,15 @@ export const Notes: React.FC = () => {
             </div>
             <div>
               <label className="block text-2xs font-bold text-slate-600 uppercase tracking-widest mb-1.5">Note Details</label>
-              <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="Write your study notes here..."
-                rows={10}
-                className="w-full rounded-xl border border-black/5 bg-slate-950/45 px-4 py-3 text-sm font-medium text-slate-800 focus:outline-none focus:border-blue-500/50"
-                required
-              />
+              <div className="bg-white rounded-xl overflow-hidden border border-black/5 text-slate-900">
+                <ReactQuill
+                  theme="snow"
+                  value={content}
+                  onChange={setContent}
+                  placeholder="Write your study notes here..."
+                  className="bg-white h-48"
+                />
+              </div>
             </div>
             <div>
               <label className="block text-2xs font-bold text-slate-600 uppercase tracking-widest mb-1.5">Tags (Comma-separated)</label>
@@ -177,12 +180,12 @@ export const Notes: React.FC = () => {
 
                 {/* Edit Mode vs Display Mode */}
                 {editingNoteId === note.id ? (
-                  <div className="mt-4 space-y-3">
-                    <textarea
+                  <div className="mt-4 space-y-3 bg-white p-2 rounded-xl border border-black/5">
+                    <ReactQuill
+                      theme="snow"
                       value={editingContent}
-                      onChange={(e) => setEditingContent(e.target.value)}
-                      rows={4}
-                      className="w-full rounded-xl border border-black/5 bg-slate-950/45 px-3 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-blue-500/50"
+                      onChange={setEditingContent}
+                      className="bg-white h-48 mb-12 text-slate-900"
                     />
                     <div className="flex gap-2">
                       <Button
@@ -203,9 +206,10 @@ export const Notes: React.FC = () => {
                     </div>
                   </div>
                 ) : (
-                  <p className="text-sm md:text-base text-slate-700 mt-4 whitespace-pre-wrap leading-relaxed">
-                    {note.content}
-                  </p>
+                  <div 
+                    className="text-sm md:text-base text-slate-800 mt-4 p-4 bg-white/90 rounded-xl border border-black/5 shadow-inner rich-text-content"
+                    dangerouslySetInnerHTML={{ __html: note.content }}
+                  />
                 )}
 
                 {/* Tags */}
