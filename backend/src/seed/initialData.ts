@@ -233,7 +233,7 @@ export async function seedInitialData() {
       try { await db.query("ALTER TABLE aois ADD COLUMN feedback TEXT"); } catch(e){}
       try { await db.query('ALTER TABLE users ADD COLUMN is_active BOOLEAN DEFAULT TRUE'); } catch(e){}
 
-        
+      try {
         await db.query(`
           CREATE TABLE IF NOT EXISTS messages (
             id VARCHAR(50) PRIMARY KEY,
