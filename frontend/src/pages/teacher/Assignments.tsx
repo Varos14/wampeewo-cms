@@ -218,6 +218,8 @@ export default function TeacherAssignments() {
                   deadline: new Date(dueDate).toISOString(),
                   rubric: []
                 });
+                // Clear stale AOI cache so fresh data is fetched
+                localStorage.removeItem('wampeewo_cache__aoi_');
                 setShowModal(false);
                 await fetchData(true); // Trigger a forced re-fetch of AOIs
                 alert('Assignment submitted for Admin approval! It will appear in your list below.');
