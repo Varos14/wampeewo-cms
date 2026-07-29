@@ -29,9 +29,9 @@ export async function listAOIs(req: Request, res: Response) {
     }));
 
     return res.json(items);
-  } catch (err) {
+  } catch (err: any) {
     console.error('[listAOIs] DB error:', err);
-    return res.status(500).json({ error: 'Internal server error listing AOIs' });
+    return res.status(500).json({ error: 'Internal server error listing AOIs: ' + err.message });
   }
 }
 
