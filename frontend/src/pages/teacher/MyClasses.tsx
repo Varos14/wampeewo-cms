@@ -26,10 +26,36 @@ export default function TeacherMyClasses() {
 
   const handleGenerateReports = async (classId: string, className: string) => {
     setGeneratingFor(classId);
-    // Simulate API delay for report generation
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setGeneratingFor(null);
-    alert(`Success! PDF reports for all students in ${className} have been generated and sent to your email.`);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:4000/api/classes/${classId}/reports/download`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to download report');
+      }
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      a.download = `Class_Report_${className.replace(/\s+/g, '_')}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      
+      alert(`Success! PDF reports for all students in ${className} have been downloaded.`);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to generate report');
+    } finally {
+      setGeneratingFor(null);
+    }
   };
 
   return (
