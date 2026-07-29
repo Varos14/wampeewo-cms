@@ -21,6 +21,8 @@ export default function AdminAssignments() {
     setLoading(true);
     try {
       await fetchData(true);
+      // Clear cache so we always get fresh assignments from the server
+      localStorage.removeItem('wampeewo_cache__aoi_');
       // Get all assignments across all teachers/classes
       const data = await aoiService.list(undefined, undefined);
       setAssignments(data);
