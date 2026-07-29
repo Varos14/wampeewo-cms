@@ -233,6 +233,41 @@ export async function seedInitialData() {
       try { await db.query("ALTER TABLE aois ADD COLUMN feedback TEXT"); } catch(e){}
       try { await db.query('ALTER TABLE users ADD COLUMN is_active BOOLEAN DEFAULT TRUE'); } catch(e){}
 
+      // Migration: Update teacher-class assignments for classes c3 and c4
+      console.log('[seed] Ensuring all teachers are assigned to c1, c2, c3, c4...');
+      const [teachers] = await db.query("SELECT id FROM users WHERE role='teacher'");
+      for (const t of (teachers as any[])) {
+        for (const classId of ['c1', 'c2', 'c3', 'c4']) {
+          try {
+            await db.query('INSERT INTO teacher_classes (teacher_id, class_id) VALUES (?, ?)', [t.id, classId]);
+          } catch(e){} // Ignore constraint violations
+        }
+      }
+
+      // Migration: Insert missing subjects for existing production databases
+      console.log('[seed] Ensuring subjects exist for all classes...');
+      const subjectData = [
+        { name: 'English', code: 'ENG' },
+        { name: 'Mathematics', code: 'MTH' },
+        { name: 'Geography', code: 'GEO' },
+        { name: 'History', code: 'HST' },
+        { name: 'Physics', code: 'PHY' },
+        { name: 'Biology', code: 'BIO' }
+      ];
+      for (const cls of ['c1', 'c2', 'c3', 'c4']) {
+        for (const subj of subjectData) {
+          const id = 'sub_' + cls + '_' + subj.code.toLowerCase();
+          try {
+            const [existing] = await db.query('SELECT id FROM subjects WHERE name = ? AND class_id = ?', [subj.name, cls]);
+            if ((existing as any[]).length === 0) {
+              await db.query('INSERT INTO subjects (id, name, code, class_id) VALUES (?, ?, ?, ?)', [id, subj.name, subj.code, cls]);
+            }
+          } catch(e) {
+            console.error('[seed] Error checking/inserting subject:', e);
+          }
+        }
+      }
+
       try {
         await db.query(`
           CREATE TABLE IF NOT EXISTS messages (
@@ -439,18 +474,31 @@ export async function seedInitialData() {
             await db.query('INSERT INTO teacher_subjects (teacher_id, subject_name) VALUES (?, ?)', [t.id, t.subj]);
             await db.query('INSERT INTO teacher_classes (teacher_id, class_id) VALUES (?, ?)', [t.id, 'c1']);
             await db.query('INSERT INTO teacher_classes (teacher_id, class_id) VALUES (?, ?)', [t.id, 'c2']);
+            await db.query('INSERT INTO teacher_classes (teacher_id, class_id) VALUES (?, ?)', [t.id, 'c3']);
+            await db.query('INSERT INTO teacher_classes (teacher_id, class_id) VALUES (?, ?)', [t.id, 'c4']);
         }
     }
 
-    // Subjects
-    const subjects = [
-      { id: 's1', name: 'Mathematics', code: 'MTH', class_id: 'c1' },
-      { id: 's2', name: 'English', code: 'ENG', class_id: 'c1' },
-      { id: 's3', name: 'Geography', code: 'GEO', class_id: 'c1' },
-      { id: 's4', name: 'History', code: 'HST', class_id: 'c1' },
-      { id: 's5', name: 'Physics', code: 'PHY', class_id: 'c1' },
-      { id: 's6', name: 'Biology', code: 'BIO', class_id: 'c1' }
+    const subjectData = [
+      { name: 'English', code: 'ENG' },
+      { name: 'Mathematics', code: 'MTH' },
+      { name: 'Geography', code: 'GEO' },
+      { name: 'History', code: 'HST' },
+      { name: 'Physics', code: 'PHY' },
+      { name: 'Biology', code: 'BIO' }
     ];
+    
+    const subjects = [];
+    for (const cls of ['c1', 'c2', 'c3', 'c4']) {
+      for (const subj of subjectData) {
+        subjects.push({
+          id: 'sub_' + cls + '_' + subj.code.toLowerCase(),
+          name: subj.name,
+          code: subj.code,
+          class_id: cls
+        });
+      }
+    }
 
     for (const s of subjects) {
       await db.query(
