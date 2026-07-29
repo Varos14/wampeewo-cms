@@ -42,6 +42,10 @@ export async function createAOI(req: Request, res: Response) {
     return res.status(400).json({ error: 'title, description, deadline, classId, and teacherId are required' });
   }
 
+  if (new Date(deadline) < new Date()) {
+    return res.status(400).json({ error: 'The assignment due date cannot be in the past' });
+  }
+
   const aoiType = type || 'assignment';
   const status = 'pending';
 

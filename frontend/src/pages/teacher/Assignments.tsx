@@ -227,6 +227,12 @@ export default function TeacherAssignments() {
             <form onSubmit={async (e) => {
               e.preventDefault();
               if(!user) return;
+
+              if (new Date(dueDate) < new Date()) {
+                alert('The assignment due date cannot be in the past.');
+                return;
+              }
+
               setSubmitting(true);
               try {
                 await aoiService.create({
@@ -283,7 +289,14 @@ export default function TeacherAssignments() {
               </div>
               <div>
                 <label className="block text-slate-600 font-medium mb-1 text-xs">Due Date</label>
-                <input type="datetime-local" required value={dueDate} onChange={e=>setDueDate(e.target.value)} className="w-full bg-white/80 border border-black/10 rounded-xl px-3 py-2 text-slate-800 focus:border-blue-500 text-sm" />
+                <input 
+                  type="datetime-local" 
+                  required 
+                  min={new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)} 
+                  value={dueDate} 
+                  onChange={e=>setDueDate(e.target.value)} 
+                  className="w-full bg-white/80 border border-black/10 rounded-xl px-3 py-2 text-slate-800 focus:border-blue-500 text-sm" 
+                />
               </div>
               <div className="flex justify-end gap-3 pt-4">
                 <Button variant="ghost" onClick={() => setShowModal(false)}>Cancel</Button>
