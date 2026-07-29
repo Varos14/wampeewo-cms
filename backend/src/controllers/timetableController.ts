@@ -35,7 +35,7 @@ export async function createTimetableEntry(req: Request, res: Response) {
   }
 
   const userRole = (req as any).auth?.role;
-  const userId = (req as any).auth?.userId;
+  const userId = (req as any).auth?.sub;
 
   if (userRole === 'student' && classId !== userId) {
     return res.status(403).json({ error: 'Students can only add study sessions to their own personal timetable' });
